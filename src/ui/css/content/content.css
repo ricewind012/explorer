@@ -1,0 +1,56 @@
+html,
+body,
+#body-container {
+	height: 100%;
+}
+
+body {
+	overflow: hidden;
+}
+
+#body-container {
+	gap: var(--window-gap);
+
+	display: flex;
+	flex-direction: column;	
+}
+
+#content {
+	--table-icon-width: 16px;
+	--table-name-button-width: 322px;
+	--table-size-button-width: 150px;
+	--table-type-button-width: 150px;
+	--table-mode-button-width: 150px;
+
+	overflow: auto;
+
+	gap: 1px;
+
+	display: flex;
+	flex-grow: 1;
+}
+
+.content-section-container {
+	overflow: hidden;
+	background-color: var(--color-window);
+	box-shadow: var(--border-field);
+
+	padding: 2px;
+}
+
+.content-section {
+	overflow: auto;
+
+	width: calc(100% + 7px);
+	height: 100%;
+}
+
+#content-main {
+	flex-grow: 1;
+}
+
+#content-list {
+	overflow: auto;
+
+	height: 100%;
+}

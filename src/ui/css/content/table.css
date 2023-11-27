@@ -1,0 +1,110 @@
+#table-list-container {
+	overflow: auto;
+	height: calc(100% - 17px);
+}
+
+#table-header {
+	position: sticky;
+	top: 0;
+	display: flex;
+}
+
+.table-header-button-container {
+	position: relative;
+  display: flex;
+}
+
+.table-header-button {
+	text-align: left;
+
+	padding: 2px 7px;
+	margin: 0;
+
+	width: 100%;
+
+	&[sort]:not([sort="none"])::after {
+		content: '';
+
+		background-color: var(--color-button-text);
+		-webkit-mask: var(--button-img, none) no-repeat;
+		-webkit-mask-size: 7px 4px;
+		-webkit-mask-position: center;
+
+		position: absolute;
+		top: -1px;
+		right: 7px;
+		width: 7px;
+		height: 100%;
+	}
+
+	&[sort="ascending"] {
+		--button-img: var(--icon-arrow-bottom);
+	}
+
+	&[sort="descending"] {
+		--button-img: var(--icon-arrow-top);
+	}
+}
+
+#table-icon-button > .table-header-button {
+	color: transparent;
+
+	width: var(--table-icon-width);
+	min-width: var(--table-icon-width);
+}
+
+.list-entry {
+	--table-icon: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAQCAMAAAD6fQULAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURQAAAP///4eIj8DHyAAAAIf7VzIAAAAFdFJOU/////8A+7YOUwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAADZJREFUGFdjYGFhYIRCIBPIYYJCIBtIICCQBwfMWHgMDCBFOOVA0lSVgwEQjxkBGIDuhgMGFgBmBADr9EYr2gAAAABJRU5ErkJggg==');
+
+  /* alternative -webkit-line-clamp */
+	height: calc(var(--text-size) * var(--text-line) + 3px);
+	display: flex;
+
+  &[selected] {
+    background-color: var(--color-highlight);
+    color: var(--color-highlight-text);
+  }
+
+	/* Directory */
+	&[type="2"] {
+		--table-icon: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAMAAABBwMRzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAASUExURYeIj8DHyP//AP///wAAAAAAAJRqB2kAAAAGdFJOU///////ALO/pL8AAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA1SURBVBhXtYrRFQAQEMOCdv+VHcfDANKvtMVm4AWm1MguSI0ib9AuUHjuM9OPlh/7g7AupA6lNwF/p6NMjAAAAABJRU5ErkJggg==');
+	}
+}
+
+.table-header-button,
+.list-row {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding: 2px 7px;
+
+	width: var(--table-row);
+	min-width: 60px;
+}
+
+.list-image {
+	background: var(--table-icon) center no-repeat;
+	padding: 0;
+
+	width: var(--table-icon-width);
+	min-width: var(--table-icon-width);
+}
+
+#table-name-button,
+.list-name {
+	--table-row: var(--table-name-button-width);
+}
+
+#table-size-button,
+.list-size {
+	--table-row: var(--table-size-button-width);
+}
+
+#table-type-button,
+.list-type {
+	--table-row: var(--table-type-button-width);
+}
+
+#table-mode-button,
+.list-mode {
+	--table-row: var(--table-mode-button-width);
+}

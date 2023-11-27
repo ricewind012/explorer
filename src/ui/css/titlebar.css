@@ -1,0 +1,103 @@
+#titlebar {
+	background-color: var(--color-active-caption);
+	color: var(--color-active-caption-text);
+	font-weight: bold;
+
+	padding: 1px 2px;
+	gap: 4px;
+
+	display: flex;
+	align-items: center;
+
+	:root:not([focused]) & {
+		--color-active-caption: var(--color-gray-text);
+	}
+}
+
+#titlebar-icon {
+	background-image: var(--titlebar-icon);
+
+	width: 16px;
+	height: 16px;
+}
+
+#titlebar-name {
+	font: var(--text-ui);
+	font-weight: bold;
+
+	margin: 0;
+
+	flex-grow: 1;
+	app-region: drag;
+}
+
+#titlebar-buttons {
+	margin-top: -3px;
+	margin-right: 3px;
+}
+
+.titlebar-button {
+	margin: 0;
+	/* TODO: not sure why there is a margin with the above line */
+	margin-right: -3px;
+
+	position: relative !important;
+	width: 16px !important;
+	height: 14px !important;
+
+	&::before,
+	&::after {
+		content: '' !important;
+
+		-webkit-mask: var(--button-img, none) no-repeat !important;
+		-webkit-mask-size: var(--button-img-size, auto auto) !important;
+		-webkit-mask-position: var(--button-img-pos, center) !important;
+
+		position: absolute !important;
+		top: 0 !important;
+		right: 0 !important;
+		bottom: 0 !important;
+		left: 0 !important;
+		height: 100% !important;
+		display: block !important;
+	}
+
+	&::before {
+		background-color: var(--color-button-text) !important;
+
+		z-index: 1 !important;
+	}
+
+	&:disabled::after {
+		background-color: var(--color-button-highlight) !important;
+
+		left: 1px !important;
+		top: 1px !important;
+	}
+}
+
+#titlebar-button-minimise {
+	--button-img: var(--icon-minimize);
+	--button-img-size: 6px 2px;
+	--button-img-pos: 4px 9px;
+}
+
+#titlebar-button-maximise {
+	--button-img: var(--icon-maximize);
+	--button-img-size: 9px;
+	--button-img-pos: 3px 2px;
+}
+
+#titlebar-button-restore {
+	--button-img: var(--icon-restore);
+	--button-img-size: 10px 9px;
+	--button-img-pos: 2px 2px;
+}
+
+#titlebar-button-close {
+	--button-img: var(--icon-close);
+	--button-img-size: 8px 7px;
+	--button-img-pos: 4px 3px;
+
+	margin-left: 2px;
+}

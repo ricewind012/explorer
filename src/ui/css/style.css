@@ -1,0 +1,31 @@
+/* Global */
+@import 'shared/controls-generated.css';
+@import 'shared/controls.css';
+@import 'shared/icons.css';
+@import 'shared/tabs.css';
+@import 'shared/text.css';
+@import 'shared/variables.css';
+@import 'shared/window.css';
+
+/* Content */
+@import 'titlebar.css';
+@import 'statusbar.css';
+
+@import 'content/content.css';
+@import 'content/separator.css';
+@import 'content/table.css';
+
+/* Reset */
+* {
+  box-sizing: border-box;
+}
+
+ul,
+menu {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}

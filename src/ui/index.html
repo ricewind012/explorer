@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="default-src 'unsafe-inline' file: data:"
+		>
+
+		<meta name="color-scheme" content="light dark">
+		<link rel="stylesheet" href="css/style.css">
+
+		<title>Explorer</title>
+	</head>
+
+	<body>
+		<div id="body-container">
+			<header id="titlebar">
+				<img
+					id="titlebar-icon"
+					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQMARcYyg/K3gAAANNJREFUOMutklFuwzAMQ5+H3iu8WaWb2SfjPuK4dpIO6zAChgAZokhJhY6IMCdEROE3iAjXWm2zxDvSM0pEWBLbJlqrl1hrfde0jO6fIgIDBviaxNBaIzPJTEopZObIz/Hi3/bwbNv0TkDPnWfzUjAILsWd9I7kjYVdnHusraFtO3Qug52xEJyLa2vjb97OLYEkMnMplkREAJDJrYLH3AH63iW0zwdJSB4mn08xn8ZjZz9Woz7YsSOkAG9QYD/M++v2zy+MbTge5nP8O8mfCBa7AHwDTh8VZEOWn1kAAAAASUVORK5CYII="
+				/>
+				<h1 id="titlebar-name"></h1>
+
+				<menu id="titlebar-buttons">
+					<button
+						class="titlebar-button"
+						id="titlebar-button-minimise"
+					></button>
+
+					<button
+						class="titlebar-button"
+						id="titlebar-button-maximise"
+					></button>
+
+					<button
+						class="titlebar-button"
+						id="titlebar-button-restore"
+						hidden
+					></button>
+
+					<button
+						class="titlebar-button"
+						id="titlebar-button-close"
+					></button>
+				</menu>
+			</header>
+
+			<main id="content">
+				<section
+					id="content-main"
+					class="content-section-container"
+				>
+					<div class="content-section">
+						<menu id="table-header">
+							<li
+								id="table-icon-button"
+								class="table-header-button-container"
+							>
+								<button class="table-header-button">
+									Icon
+								</button>
+							</li>
+
+							<li class="table-header-button-container">
+								<button
+									id="table-name-button"
+									class="table-header-button"
+								>
+									Name
+								</button>
+
+								<div
+									id="table-separator-name"
+									class="separator"
+									orientation="vertical"
+								></div>
+							</li>
+
+							<li class="table-header-button-container">
+								<button
+									id="table-size-button"
+									class="table-header-button"
+								>
+									Size
+								</button>
+
+								<div
+									id="table-separator-size"
+									class="separator"
+									orientation="vertical"
+								></div>
+							</li>
+
+							<li class="table-header-button-container">
+								<button
+									id="table-type-button"
+									class="table-header-button"
+								>
+									Type
+								</button>
+
+								<div
+									id="table-separator-type"
+									class="separator"
+									orientation="vertical"
+								></div>
+							</li>
+
+							<li class="table-header-button-container">
+								<button
+									id="table-mode-button"
+									class="table-header-button"
+								>
+									Permissions
+								</button>
+
+								<div
+									id="table-separator-mode"
+									class="separator"
+									orientation="vertical"
+								></div>
+							</li>
+						</menu>
+
+						<div id="table-list-container">
+							<ul id="table-list"></ul>
+						</div>
+					</div>
+				</section>
+			</main>
+
+			<footer id="statusbar">
+				<main id="statusbar-content">
+					<section
+						class="statusbar-item"
+						id="statusbar-count"
+					></section>
+
+					<section
+						class="statusbar-item"
+						id="statusbar-disk-usage"
+					></section>
+				</main>
+
+				<div id="statusbar-resize-handle"></div>
+			</footer>
+		</div>
+	</body>
+
+	<template id="list-entry-template">
+		<li class="list-entry">
+			<img class="list-row list-image" />
+			<div class="list-row list-name"></div>
+			<div class="list-row list-size"></div>
+			<div class="list-row list-type"></div>
+			<div class="list-row list-mode"></div>
+		</li>
+	</template>
+
+	<script src="js/functions.js"></script>
+	<script src="js/classes.js"></script>
+	<script src="js/globals.js"></script>
+	<script src="js/helpers.js"></script>
+	<script src="js/enums.js"></script>
+	<script src="js/index.js"></script>
+</html>

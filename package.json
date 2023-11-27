@@ -1,0 +1,14 @@
+{
+  "name": "explorer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "electron": "^26.2.4"
+  }
+}

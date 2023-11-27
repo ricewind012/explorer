@@ -1,0 +1,19 @@
+.separator {
+	--separator-size: 13px;
+
+	position: absolute;
+
+	&[orientation="vertical"] {
+		right: calc(var(--separator-size) / -2);
+		width: var(--separator-size);
+		height: 100%;
+		cursor: col-resize;
+	}
+
+	&[orientation="horizontal"] {
+		bottom: calc(var(--separator-size) / -2);
+		width: 100%;
+		height: var(--separator-size);
+		cursor: row-resize;
+	}
+}
