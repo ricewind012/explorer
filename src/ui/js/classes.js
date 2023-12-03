@@ -24,8 +24,7 @@ class CAppData {
 class CPath {
 	constructor() {
 		this.m_strPath = null;
-		this.m_elSelection = null;
-		this.m_strSelectionPath = null;
+		this.m_Selection = null;
 		this.m_Sorting  = {
 			data:   null,
 			button: null,
@@ -55,8 +54,7 @@ class CPath {
 			] = [...elEntryContainer.children];
 
 			elEntryContainer.addEventListener('click', (ev) => {
-				this.ChangeSelection(ev.target.parentNode);
-				this.m_strSelectionPath = hFile.path;
+				this.ChangeSelection(ev.target.parentNode, hFile);
 			});
 
 			elListName.innerText = hFile.path
@@ -118,23 +116,26 @@ class CPath {
 		});
 	}
 
-	ChangeSelection(el) {
-		this.m_elSelection?.removeAttribute('selected');
-		this.m_elSelection = el;
-		this.m_elSelection?.setAttribute('selected', '');
+	ChangeSelection(el, file) {
+		this.m_Selection?.el.removeAttribute('selected');
+		this.m_Selection = {
+			el,
+			file
+		};
+		this.m_Selection.el.setAttribute('selected', '');
 
-		if (this.m_elSelection.getAttribute('type') == EFileType.Directory)
+		if (this.m_Selection.file.type == EFileType.Directory)
 			return;
 
 		UpdateStatusbar(
 			'usage',
-			HumanReadableSize(this.m_elSelection.getAttribute('size'))
+			HumanReadableSize(this.m_Selection.file.size)
 		);
 	}
 
 	ExecuteSelection() {
 		try {
-			electron.ExecuteCommand(`${k_strOpener} ${this.m_strSelectionPath}`);
+			electron.ExecuteCommand(`${k_strOpener} ${this.m_Selection.file.path}`);
 		} catch (e) {
 			alert(e.message);
 			return;

@@ -9,15 +9,15 @@ window.addEventListener('blur', () => {
 document.addEventListener('keydown', (ev) => {
 	switch (ev.key) {
 		case 'Enter':
-			let elSelection = g_Path.m_elSelection;
+			let selection = g_Path.m_Selection;
 
-			switch (Number(elSelection?.getAttribute('type'))) {
+			switch (selection.file.type) {
 				case EFileType.NotFound:
 				case EFileType.Unknown:
 					break;
 
 				case EFileType.Directory:
-					g_Path.Navigate(g_Path.m_strPath + '/' + g_Path.m_strSelectionPath);
+					g_Path.Navigate(selection.file.path);
 					break;
 
 				default:
