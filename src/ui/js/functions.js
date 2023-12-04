@@ -1,3 +1,11 @@
+function CreateWindow(strPageName, options) {
+	options = Object.entries(options)
+		.map(e => e.join('='))
+		.join(',');
+
+	return window.open(`${strPageName}.html`, '_blank', options);
+}
+
 function HandlePointerEvent(el, fnMoveCallback) {
 	el.addEventListener('pointerdown', () => {
 		function fnMove(ev) {

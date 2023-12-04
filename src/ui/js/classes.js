@@ -35,7 +35,9 @@ class CPath {
 	Render() {
 		let elList = g_Elements.content.list;
 		let strLabel = `${g_vecFiles.length} files in ${this.m_strPath}`;
+		this.m_Selection = null;
 		console.time(strLabel);
+		postMessage({ action: 'close' });
 
 		elList.innerHTML = '';
 		for (let i = 0; i < g_vecFiles.length; i++) {

@@ -6,6 +6,27 @@ window.addEventListener('blur', () => {
 	document.documentElement.removeAttribute('focused');
 });
 
+window.addEventListener('message', (ev) => {
+	let data = ev.data;
+
+	console.log('Message received: %o', data);
+
+	switch (data.action) {
+		case 'close':
+			if (!g_hChildWindow?.closed)
+				g_hChildWindow?.close();
+			break;
+
+		case 'execute':
+			g_Path.ExecuteSelection();
+			break;
+
+		case 'navigate':
+			g_Path.Navigate(data.path);
+			break;
+	}
+});
+
 document.addEventListener('keydown', (ev) => {
 	switch (ev.key) {
 		case 'Enter':
@@ -41,6 +62,35 @@ document.addEventListener('keydown', (ev) => {
 			);
 			break;
 	}
+});
+
+document.addEventListener('contextmenu', (ev) => {
+	// TODO:
+	// immediately closes every window, but
+	// can be opened multiple times without this
+	//postMessage({ action: 'close' });
+
+	let selection = g_Path.m_Selection;
+
+	if (!selection?.el)
+		return;
+
+	g_hChildWindow = CreateWindow('menu', {
+		autoHideMenuBar: true,
+		resizable:       false,
+		focusable:       false,
+		frame:           false,
+		width:           112,
+		minWidth:        112,
+		height:          23,
+		minHeight:       23,
+		x:               ev.screenX,
+		y:               ev.screenY,
+	});
+
+	g_hChildWindow.addEventListener('DOMContentLoaded', () => {
+		g_hChildWindow.postMessage(selection.file);
+	});
 });
 
 document.addEventListener('explorer:navigate', (ev) => {

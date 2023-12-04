@@ -26,6 +26,7 @@ let g_Data     = new CAppData();
 let g_Path     = new CPath();
 let g_Elements = {};
 
+let g_hChildWindow = null;
 let g_vecFiles = [];
 
 let g_vecTableButtons = [
