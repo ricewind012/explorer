@@ -21,7 +21,7 @@ function CreateWindow(strPageName) {
 		},
 	});
 
-	hWindow.loadFile(`src/ui/${strPageName}.html`);
+	hWindow.loadFile(`src/ui/html/${strPageName}.html`);
 	hWindow.once('ready-to-show', () => hWindow.show());
 
 	ipcMain.on('resize', (_, e) => {

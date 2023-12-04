@@ -8,8 +8,8 @@
 @import 'shared/window.css';
 
 /* Content */
-@import 'titlebar.css';
-@import 'statusbar.css';
+@import 'parts/titlebar.css';
+@import 'parts/statusbar.css';
 
 @import 'content/content.css';
 @import 'content/separator.css';
