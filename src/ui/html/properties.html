@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="default-src 'unsafe-inline' file: data:"
+		>
+
+		<meta name="color-scheme" content="light dark">
+		<link rel="stylesheet" href="../css/properties.css">
+
+		<title>Properties</title>
+	</head>
+
+	<body>
+		<div id="body-container">
+			<header id="titlebar">
+				<h1 id="titlebar-name"></h1>
+
+				<menu id="titlebar-buttons">
+					<button
+						class="titlebar-button"
+						id="titlebar-button-help"
+					></button>
+
+					<button
+						class="titlebar-button"
+						id="titlebar-button-close"
+					></button>
+				</menu>
+			</header>
+
+			<main id="content">
+        <div id="tabs-container" >
+          <menu id="tabs">
+            <li role="tab">General</li>
+          </menu>
+
+          <div role="tabpanel">
+            <ul id="section-file">
+							<li class="column">
+								<div
+									id="file-icon"
+									class="column-header"
+								></div>
+								<div id="file-name"></div>
+							</li>
+            </ul>
+
+            <hr />
+
+            <ul id="section-info">
+              <li class="column">
+                <div class="column-header">Type:</div>
+                <div id="file-type"></div>
+							</li>
+
+							<li class="column">
+                <div class="column-header">Location:</div>
+                <div id="file-path"></div>
+							</li>
+
+							<li class="column">
+                <div class="column-header">Size:</div>
+                <div id="file-size"></div>
+              </li>
+            </ul>
+
+						<hr />
+
+						<ul id="section-attribute">
+							<li class="column">
+								<div class="column-header">Attributes:</div>
+
+								<div class="column-header">
+									<label>
+										<input
+											id="attr-versteckt"
+											type="checkbox"
+											disabled
+										/>
+										Hidden
+									</label>
+
+									<label>
+										<input
+											id="attr-read-only"
+											type="checkbox"
+											disabled
+										/>
+										Read-only
+									</label>
+
+									<label>
+										<input
+											id="attr-system"
+											type="checkbox"
+											disabled
+										/>
+										System
+									</label>
+								</div>
+							</li>
+						</ul>
+          </div>
+        </div>
+			</main>
+
+			<footer id="button-group-container">
+        <menu id="button-group">
+          <button id="button-ok">OK</button>
+        </menu>
+			</footer>
+		</div>
+	</body>
+
+	<script src="../js/functions.js"></script>
+	<script src="../js/classes.js"></script>
+	<script src="../js/globals.js"></script>
+	<script src="../js/helpers.js"></script>
+	<script src="../js/enums.js"></script>
+	<script src="../js/properties.js"></script>
+</html>

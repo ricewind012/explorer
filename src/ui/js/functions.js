@@ -1,9 +1,20 @@
-function CreateWindow(strPageName, options) {
+function CreateWindow(strPageName, options, msg) {
+	options = Object.assign(options, {
+		autoHideMenuBar: true,
+		resizable:       false,
+		frame:           false,
+	});
 	options = Object.entries(options)
 		.map(e => e.join('='))
 		.join(',');
 
-	return window.open(`${strPageName}.html`, '_blank', options);
+	let hWindow = window.open(`${strPageName}.html`, '_blank', options);
+
+	hWindow.addEventListener('DOMContentLoaded', () => {
+		hWindow.postMessage(msg);
+	});
+
+	return hWindow;
 }
 
 function HandlePointerEvent(el, fnMoveCallback) {

@@ -1,3 +1,42 @@
+let g_Data     = new CAppData();
+let g_Path     = new CPath();
+let g_Elements = {};
+
+let g_hChildWindow = null;
+let g_vecFiles = [];
+
+let g_vecTableButtons = [
+	{
+		name: 'name',
+		functions: [
+			(a, b) => a,
+			(a, b) => a.path.localeCompare(b.path),
+			(a, b) => b.path.localeCompare(a.path),
+		],
+	}, {
+		name: 'size',
+		functions: [
+			(a, b) => a,
+			(a, b) => a.size - b.size,
+			(a, b) => b.size - a.size,
+		],
+	}, {
+		name: 'type',
+		functions: [
+			(a, b) => a,
+			(a, b) => a.type - b.type,
+			(a, b) => b.type - a.type,
+		],
+	}, {
+		name: 'mode',
+		functions: [
+			(a, b) => a,
+			(a, b) => a.mode - b.mode,
+			(a, b) => b.mode - a.mode,
+		],
+	},
+];
+
 window.addEventListener('focus', () => {
 	document.documentElement.setAttribute('focused', '');
 });
@@ -23,6 +62,17 @@ window.addEventListener('message', (ev) => {
 
 		case 'navigate':
 			g_Path.Navigate(data.path);
+			break;
+
+		case 'create-window':
+			g_hChildWindow = CreateWindow(
+				'properties',
+				{
+					width:  367,
+					height: 419,
+				},
+				data.file
+			);
 			break;
 	}
 });
@@ -75,22 +125,23 @@ document.addEventListener('contextmenu', (ev) => {
 	if (!selection?.el)
 		return;
 
-	g_hChildWindow = CreateWindow('menu', {
-		autoHideMenuBar: true,
-		resizable:       false,
-		focusable:       false,
-		frame:           false,
-		width:           112,
-		minWidth:        112,
-		height:          23,
-		minHeight:       23,
-		x:               ev.screenX,
-		y:               ev.screenY,
-	});
+	let nMenuHeight = g_vecMenuEntries
+		.map(e => e.length ? 23 : 6)
+		.reduce((a, b) => a + b);
 
-	g_hChildWindow.addEventListener('DOMContentLoaded', () => {
-		g_hChildWindow.postMessage(selection.file);
-	});
+	g_hChildWindow = CreateWindow(
+		'menu',
+		{
+			focusable:       false,
+			width:           112,
+			minWidth:        112,
+			height:          nMenuHeight,
+			minHeight:       nMenuHeight,
+			x:               ev.screenX,
+			y:               ev.screenY,
+		},
+		selection.file
+	);
 });
 
 document.addEventListener('explorer:navigate', (ev) => {
