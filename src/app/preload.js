@@ -1,5 +1,5 @@
 let Addon = p =>
-	require(path.join(__dirname, `modules/${p}/build/Release/addon`));
+	require(path.join(__dirname, `../modules/${p}/build/Release/addon`));
 
 let {
 	contextBridge,
