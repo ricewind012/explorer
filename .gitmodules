@@ -1,0 +1,3 @@
+[submodule "src/ui/css/shared"]
+	path = src/ui/css/shared
+	url = https://github.com/ricewind012/win95-shared
