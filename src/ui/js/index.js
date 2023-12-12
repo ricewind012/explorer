@@ -1,9 +1,8 @@
-let g_Data     = new CAppData();
-let g_Path     = new CPath();
-let g_Elements = {};
+let g_Data         = new CAppData();
+let g_Path         = new CPath();
 
 let g_hChildWindow = null;
-let g_vecFiles = [];
+let g_vecFiles     = [];
 
 let g_vecTableButtons = [
 	{
@@ -37,18 +36,8 @@ let g_vecTableButtons = [
 	},
 ];
 
-window.addEventListener('focus', () => {
-	document.documentElement.setAttribute('focused', '');
-});
-
-window.addEventListener('blur', () => {
-	document.documentElement.removeAttribute('focused');
-});
-
 window.addEventListener('message', (ev) => {
 	let data = ev.data;
-
-	console.log('Message received: %o', data);
 
 	switch (data.action) {
 		case 'close':
@@ -182,52 +171,24 @@ document.addEventListener('explorer:sort', (ev) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-	g_Elements = {
-		titlebar: {
-			icon: id('titlebar-icon'),
-			name: id('titlebar-name'),
+	g_Elements.content = {
+		container: id('content'),
+		list:      id('table-list'),
+		entry:     id('list-entry-template'),
 
-			buttons: {
-				minimise: id('titlebar-button-minimise'),
-				maximise: id('titlebar-button-maximise'),
-				restore:  id('titlebar-button-restore'),
-				close:    id('titlebar-button-close'),
-			},
+		table: {
+			name: id('table-name-button'),
+			size: id('table-size-button'),
+			type: id('table-type-button'),
+			mode: id('table-mode-button'),
 		},
+	}
 
-		content: {
-			container: id('content'),
-			list:      id('table-list'),
-			entry:     id('list-entry-template'),
-
-			table: {
-				name: id('table-name-button'),
-				size: id('table-size-button'),
-				type: id('table-type-button'),
-				mode: id('table-mode-button'),
-			},
-		},
-
-		statusbar: {
-			count:  id('statusbar-count'),
-			usage:  id('statusbar-disk-usage'),
-			handle: id('statusbar-resize-handle'),
-		},
+	g_Elements.statusbar = {
+		count:  id('statusbar-count'),
+		usage:  id('statusbar-disk-usage'),
+		handle: id('statusbar-resize-handle'),
 	};
-
-	// Set up titlebar
-	g_Elements.titlebar.buttons.minimise.addEventListener('click', () => {
-		electron.ipcRenderer.send('minimize');
-	});
-	g_Elements.titlebar.buttons.maximise.addEventListener('click', () => {
-		HandleMaximizeButton();
-	});
-	g_Elements.titlebar.buttons.restore.addEventListener('click', () => {
-		HandleMaximizeButton();
-	});
-	g_Elements.titlebar.buttons.close.addEventListener('click', () => {
-		electron.ipcRenderer.send('close');
-	});
 
 	// Set up statusbar
 	HandlePointerEvent(g_Elements.statusbar.handle, (ev) => {

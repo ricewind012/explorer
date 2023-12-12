@@ -2,20 +2,6 @@ let SendMesssageToParent = window.opener.postMessage;
 
 let g_elEntryTemplate = null;
 
-window.addEventListener('message', (ev) => {
-	g_Data = ev.data;
-
-	console.log('Message received: %o', g_Data);
-});
-
-document.addEventListener('keydown', (ev) => {
-	switch (ev.key) {
-		case 'Escape':
-			window.close();
-			break;
-	}
-});
-
 document.addEventListener('DOMContentLoaded', () => {
   g_elEntryTemplate = id('menu-entry-template');
 

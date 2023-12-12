@@ -1,7 +1,7 @@
 let g_vecMenuEntries = [
 	[
 		'Open', () => {
-			switch (g_Data.type) {
+			switch (g_Message.type) {
 				case EFileType.NotFound:
 				case EFileType.Unknown:
 					break;
@@ -9,7 +9,7 @@ let g_vecMenuEntries = [
 				case EFileType.Directory:
 					SendMesssageToParent({
 						action: 'navigate',
-						path:	 g_Data.path
+						path:	 g_Message.path,
 					});
 					break;
 
@@ -26,7 +26,7 @@ let g_vecMenuEntries = [
 		'Properties', () => {
 			SendMesssageToParent({
 				action: 'create-window',
-				file:   g_Data,
+				file:   g_Message,
 			});
 		}
 	]

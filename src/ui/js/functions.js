@@ -34,10 +34,11 @@ function HandlePointerEvent(el, fnMoveCallback) {
 }
 
 function HandleMaximizeButton() {
-	let bFullscreen = g_Elements.titlebar.buttons.maximise.hidden;
+	let buttons = g_Elements.titlebar.buttons;
+	let bFullscreen = buttons.maximise.hidden;
 
-	g_Elements.titlebar.buttons.restore.hidden  = bFullscreen;
-	g_Elements.titlebar.buttons.maximise.hidden = !bFullscreen;
+	buttons.restore.hidden  = bFullscreen;
+	buttons.maximise.hidden = !bFullscreen;
 	electron.ipcRenderer.send('fullscreen');
 }
 

@@ -1,8 +1,6 @@
 window.addEventListener('message', (ev) => {
 	let data = ev.data;
 
-	console.log('Message received: %o', data);
-
   g_Elements.file.name.innerText = data.path
     .split('/')
     .filter(e => e)
