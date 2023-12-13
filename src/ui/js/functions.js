@@ -1,20 +1,17 @@
 function CreateWindow(strPageName, options, msg) {
 	options = Object.assign(options, {
-		autoHideMenuBar: true,
 		resizable:       false,
-		frame:           false,
-	});
-	options = Object.entries(options)
-		.map(e => e.join('='))
-		.join(',');
-
-	let hWindow = window.open(`${strPageName}.html`, '_blank', options);
-
-	hWindow.addEventListener('DOMContentLoaded', () => {
-		hWindow.postMessage(msg);
 	});
 
-	return hWindow;
+	electron.ipcRenderer.send('create-window', {
+		page: strPageName,
+		options,
+		msg,
+	});
+}
+
+function SendMesssageToParent(msg) {
+	electron.ipcRenderer.send('send-message-to-parent', msg);
 }
 
 function HandlePointerEvent(el, fnMoveCallback) {

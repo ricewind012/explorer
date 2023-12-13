@@ -1,5 +1,3 @@
-let SendMesssageToParent = window.opener.postMessage;
-
 let g_elEntryTemplate = null;
 
 document.addEventListener('DOMContentLoaded', () => {

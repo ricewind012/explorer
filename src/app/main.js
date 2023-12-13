@@ -5,8 +5,8 @@ let {
 } = require('electron');
 let path = require('node:path');
 
-function CreateWindow(strPageName) {
-	let hWindow = new CBrowserWindow({
+function CreateWindow(strPageName, additionalOptions) {
+	let options = Object.assign({
 		frame:           false,
 		width:           800,
 		height:          600,
@@ -19,10 +19,18 @@ function CreateWindow(strPageName) {
 			nodeIntegration: true,
 			preload:         path.join(__dirname, 'preload.js'),
 		},
-	});
+	}, additionalOptions);
+	let hWindow = new CBrowserWindow(options);
 
 	hWindow.loadFile(`src/ui/html/${strPageName}.html`);
 	hWindow.once('ready-to-show', () => hWindow.show());
+
+	return hWindow;
+}
+
+hApp.commandLine.appendSwitch('disable-smooth-scrolling');
+hApp.whenReady().then(() => {
+	let hWindow = CreateWindow('index');
 
 	ipcMain.on('resize', (_, e) => {
 		hWindow.setSize(e.width, e.height);
@@ -36,8 +44,21 @@ function CreateWindow(strPageName) {
 	ipcMain.on('close', () => {
 		hApp.quit();
 	});
-}
+	ipcMain.on('create-window', (ev, args) => {
+		let hWindow = CreateWindow(args.page, args.options);
 
-hApp.commandLine.appendSwitch('disable-smooth-scrolling');
-hApp.whenReady().then(() => CreateWindow('index'));
+		if (!args.msg)
+			return;
+
+		hWindow.once('ready-to-show', () => {
+			hWindow.webContents.postMessage('window-message', args.msg);
+		});
+	});
+	ipcMain.on('send-message-to-parent', (ev, args) => {
+		if (ev.sender == hWindow.webContents)
+			return;
+
+		hWindow.webContents.postMessage('window-message', args);
+	});
+});
 hApp.on('window-all-closed', () => hApp.quit());

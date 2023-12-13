@@ -11,6 +11,10 @@ let cp = require('node:child_process');
 
 let FilesystemUtils = Addon('FilesystemUtils');
 
+ipcRenderer.on('window-message', (ev, args) => {
+	postMessage(args);
+});
+
 contextBridge.exposeInMainWorld('electron', {
 	ipcRenderer,
 	FilesystemUtils,
