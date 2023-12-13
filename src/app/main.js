@@ -13,7 +13,7 @@ function CreateWindow(strPageName, additionalOptions) {
 		minWidth:        400,
 		minHeight:       300,
 
-		show:            false, // Try to prevent FOUC
+		show:            false, // Try to prevent the white flash
 		autoHideMenuBar: true,
 		webPreferences:  {
 			nodeIntegration: true,
@@ -45,6 +45,9 @@ hApp.whenReady().then(() => {
 		hApp.quit();
 	});
 	ipcMain.on('create-window', (ev, args) => {
+		if (args.page == 'menu' && CBrowserWindow.getAllWindows().length >= 2)
+			return;
+
 		let hWindow = CreateWindow(args.page, args.options);
 
 		if (!args.msg)

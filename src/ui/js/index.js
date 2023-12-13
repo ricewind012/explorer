@@ -104,11 +104,6 @@ document.addEventListener('keydown', (ev) => {
 });
 
 document.addEventListener('contextmenu', (ev) => {
-	// TODO:
-	// immediately closes every window, but
-	// can be opened multiple times without this
-	//postMessage({ action: 'close' });
-
 	let selection = g_Path.m_Selection;
 
 	if (!selection?.el)
