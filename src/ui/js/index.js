@@ -39,10 +39,17 @@ let g_vecTableButtons = [
 window.addEventListener('message', (ev) => {
 	let data = ev.data;
 
+	// `create-window` reply
+	if (typeof data == 'number') {
+		g_hChildWindow = data;
+		return;
+	}
+
 	switch (data.action) {
 		case 'close':
-			if (!g_hChildWindow?.closed)
-				g_hChildWindow?.close();
+			if (g_hChildWindow)
+				electron.ipcRenderer.send('close-window', g_hChildWindow);
+			g_hChildWindow = null;
 			break;
 
 		case 'execute':
@@ -54,7 +61,7 @@ window.addEventListener('message', (ev) => {
 			break;
 
 		case 'create-window':
-			g_hChildWindow = CreateWindow(
+			CreateWindow(
 				'properties',
 				{
 					width:  367,
@@ -113,7 +120,7 @@ document.addEventListener('contextmenu', (ev) => {
 		.map(e => e.length ? 23 : 6)
 		.reduce((a, b) => a + b);
 
-	g_hChildWindow = CreateWindow(
+	CreateWindow(
 		'menu',
 		{
 			focusable:       false,

@@ -55,7 +55,11 @@ hApp.whenReady().then(() => {
 
 		hWindow.once('ready-to-show', () => {
 			hWindow.webContents.postMessage('window-message', args.msg);
+			ev.reply('create-window', hWindow.id);
 		});
+	});
+	ipcMain.on('close-window', (ev, args) => {
+		CBrowserWindow.fromId(args)?.close();
 	});
 	ipcMain.on('send-message-to-parent', (ev, args) => {
 		if (ev.sender == hWindow.webContents)
