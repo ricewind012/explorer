@@ -44,18 +44,20 @@ hApp.whenReady().then(() => {
 	ipcMain.on('close', () => {
 		hApp.quit();
 	});
-	ipcMain.on('create-window', (ev, args) => {
-		if (args.page == 'menu' && CBrowserWindow.getAllWindows().length >= 2)
-			return;
+	ipcMain.handle('create-window', (ev, args) => {
+		return new Promise((resolve, reject) => {
+			if (args.page == 'menu' && CBrowserWindow.getAllWindows().length >= 2) {
+				reject('Too many windows');
+				return;
+			}
 
-		let hWindow = CreateWindow(args.page, args.options);
+			let hWindow = CreateWindow(args.page, args.options);
 
-		if (!args.msg)
-			return;
+			hWindow.once('ready-to-show', () => {
+				hWindow.webContents.postMessage('window-message', args.msg);
 
-		hWindow.once('ready-to-show', () => {
-			hWindow.webContents.postMessage('window-message', args.msg);
-			ev.reply('create-window', hWindow.id);
+				resolve(hWindow.id);
+			});
 		});
 	});
 	ipcMain.on('close-window', (ev, args) => {

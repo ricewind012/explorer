@@ -36,14 +36,8 @@ let g_vecTableButtons = [
 	},
 ];
 
-window.addEventListener('message', (ev) => {
+window.addEventListener('message', async (ev) => {
 	let data = ev.data;
-
-	// `create-window` reply
-	if (typeof data == 'number') {
-		g_hChildWindow = data;
-		return;
-	}
 
 	switch (data.action) {
 		case 'close':
@@ -61,11 +55,12 @@ window.addEventListener('message', (ev) => {
 			break;
 
 		case 'create-window':
-			CreateWindow(
+			g_hChildWindow = await electron.CreateWindow(
 				'properties',
 				{
-					width:  367,
-					height: 419,
+					resizable: false,
+					width:     367,
+					height:    419,
 				},
 				data.file
 			);
@@ -110,7 +105,7 @@ document.addEventListener('keydown', (ev) => {
 	}
 });
 
-document.addEventListener('contextmenu', (ev) => {
+document.addEventListener('contextmenu', async (ev) => {
 	let selection = g_Path.m_Selection;
 
 	if (!selection?.el)
@@ -120,9 +115,10 @@ document.addEventListener('contextmenu', (ev) => {
 		.map(e => e.length ? 23 : 6)
 		.reduce((a, b) => a + b);
 
-	CreateWindow(
+	g_hChildWindow = await electron.CreateWindow(
 		'menu',
 		{
+			resizable:       false,
 			focusable:       false,
 			width:           112,
 			minWidth:        112,

@@ -1,15 +1,3 @@
-function CreateWindow(strPageName, options, msg) {
-	options = Object.assign(options, {
-		resizable:       false,
-	});
-
-	electron.ipcRenderer.send('create-window', {
-		page: strPageName,
-		options,
-		msg,
-	});
-}
-
 function SendMesssageToParent(msg) {
 	electron.ipcRenderer.send('send-message-to-parent', msg);
 }

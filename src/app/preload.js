@@ -11,10 +11,6 @@ let cp = require('node:child_process');
 
 let FilesystemUtils = Addon('FilesystemUtils');
 
-ipcRenderer.on('create-window', (ev, args) => {
-	postMessage(args);
-});
-
 ipcRenderer.on('window-message', (ev, args) => {
 	postMessage(args);
 });
@@ -22,6 +18,14 @@ ipcRenderer.on('window-message', (ev, args) => {
 contextBridge.exposeInMainWorld('electron', {
 	ipcRenderer,
 	FilesystemUtils,
+
+	CreateWindow(strPageName, options, msg) {
+		return ipcRenderer.invoke('create-window', {
+			page: strPageName,
+			options,
+			msg,
+		});
+	},
 
 	// shell.openPath() is async, but blocking ?
 	ExecuteCommand(cmd) {
