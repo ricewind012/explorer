@@ -23,7 +23,7 @@ contextBridge.exposeInMainWorld('electron', {
 	ipcRenderer,
 	FilesystemUtils,
 
-	// Could have used g_app_info_launch_default_for_uri() here, but fuck you
+	// shell.openPath() is async, but blocking ?
 	ExecuteCommand(cmd) {
 		cp.exec(cmd, (err, stdout, stderr) => {
 			if (err) {
