@@ -1,26 +1,17 @@
 #include <node.h>
 #include <source_location>
 
+#include "shared.h"
+
 using namespace v8;
 
-const char* ArgToString(Isolate* pIsolate, Local<Value> arg) {
-	String::Utf8Value js_str(pIsolate, arg);
-	auto szResult(*js_str);
-
-	return szResult;
-}
-
-Local<String> ToString(Isolate* pIsolate, const char* szString) {
-	return String::NewFromUtf8(pIsolate, szString).ToLocalChecked();
-}
-
-void ThrowException(
-	Isolate* pIsolate,
-	const char* szMessage,
-	const std::source_location hLine = std::source_location::current()
-) {
-	auto szLine = std::to_string(hLine.line()).c_str();
-	auto szFile = basename(hLine.file_name());
+void
+ThrowException(Isolate* pIsolate,
+							 const char* szMessage,
+							 const std::source_location location)
+{
+	auto szLine = std::to_string(location.line()).c_str();
+	auto szFile = location.file_name();
 
 	auto unLength = strlen(szFile) + strlen(szLine) + strlen(szMessage) + 3;
 	char szOutput[unLength];
@@ -31,5 +22,5 @@ void ThrowException(
 	strcat(szOutput, ": ");
 	strcat(szOutput, szMessage);
 
-	pIsolate->ThrowException(Exception::Error(ToString(pIsolate, szOutput)));
+	pIsolate->ThrowException(Exception::Error(TO_STRING(szOutput)));
 }

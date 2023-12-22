@@ -1,12 +1,13 @@
-#include "../shared/shared.h"
-
 #include <filesystem>
 #include <vector>
-#include <unordered_map>
+
+#include "../shared/shared.h"
 
 namespace fs = std::filesystem;
 
-void GetFiles(const FunctionCallbackInfo<Value>& args) {
+void
+GetFiles(const FunctionCallbackInfo<Value>& args)
+{
 	auto* pIsolate = args.GetIsolate();
 	auto context = pIsolate->GetCurrentContext();
 
@@ -14,15 +15,15 @@ void GetFiles(const FunctionCallbackInfo<Value>& args) {
 	std::vector<Local<Object>> vecPaths;
 
 	String::Utf8Value js_strArg(pIsolate, args[0]);
-	auto szArg(*js_strArg);
+	auto szArg = *js_strArg;
 
-	for (const auto& i : fs::directory_iterator{szArg, err}) {
+	for (const auto& i : fs::directory_iterator{ szArg, err }) {
 		auto obj = Object::New(pIsolate);
 		auto hFileStatus = fs::status(i.path());
 
-		OBJ_MEMBER("path", ToString(pIsolate, i.path().c_str()));
+		OBJ_MEMBER("path", TO_STRING(i.path().c_str()));
 		OBJ_MEMBER("type", Number::New(pIsolate, (int)hFileStatus.type()));
-    OBJ_MEMBER("mode", Number::New(pIsolate, (int)hFileStatus.permissions()));
+		OBJ_MEMBER("mode", Number::New(pIsolate, (int)hFileStatus.permissions()));
 
 		if (!i.is_directory()) {
 			OBJ_MEMBER("size", Number::New(pIsolate, fs::file_size(i, err)));
@@ -54,13 +55,15 @@ void GetFiles(const FunctionCallbackInfo<Value>& args) {
 	args.GetReturnValue().Set(result);
 }
 
-void DiskUsage(const FunctionCallbackInfo<Value>& args) {
+void
+DiskUsage(const FunctionCallbackInfo<Value>& args)
+{
 	auto* pIsolate = args.GetIsolate();
 	auto context = pIsolate->GetCurrentContext();
 	auto obj = Object::New(pIsolate);
 
 	String::Utf8Value js_strArg(pIsolate, args[0]);
-	auto szArg(*js_strArg);
+	auto szArg = *js_strArg;
 
 	std::error_code err;
 	auto data = fs::space(szArg, err);
@@ -77,10 +80,8 @@ void DiskUsage(const FunctionCallbackInfo<Value>& args) {
 }
 
 extern "C" NODE_MODULE_EXPORT void
-NODE_MODULE_INITIALIZER(
-	Local<Object> exports,
-	Local<Object> module
-) {
+NODE_MODULE_INITIALIZER(Local<Object> exports, Local<Object> module)
+{
 	NODE_SET_METHOD(exports, "GetFiles", GetFiles);
 	NODE_SET_METHOD(exports, "DiskUsage", DiskUsage);
 }
