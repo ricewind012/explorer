@@ -5,7 +5,7 @@
 	ThrowException(pIsolate, msg);                                               \
 	return
 #define TO_STRING(str) String::NewFromUtf8(pIsolate, str).ToLocalChecked()
-#define OBJ_MEMBER(k, v) obj->Set(context, TO_STRING(k), v)
+#define OBJ_MEMBER(k, v) obj->Set(context, TO_STRING(k), v).FromJust()
 
 using namespace v8;
 
