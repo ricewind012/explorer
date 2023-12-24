@@ -16,15 +16,39 @@ ipcRenderer.on('window-message', (ev, args) => {
 });
 
 contextBridge.exposeInMainWorld('electron', {
-	ipcRenderer,
 	FilesystemUtils,
 
-	CreateWindow(strPageName, options, msg) {
-		return ipcRenderer.invoke('create-window', {
-			page: strPageName,
-			options,
-			msg,
-		});
+	SendMesssageToParent(msg) {
+		ipcRenderer.send('send-message-to-parent', msg);
+	},
+
+	Window: {
+		Close(hWindow) {
+			ipcRenderer.send('close-window', hWindow);
+		},
+
+		Create(strPageName, options, msg) {
+			return ipcRenderer.invoke('create-window', {
+				page: strPageName,
+				options,
+				msg,
+			});
+		},
+
+		Minimize() {
+			ipcRenderer.send('minimize');
+		},
+
+		ToggleFullscreen() {
+			ipcRenderer.send('fullscreen');
+		},
+
+		Resize(nWidth, nHeight) {
+			ipcRenderer.send('resize', {
+				width:  nWidth,
+				height: nHeight,
+			});
+		},
 	},
 
 	// shell.openPath() is async, but blocking ?

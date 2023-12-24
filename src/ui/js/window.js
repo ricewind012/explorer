@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let buttons = g_Elements.titlebar.buttons;
 
 	buttons.minimise?.addEventListener('click', () => {
-		electron.ipcRenderer.send('minimize');
+		electron.Window.Minimize();
 	});
 	buttons.maximise?.addEventListener('click', () => {
 		HandleMaximizeButton();
@@ -48,6 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		HandleMaximizeButton();
 	});
 	buttons.close?.addEventListener('click', () => {
-		electron.ipcRenderer.send('close');
+		window.close();
 	});
 });

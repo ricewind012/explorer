@@ -1,7 +1,3 @@
-function SendMesssageToParent(msg) {
-	electron.ipcRenderer.send('send-message-to-parent', msg);
-}
-
 function HandlePointerEvent(el, fnMoveCallback) {
 	el.addEventListener('pointerdown', () => {
 		function fnMove(ev) {
@@ -24,7 +20,7 @@ function HandleMaximizeButton() {
 
 	buttons.restore.hidden  = bFullscreen;
 	buttons.maximise.hidden = !bFullscreen;
-	electron.ipcRenderer.send('fullscreen');
+	electron.Window.ToggleFullscreen();
 }
 
 function GetPreviousSiblingsWidth(el) {

@@ -41,7 +41,7 @@ hApp.whenReady().then(() => {
 	ipcMain.on('fullscreen', () => {
 		hWindow.isMaximized() ? hWindow.restore() : hWindow.maximize();
 	});
-	ipcMain.on('close', () => {
+	ipcMain.on('close-app', () => {
 		hApp.quit();
 	});
 	ipcMain.handle('create-window', (ev, args) => {

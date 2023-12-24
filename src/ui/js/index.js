@@ -42,7 +42,7 @@ window.addEventListener('message', async (ev) => {
 	switch (data.action) {
 		case 'close':
 			if (g_hChildWindow)
-				electron.ipcRenderer.send('close-window', g_hChildWindow);
+				electron.Window.Close(g_hChildWindow);
 			g_hChildWindow = null;
 			break;
 
@@ -55,7 +55,7 @@ window.addEventListener('message', async (ev) => {
 			break;
 
 		case 'create-window':
-			g_hChildWindow = await electron.CreateWindow(
+			g_hChildWindow = await electron.Window.Create(
 				'properties',
 				{
 					resizable: false,
@@ -115,7 +115,7 @@ document.addEventListener('contextmenu', async (ev) => {
 		.map(e => e.length ? 23 : 6)
 		.reduce((a, b) => a + b);
 
-	g_hChildWindow = await electron.CreateWindow(
+	g_hChildWindow = await electron.Window.Create(
 		'menu',
 		{
 			resizable:       false,
@@ -190,10 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Set up statusbar
 	HandlePointerEvent(g_Elements.statusbar.handle, (ev) => {
-		electron.ipcRenderer.send('resize', {
-			width:  ev.pageX,
-			height: ev.pageY,
-		});
+		electron.Window.Resize(ev.pageX, ev.pageY);
 	});
 
 	// Set up separators

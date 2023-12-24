@@ -7,14 +7,14 @@ let g_vecMenuEntries = [
 					break;
 
 				case EFileType.Directory:
-					SendMesssageToParent({
+					electron.SendMesssageToParent({
 						action: 'navigate',
 						path:	 g_Message.path,
 					});
 					break;
 
 				default:
-					SendMesssageToParent({
+					electron.SendMesssageToParent({
 						action: 'execute',
 					});
 					break;
@@ -24,7 +24,7 @@ let g_vecMenuEntries = [
 		// Separator
 	], [
 		'Properties', () => {
-			SendMesssageToParent({
+			electron.SendMesssageToParent({
 				action: 'create-window',
 				file:   g_Message,
 			});
