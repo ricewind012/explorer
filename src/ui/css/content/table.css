@@ -56,6 +56,7 @@
 .list-entry {
 	--table-icon: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAQCAMAAAD6fQULAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURQAAAP///4eIj8DHyAAAAIf7VzIAAAAFdFJOU/////8A+7YOUwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAADZJREFUGFdjYGFhYIRCIBPIYYJCIBtIICCQBwfMWHgMDCBFOOVA0lSVgwEQjxkBGIDuhgMGFgBmBADr9EYr2gAAAABJRU5ErkJggg==');
 
+	width: max-content;
   /* alternative -webkit-line-clamp */
 	height: calc(var(--text-size) * var(--text-line) + 3px);
 	display: flex;
@@ -91,20 +92,20 @@
 
 #table-name-button,
 .list-name {
-	--table-row: var(--table-name-button-width);
+	--table-row: var(--table-separator-name-width);
 }
 
 #table-size-button,
 .list-size {
-	--table-row: var(--table-size-button-width);
+	--table-row: var(--table-separator-size-width);
 }
 
 #table-type-button,
 .list-type {
-	--table-row: var(--table-type-button-width);
+	--table-row: var(--table-separator-type-width);
 }
 
 #table-mode-button,
 .list-mode {
-	--table-row: var(--table-mode-button-width);
+	--table-row: var(--table-separator-mode-width);
 }

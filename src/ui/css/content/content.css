@@ -17,10 +17,10 @@ body {
 
 #content {
 	--table-icon-width: 16px;
-	--table-name-button-width: 322px;
-	--table-size-button-width: 150px;
-	--table-type-button-width: 150px;
-	--table-mode-button-width: 150px;
+	--table-separator-name-width: 322px;
+	--table-separator-size-width: 150px;
+	--table-separator-type-width: 150px;
+	--table-separator-mode-width: 150px;
 
 	overflow: auto;
 

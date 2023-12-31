@@ -198,12 +198,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	for (let el of els('.table-header-button-container > .separator')) {
 		HandlePointerEvent(el, (ev) => {
-			let target = ev.target;
-			// TODO: does not work when resizing to right hand side
-			let nPreviousButtonWidth = GetPreviousSiblingsWidth(target.parentNode);
+			let nPreviousButtonWidth = GetPreviousSiblingsWidth(el.parentNode);
 
 			elContent.style.setProperty(
-				`--${target.id}-width`,
+				`--${el.id}-width`,
 				`${ev.pageX - nPreviousButtonWidth}px`
 			);
 		});
