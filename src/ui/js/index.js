@@ -65,45 +65,18 @@ window.addEventListener('message', async (ev) => {
 				data.file
 			);
 			break;
-	}
-});
 
-document.addEventListener('keydown', (ev) => {
-	switch (ev.key) {
-		case 'Enter':
-			let selection = g_Path.m_Selection;
-
-			switch (selection.file.type) {
-				case EFileType.NotFound:
-				case EFileType.Unknown:
-					break;
-
-				case EFileType.Directory:
-					g_Path.Navigate(selection.file.path);
-					break;
-
-				default:
-					g_Path.ExecuteSelection();
-					break;
-			}
+		case 'file-delete':
+			g_Path.DeleteSelection();
 			break;
 
-		case 'Backspace':
-			let strPath = g_Path.m_strPath;
-
-			if (!strPath || strPath == '/')
-				return;
-
-			g_Path.Navigate(
-				'/' + strPath
-					.split('/')
-					.filter(e => e)
-					.slice(0, -1)
-					.join('/')
-			);
+		case 'file-rename':
+			g_Path.RenameSelection();
 			break;
 	}
 });
+
+document.addEventListener('keydown', OnKeyPress);
 
 document.addEventListener('contextmenu', async (ev) => {
 	let selection = g_Path.m_Selection;

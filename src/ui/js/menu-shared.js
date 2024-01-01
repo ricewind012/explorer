@@ -23,6 +23,22 @@ let g_vecMenuEntries = [
 	], [
 		// Separator
 	], [
+		'Delete', () => {
+			electron.SendMesssageToParent({
+				action: 'file-delete',
+				file:   g_Message,
+			});
+		}
+	], [
+		'Rename', () => {
+			electron.SendMesssageToParent({
+				action: 'file-rename',
+				file:   g_Message,
+			});
+		}
+	], [
+		// Separator
+	], [
 		'Properties', () => {
 			electron.SendMesssageToParent({
 				action: 'create-window',

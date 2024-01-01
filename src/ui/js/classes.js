@@ -135,6 +135,20 @@ class CPath {
 		);
 	}
 
+	DeleteSelection() {
+		let selection = this.m_Selection;
+
+		try {
+			electron.File.Delete(selection.file.path, { recursive: true });
+		} catch (e) {
+			alert(e.message);
+			return;
+		}
+
+		console.log('%o deleted', selection.file.path);
+		selection.el.remove();
+	}
+
 	ExecuteSelection() {
 		try {
 			electron.ExecuteCommand(`${k_strOpener} ${this.m_Selection.file.path}`);
@@ -142,5 +156,66 @@ class CPath {
 			alert(e.message);
 			return;
 		}
+	}
+
+	RenameSelection() {
+		let elSelection = this.m_Selection.el;
+		let elListName = elSelection.querySelector(':scope > .list-name');
+		let elInput = elSelection.querySelector(':scope > .list-rename-input');
+
+		elListName.hidden = true;
+		elInput.value = elListName.innerText;
+		elInput.hidden = false;
+		elInput.focus();
+		elInput.select();
+
+		function GoBack() {
+			elListName.hidden = false;
+			elInput.hidden = true;
+
+			electron.Window.SetDestroyable(true);
+			document.addEventListener('keydown', OnKeyPress);
+			document.removeEventListener('keydown', OnAccept);
+			document.removeEventListener('keydown', OnCancel);
+		}
+
+		function OnAccept(ev) {
+			if (ev.key != 'Enter')
+				return;
+
+			let strOldName = elListName.innerText;
+			let strNewName = elInput.value;
+
+			if (strNewName == '' || strOldName == strNewName) {
+				GoBack();
+				return;
+			}
+
+			console.log('%o renamed to %o', strOldName, strNewName);
+			g_Path.m_Selection.file.path = strNewName;
+			elListName.innerText = strNewName;
+			try {
+				electron.File.Move(
+					g_Path.m_strPath + '/' + strOldName,
+					g_Path.m_strPath + '/' + strNewName
+				);
+			} catch (e) {
+				alert(e.message);
+			}
+
+			GoBack();
+		}
+
+		function OnCancel(ev) {
+			if (ev.key != 'Escape')
+				return;
+
+			GoBack();
+		}
+
+		electron.Window.SetDestroyable(false);
+		document.removeEventListener('keydown', OnKeyPress);
+		document.addEventListener('keydown', OnAccept);
+		document.addEventListener('keydown', OnCancel);
 	}
 }

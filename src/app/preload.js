@@ -8,8 +8,13 @@ let {
 
 let path = require('node:path');
 let cp = require('node:child_process');
+let fs = require('node:fs');
 
 let FilesystemUtils = Addon('FilesystemUtils');
+
+function HandleBeforeUnload(ev) {
+	ev.returnValue = true;
+}
 
 ipcRenderer.on('window-message', (ev, args) => {
 	postMessage(args);
@@ -17,6 +22,11 @@ ipcRenderer.on('window-message', (ev, args) => {
 
 contextBridge.exposeInMainWorld('electron', {
 	FilesystemUtils,
+
+	File: {
+		Delete: fs.rmSync,
+		Move: fs.renameSync,
+	},
 
 	SendMesssageToParent(msg) {
 		ipcRenderer.send('send-message-to-parent', msg);
@@ -48,6 +58,13 @@ contextBridge.exposeInMainWorld('electron', {
 				width:  nWidth,
 				height: nHeight,
 			});
+		},
+
+		SetDestroyable(bCanDestroy) {
+			if (bCanDestroy)
+				window.removeEventListener('beforeunload', HandleBeforeUnload);
+			else
+				window.addEventListener('beforeunload', HandleBeforeUnload);
 		},
 	},
 
