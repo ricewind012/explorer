@@ -1,5 +1,0 @@
-Standard: Cpp11
-BasedOnStyle: Mozilla
-UseTab: Always
-IndentWidth: 2
-TabWidth: 2

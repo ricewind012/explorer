@@ -41,9 +41,9 @@ class CPath {
 
 		elList.innerHTML = '';
 		for (let i = 0; i < g_vecFiles.length; i++) {
-			let hFile = g_vecFiles[i];
-			let bUnknownType = hFile.type == EFileType.NotFound;
-			console.assert(!bUnknownType, 'EFileType == -1 for %o', hFile.path);
+			let file = g_vecFiles[i];
+			let bUnknownType = file.type == EFileType.Unknown;
+			console.assert(!bUnknownType, 'EFileType == 8 for %o', file.path);
 
 			let elEntry = g_Elements.content.entry.content.cloneNode(true);
 			let elEntryContainer = elEntry.children[0];
@@ -56,45 +56,45 @@ class CPath {
 			] = [...elEntryContainer.children];
 
 			elEntryContainer.addEventListener('click', (ev) => {
-				this.ChangeSelection(ev.target.parentNode, hFile);
+				this.ChangeSelection(ev.target.parentNode, file);
 			});
 
-			elListName.innerText = hFile.path
+			elListName.innerText = file.path
 				.split('/')
 				.filter(e => e)
 				.splice(-1);
 
 			if (!bUnknownType) {
-				for (let i of Object.keys(hFile))
-					elEntryContainer.setAttribute(i, hFile[i]);
+				for (let i of Object.keys(file))
+					elEntryContainer.setAttribute(i, file[i]);
 
-				elListType.innerText = EFileType[hFile.type];
+				elListType.innerText = EFileType[file.type];
 				elListMode.innerText = (() => {
-					switch (hFile.mode) {
+					switch (file.mode) {
 						case EFileType.Directory:
 							return 'd';
 						case EFileType.Symlink:
 							return 'l';
 						default:
-							return hFile.mode & S_IRGRP ? '-' : 's';
+							return file.mode & S_IRGRP ? '-' : 's';
 					}
 				})();
 				elListMode.innerText += PermissionsToString(
-					`0o${(hFile.mode).toString(8)}`
+					`0o${(file.mode).toString(8)}`
 				);
 
-				if (hFile.type == EFileType.Directory) {
+				if (file.type == EFileType.Directory) {
 					elListName.addEventListener('dblclick', (ev) => {
-						g_Path.Navigate(hFile.path);
+						g_Path.Navigate(file.path);
 					});
 				} else {
-					let strExtension = hFile.path.match(/\.[\w-]+$/);
+					let strExtension = file.path.match(/\.[\w-]+$/);
 					elListIcon.setAttribute('ext', strExtension);
 
 					elListName.addEventListener('dblclick', (ev) => {
 						this.ExecuteSelection();
 					});
-					elListSize.innerText = HumanReadableSize(hFile.size);
+					elListSize.innerText = HumanReadableSize(file.size);
 				}
 			}
 
@@ -106,7 +106,22 @@ class CPath {
 
 	Navigate(strPath) {
 		try {
-			g_vecFiles = electron.FilesystemUtils.GetFiles(strPath);
+			g_vecFiles = electron.FS.List(strPath).map(e => {
+				let type = (() => {
+					switch (e.mode & S_IFMT) {
+						case S_IFREG:  return EFileType.Regular;
+						case S_IFDIR:  return EFileType.Directory;
+						case S_IFLNK:  return EFileType.Symlink;
+						case S_IFBLK:  return EFileType.Block;
+						case S_IFCHR:  return EFileType.Character;
+						case S_IFIFO:  return EFileType.FIFO;
+						case S_IFSOCK: return EFileType.Socket;
+						default:       return EFileType.Unknown;
+					}
+				})();
+
+				return Object.assign(e, { type })
+			});
 		} catch(e) {
 			alert(e.message);
 			return;

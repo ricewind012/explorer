@@ -1,6 +1,3 @@
-let Addon = p =>
-	require(path.join(__dirname, `../modules/${p}/build/Release/addon`));
-
 let {
 	contextBridge,
 	ipcRenderer,
@@ -9,8 +6,6 @@ let {
 let path = require('node:path');
 let cp = require('node:child_process');
 let fs = require('node:fs');
-
-let FilesystemUtils = Addon('FilesystemUtils');
 
 function HandleBeforeUnload(ev) {
 	ev.returnValue = true;
@@ -21,7 +16,27 @@ ipcRenderer.on('window-message', (ev, args) => {
 });
 
 contextBridge.exposeInMainWorld('electron', {
-	FilesystemUtils,
+	FS: {
+		Constants: fs.constants,
+
+		List(strPath) {
+			return fs.readdirSync(strPath)
+				.map(e => path.join(strPath, e))
+				.map(e => {
+					try {
+						return Object.assign(fs.statSync(e), { path: e });
+					} catch (e) {
+						console.error(e.message);
+						return;
+					}
+				})
+				.filter(Boolean);
+		},
+
+		Stat(strPath) {
+			return fs.statfsSync(strPath);
+		},
+	},
 
 	File: {
 		Delete: fs.rmSync,

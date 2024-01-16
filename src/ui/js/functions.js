@@ -99,9 +99,6 @@ function PermissionsToString(nPerms) {
 }
 
 function HumanReadableSize(nBytes) {
-	if (!nBytes || nBytes >= k_n1TB)
-		return '0 B';
-
 	let eUnit = Math.floor(Math.log(nBytes) / Math.log(1024));
 	let nSize = Math.round(nBytes / Math.pow(1024, eUnit));
 

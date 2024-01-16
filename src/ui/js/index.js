@@ -112,10 +112,11 @@ document.addEventListener('explorer:navigate', (ev) => {
 		count: nFiles,
 	} = ev.detail;
 	let {
-		capacity: nCapacity,
-		free:     nFree
-	} = electron.FilesystemUtils.DiskUsage(strPath);
-	let nDiskUsage = nCapacity - nFree;
+		bsize:  nBlockSize,
+		blocks: nBlocks,
+		bfree:  nBlocksFree,
+	} = electron.FS.Stat(strPath);
+	let nDiskUsage = nBlocks * nBlockSize - nBlocksFree * nBlockSize;
 
 	UpdateStatusbar('count', `${nFiles} object(s)`);
 	UpdateStatusbar('usage', HumanReadableSize(nDiskUsage));
