@@ -7,7 +7,7 @@ let path = require('node:path');
 let cp = require('node:child_process');
 let fs = require('node:fs');
 
-function HandleBeforeUnload(ev) {
+function OnBeforeUnload(ev) {
 	ev.returnValue = true;
 }
 
@@ -77,15 +77,15 @@ contextBridge.exposeInMainWorld('electron', {
 
 		SetDestroyable(bCanDestroy) {
 			if (bCanDestroy)
-				window.removeEventListener('beforeunload', HandleBeforeUnload);
+				window.removeEventListener('beforeunload', OnBeforeUnload);
 			else
-				window.addEventListener('beforeunload', HandleBeforeUnload);
+				window.addEventListener('beforeunload', OnBeforeUnload);
 		},
 	},
 
 	// shell.openPath() is async, but blocking ?
 	ExecuteCommand(cmd) {
-		cp.exec(cmd, (err, stdout, stderr) => {
+		cp.exec(cmd, (err) => {
 			if (err) {
 				throw new Error(err.message);
 			}

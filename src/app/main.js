@@ -1,5 +1,5 @@
 let {
-	app: hApp,
+	app,
 	BrowserWindow: CBrowserWindow,
 	ipcMain,
 } = require('electron');
@@ -20,29 +20,31 @@ function CreateWindow(strPageName, additionalOptions) {
 			preload:         path.join(__dirname, 'preload.js'),
 		},
 	}, additionalOptions);
-	let hWindow = new CBrowserWindow(options);
+	let wnd = new CBrowserWindow(options);
 
-	hWindow.loadFile(`src/ui/html/${strPageName}.html`);
-	hWindow.once('ready-to-show', () => hWindow.show());
+	wnd.loadFile(`src/ui/html/${strPageName}.html`);
+	wnd.once('ready-to-show', () => {
+		wnd.show()
+	});
 
-	return hWindow;
+	return wnd;
 }
 
-hApp.commandLine.appendSwitch('disable-smooth-scrolling');
-hApp.whenReady().then(() => {
-	let hWindow = CreateWindow('index');
+app.commandLine.appendSwitch('disable-smooth-scrolling');
+app.whenReady().then(() => {
+	let wnd = CreateWindow('index');
 
 	ipcMain.on('resize', (_, e) => {
-		hWindow.setSize(e.width, e.height);
+		wnd.setSize(e.width, e.height);
 	});
 	ipcMain.on('minimize', () => {
-		hWindow.minimize();
+		wnd.minimize();
 	});
 	ipcMain.on('fullscreen', () => {
-		hWindow.isMaximized() ? hWindow.restore() : hWindow.maximize();
+		wnd.isMaximized() ? wnd.restore() : wnd.maximize();
 	});
 	ipcMain.on('close-app', () => {
-		hApp.quit();
+		app.quit();
 	});
 	ipcMain.handle('create-window', (ev, args) => {
 		return new Promise((resolve, reject) => {
@@ -51,12 +53,12 @@ hApp.whenReady().then(() => {
 				return;
 			}
 
-			let hWindow = CreateWindow(args.page, args.options);
+			let wnd = CreateWindow(args.page, args.options);
 
-			hWindow.once('ready-to-show', () => {
-				hWindow.webContents.postMessage('window-message', args.msg);
+			wnd.once('ready-to-show', () => {
+				wnd.webContents.postMessage('window-message', args.msg);
 
-				resolve(hWindow.id);
+				resolve(wnd.id);
 			});
 		});
 	});
@@ -64,10 +66,12 @@ hApp.whenReady().then(() => {
 		CBrowserWindow.fromId(args)?.close();
 	});
 	ipcMain.on('send-message-to-parent', (ev, args) => {
-		if (ev.sender == hWindow.webContents)
+		if (ev.sender == wnd.webContents)
 			return;
 
-		hWindow.webContents.postMessage('window-message', args);
+		wnd.webContents.postMessage('window-message', args);
 	});
 });
-hApp.on('window-all-closed', () => hApp.quit());
+app.on('window-all-closed', () => {
+	app.quit()
+});

@@ -88,9 +88,11 @@ function PermissionsToString(nPerms) {
 	strResult += char('r', S_IRUSR);
 	strResult += char('w', S_IWUSR);
 	strResult += char('x', S_IXUSR);
+
 	strResult += char('r', S_IRGRP);
 	strResult += char('w', S_IWGRP);
 	strResult += char('x', S_IXGRP);
+
 	strResult += char('r', S_IROTH);
 	strResult += char('w', S_IWOTH);
 	strResult += char('x', S_IXOTH);
