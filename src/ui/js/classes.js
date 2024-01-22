@@ -21,6 +21,27 @@ class CAppData {
 	}
 }
 
+class CFiles {
+	static GetContents(strPath) {
+		return electron.FS.List(strPath).map(e => {
+			let type = (() => {
+				switch (e.mode & S_IFMT) {
+					case S_IFREG:  return EFileType.Regular;
+					case S_IFDIR:  return EFileType.Directory;
+					case S_IFLNK:  return EFileType.Symlink;
+					case S_IFBLK:  return EFileType.Block;
+					case S_IFCHR:  return EFileType.Character;
+					case S_IFIFO:  return EFileType.FIFO;
+					case S_IFSOCK: return EFileType.Socket;
+					default:       return EFileType.Unknown;
+				}
+			})();
+
+			return Object.assign(e, { type })
+		});
+	}
+}
+
 class CPath {
 	constructor() {
 		this.m_strPath = null;
@@ -106,22 +127,7 @@ class CPath {
 
 	Navigate(strPath) {
 		try {
-			g_vecFiles = electron.FS.List(strPath).map(e => {
-				let type = (() => {
-					switch (e.mode & S_IFMT) {
-						case S_IFREG:  return EFileType.Regular;
-						case S_IFDIR:  return EFileType.Directory;
-						case S_IFLNK:  return EFileType.Symlink;
-						case S_IFBLK:  return EFileType.Block;
-						case S_IFCHR:  return EFileType.Character;
-						case S_IFIFO:  return EFileType.FIFO;
-						case S_IFSOCK: return EFileType.Socket;
-						default:       return EFileType.Unknown;
-					}
-				})();
-
-				return Object.assign(e, { type })
-			});
+			g_vecFiles = CFiles.GetContents(strPath);
 		} catch(e) {
 			alert(e.message);
 			return;
@@ -232,5 +238,90 @@ class CPath {
 		document.removeEventListener('keydown', OnKeyPress);
 		document.addEventListener('keydown', OnAccept);
 		document.addEventListener('keydown', OnCancel);
+	}
+}
+
+class CTree {
+	constructor() {
+		this.m_elSelection = null;
+	}
+
+	RenderPath(strPath) {
+		let files;
+		try {
+			files = CFiles.GetContents(strPath);
+		} catch (e) {
+			alert(e.message);
+			return;
+		}
+
+		return files
+			.filter(e => e.type == EFileType.Directory)
+			.map(file => {
+				let elEntry = g_Elements.tree.template.content.cloneNode(true);
+				let elEntryContainer = elEntry.children[0];
+				let [
+					elListIcon,
+					elListImage,
+					elListName,
+				] = [...elEntryContainer.querySelectorAll(':scope > div > *')];
+
+				let strFolderName = file.path
+					.split('/')
+					.filter(e => e)
+					.splice(-1)[0];
+				elListName.innerText = strFolderName;
+
+				const OnClick = (ev) => {
+					let elTarget = ev.target;
+
+					this.m_Selection?.removeAttribute('selected');
+					this.m_Selection = elEntryContainer;
+					this.m_Selection.setAttribute('selected', '');
+
+					if (elEntryContainer.getAttribute('open') == '')
+						elEntryContainer.removeAttribute('open');
+					else
+						elEntryContainer.setAttribute('open', '');
+
+					if (elEntryContainer.bRendered)
+						return;
+
+					let dirs = this.RenderPath(file.path);
+
+					if (!dirs?.length) {
+						elEntryContainer.setAttribute('empty', '');
+					} else {
+						for (let i of dirs)
+							elEntryContainer.appendChild(i);
+					}
+
+					elEntryContainer.bRendered = true;
+				}
+
+				elListIcon.addEventListener('click', OnClick);
+				elListName.addEventListener('click', (ev) => {
+					OnClick(ev);
+
+					let path = strPath + '/' + strFolderName;
+
+					if (g_Path.m_strPath == path)
+						return;
+
+					g_Path.Navigate(path);
+				});
+
+				return elEntry;
+			});
+	}
+
+	Render() {
+		let strLabel = 'CTree::Render()';
+		let elTree = g_Elements.tree.container;
+
+		console.time(strLabel);
+		for (let i of this.RenderPath('/'))
+			elTree.appendChild(i)
+		console.timeEnd(strLabel);
 	}
 }

@@ -47,6 +47,24 @@
 
 			<main id="content">
 				<section
+					id="content-sidebar"
+					class="content-section-container"
+				>
+					<ul
+						id="tree"
+						class="content-section"
+					></ul>
+				</section>
+
+				<div id="content-separator-container">
+					<div
+						id="content-separator"
+						class="separator"
+						orientation="vertical"
+					></div>
+				</div>
+
+				<section
 					id="content-main"
 					class="content-section-container"
 				>
@@ -146,6 +164,16 @@
 			</footer>
 		</div>
 	</body>
+
+	<template id="tree-entry-template">
+		<li class="tree-entry">
+			<div class="tree-entry-content">
+				<span class="tree-entry-icon"></span>
+				<img class="tree-entry-image" />
+				<span class="tree-entry-name"></span>
+			</div>
+		</li>
+	</template>
 
 	<template id="list-entry-template">
 		<li class="list-entry">

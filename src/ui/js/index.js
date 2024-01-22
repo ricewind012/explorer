@@ -1,5 +1,6 @@
 let g_Data         = new CAppData();
 let g_Path         = new CPath();
+let g_Tree         = new CTree();
 
 let g_hChildWindow = null;
 let g_vecFiles     = [];
@@ -143,8 +144,14 @@ document.addEventListener('explorer:sort', (ev) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+	g_Elements.tree = {
+		container: id('tree'),
+		template:  id('tree-entry-template'),
+	};
+
 	g_Elements.content = {
 		container: id('content'),
+		separator: id('content-separator'),
 		list:      id('table-list'),
 		entry:     id('list-entry-template'),
 
@@ -180,6 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			);
 		});
 	}
+
+	HandlePointerEvent(g_Elements.content.separator, (ev) => {
+		elContent.style.setProperty(
+			`--${ev.target.id}-width`,
+			`${ev.pageX - k_nContentSeparatorOffset}px`
+		);
+	});
 
 	// Set up table buttons
 	let buttons = g_Elements.content.table;
@@ -222,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// ... and go
 	g_Path.Navigate(g_Data.Get('last_path') || '/');
+	g_Tree.Render();
 
 	// TODO: this **re**renders it
 	if (!bHasSort)

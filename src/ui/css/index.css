@@ -4,6 +4,7 @@
 @import 'shared/icons.css';
 @import 'shared/tabs.css';
 @import 'shared/text.css';
+@import 'shared/tree.css';
 @import 'shared/variables.css';
 @import 'shared/window.css';
 
@@ -11,6 +12,7 @@
 @import 'parts/titlebar.css';
 @import 'parts/statusbar.css';
 
+@import 'content/tree.css';
 @import 'content/content.css';
 @import 'content/separator.css';
 @import 'content/table.css';

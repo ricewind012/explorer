@@ -16,6 +16,8 @@ body {
 }
 
 #content {
+	--content-separator-width: 151px;
+
 	--table-icon-width: 16px;
 	--table-separator-name-width: 322px;
 	--table-separator-size-width: 150px;
@@ -41,8 +43,16 @@ body {
 .content-section {
 	overflow: auto;
 
-	width: calc(100% + 7px);
+	width: 100%;
 	height: 100%;
+}
+
+#content-sidebar {
+	width: max(var(--content-separator-width), 4px);
+}
+
+#content-separator-container {
+	position: relative;
 }
 
 #content-main {
