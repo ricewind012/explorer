@@ -1,6 +1,5 @@
 #table-list-container {
-	overflow: auto;
-	height: calc(100% - 17px);
+	height: 100%;
 }
 
 #table-header {

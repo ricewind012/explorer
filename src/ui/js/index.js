@@ -1,4 +1,3 @@
-let g_Data         = new CAppData();
 let g_Path         = new CPath();
 let g_Tree         = new CTree();
 
@@ -86,8 +85,8 @@ document.addEventListener('contextmenu', async (ev) => {
 		return;
 
 	let nMenuHeight = g_vecMenuEntries
-		.map(e => e.length ? 23 : 6)
-		.reduce((a, b) => a + b);
+		.map(e => e.length ? 17 : 11)
+		.reduce((a, b) => a + b) + 1;
 
 	g_hChildWindow = await electron.Window.Create(
 		'menu',
@@ -122,7 +121,7 @@ document.addEventListener('explorer:navigate', (ev) => {
 	UpdateStatusbar('count', `${nFiles} object(s)`);
 	UpdateStatusbar('usage', HumanReadableSize(nDiskUsage));
 
-	g_Data.Set('last_path', strPath);
+	CAppData.Set('last_path', strPath);
 	g_Path.m_strPath = strPath;
 	g_Path.Render();
 	UpdateTitle(strPath);
@@ -136,7 +135,7 @@ document.addEventListener('explorer:sort', (ev) => {
 		order:  ev.detail.order,
 	};
 
-	g_Data.Set('last_sort', {
+	CAppData.Set('last_sort', {
 		button: ev.detail.button.name,
 		order:  ev.detail.order,
 	});
@@ -144,11 +143,6 @@ document.addEventListener('explorer:sort', (ev) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-	g_Elements.tree = {
-		container: id('tree'),
-		template:  id('tree-entry-template'),
-	};
-
 	g_Elements.content = {
 		container: id('content'),
 		separator: id('content-separator'),
@@ -161,7 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
 			type: id('table-type-button'),
 			mode: id('table-mode-button'),
 		},
-	}
+	};
+
+	g_Elements.tree = {
+		container: id('tree'),
+		template:  id('tree-entry-template'),
+	};
 
 	g_Elements.statusbar = {
 		count:  id('statusbar-count'),
@@ -220,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	let lastSort = g_Data.Get('last_sort') || {};
+	let lastSort = CAppData.Get('last_sort') || {};
 	let eOrder;
 	let strButton;
 	let bHasSort;
@@ -235,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		buttons[strButton].setAttribute('sort', EFileSorting[eOrder]);
 
 	// ... and go
-	g_Path.Navigate(g_Data.Get('last_path') || '/');
+	g_Path.Navigate(CAppData.Get('last_path') || '/');
 	g_Tree.Render();
 
 	// TODO: this **re**renders it

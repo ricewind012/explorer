@@ -5,18 +5,18 @@ class CEnum {
 		}
 	}
 
-	Append(strMember, nNumber) {
-		this[nNumber] = strMember;
-		this[strMember] = nNumber;
+	Append(strMember, nIndex) {
+		this[nIndex] = strMember;
+		this[strMember] = nIndex;
 	}
 }
 
 class CAppData {
-	Set(k, v) {
+	static Set(k, v) {
 		localStorage.setItem(k, JSON.stringify(v));
 	}
 
-	Get(strItem) {
+	static Get(strItem) {
 		return JSON.parse(localStorage.getItem(strItem));
 	}
 }
@@ -71,6 +71,7 @@ class CPath {
 			let [
 				elListIcon,
 				elListName,
+				_elListRenameInput,
 				elListSize,
 				elListType,
 				elListMode,
@@ -90,17 +91,7 @@ class CPath {
 					elEntryContainer.setAttribute(i, file[i]);
 
 				elListType.innerText = EFileType[file.type];
-				elListMode.innerText = (() => {
-					switch (file.mode) {
-						case EFileType.Directory:
-							return 'd';
-						case EFileType.Symlink:
-							return 'l';
-						default:
-							return file.mode & S_IRGRP ? '-' : 's';
-					}
-				})();
-				elListMode.innerText += PermissionsToString(
+				elListMode.innerText = PermissionsToString(
 					`0o${(file.mode).toString(8)}`
 				);
 
