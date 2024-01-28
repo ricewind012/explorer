@@ -1,50 +1,7 @@
-#statusbar {
-	background-color: var(--color-button-face);
-	box-shadow: var(--border-statusbar);
-
-	padding: 1px 2px;
-	margin: 1px;
-
-	display: flex;
-}
-
-#statusbar-content {
-	gap: 10px;
-
-	display: flex;
-	flex-grow: 1;	
-}
-
-#statusbar-resize-handle {
-	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANAgMAAAAPhQzvAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURf///8DHyIeIjwAAAPjD55kAAAAEdFJOU////wBAKqn0AAAACXBIWXMAAA7CAAAOwgEVKEqAAAAANElEQVQI1xXIMQ0AAAgDMPxgAhO45EIGcrhJxvb0qAEXBqwY4eSKbJPROe+Kt80bnesyMx6fbh/W8xR1uwAAAABJRU5ErkJggg==');
-
-	position: fixed;
-	right: 4px;
-	bottom: 4px;
-	width: 14px;
-	height: 14px;
-
-	cursor: se-resize;
-}
-
 .statusbar-item {
-	position: relative;
-	width: 120px;
+	width: 144px;
 
-	&::after {
-		content: '';
-
-		border: 1px solid;
-		border-color:
-			var(--color-button-face)
-			var(--color-button-shadow)
-			var(--color-button-face)
-			var(--color-button-highlight);
-
-		position: absolute;
-		right: -7px;
-		bottom: -2px;
-		width: 2px;
-		height: calc(100% + 2px);
+	&:last-child {
+		flex-grow: 1;
 	}
 }

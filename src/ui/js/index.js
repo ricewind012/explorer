@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	g_Elements.statusbar = {
 		count:  id('statusbar-count'),
 		usage:  id('statusbar-disk-usage'),
-		handle: id('statusbar-resize-handle'),
+		handle: id('window-resize-handle'),
 	};
 
 	// Set up statusbar

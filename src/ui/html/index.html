@@ -141,22 +141,24 @@
 				</section>
 			</main>
 
-			<footer id="statusbar">
-				<main id="statusbar-content">
-					<section
-						class="statusbar-item"
-						id="statusbar-count"
-					></section>
+			<footer class="statusbar">
+				<section
+					class="statusbar-item"
+					id="statusbar-count"
+				></section>
 
-					<section
-						class="statusbar-item"
-						id="statusbar-disk-usage"
-					></section>
-				</main>
-
-				<div id="statusbar-resize-handle"></div>
+				<section
+					class="statusbar-item"
+					id="statusbar-disk-usage"
+				></section>
 			</footer>
 		</div>
+
+		<!-- Both id & class to use id() in helpers.js-->
+		<div
+			id="window-resize-handle"
+			class="window-resize-handle"
+		></div>
 	</body>
 
 	<template id="tree-entry-template">
