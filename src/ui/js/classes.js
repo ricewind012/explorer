@@ -120,7 +120,7 @@ class CPath {
 		try {
 			g_vecFiles = CFiles.GetContents(strPath);
 		} catch(e) {
-			alert(e.message);
+			AlertDialog('error', 'Navigate() error', e.message);
 			return;
 		}
 
@@ -153,7 +153,7 @@ class CPath {
 		try {
 			electron.File.Delete(selection.file.path, { recursive: true });
 		} catch (e) {
-			alert(e.message);
+			AlertDialog('error', 'DeleteSelection() error', e.message);
 			return;
 		}
 
@@ -165,7 +165,7 @@ class CPath {
 		try {
 			electron.ExecuteCommand(`${k_strOpener} ${this.m_Selection.file.path}`);
 		} catch (e) {
-			alert(e.message);
+			AlertDialog('error', 'ExecuteSelection() error', e.message);
 			return;
 		}
 	}
@@ -212,7 +212,7 @@ class CPath {
 					g_Path.m_strPath + '/' + strNewName
 				);
 			} catch (e) {
-				alert(e.message);
+				AlertDialog('error', 'electron.File.Move() error', e.message);
 			}
 
 			GoBack();
@@ -242,7 +242,7 @@ class CTree {
 		try {
 			files = CFiles.GetContents(strPath);
 		} catch (e) {
-			alert(e.message);
+			AlertDialog('error', 'CFiles::GetContents() error', e.message);
 			return;
 		}
 

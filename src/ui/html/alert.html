@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="default-src 'unsafe-inline' file: data:"
+		>
+
+		<meta name="color-scheme" content="light dark">
+		<link rel="stylesheet" href="../css/alert.css">
+
+		<title>Alert</title>
+	</head>
+
+	<body>
+		<div id="body-container">
+			<header id="titlebar">
+				<h1 id="titlebar-name">Alert</h1>
+
+				<menu id="titlebar-buttons">
+					<button
+						class="titlebar-button"
+						id="titlebar-button-close"
+						disabled
+					></button>
+				</menu>
+			</header>
+
+			<main id="content">
+				<div id="content-info">
+					<div id="alert-icon"></div>
+					<span id="alert-text"></span>
+				</div>
+
+				<footer id="alert-buttons">
+					<button id="alert-ok">OK</button>
+				</footer>
+			</main>
+		</div>
+	</body>
+
+	<script src="../js/functions.js"></script>
+	<script src="../js/classes.js"></script>
+	<script src="../js/globals.js"></script>
+	<script src="../js/helpers.js"></script>
+	<script src="../js/window.js"></script>
+	<script src="../js/enums.js"></script>
+	<script src="../js/alert.js"></script>
+</html>

@@ -124,7 +124,7 @@ document.addEventListener('explorer:navigate', (ev) => {
 	CAppData.Set('last_path', strPath);
 	g_Path.m_strPath = strPath;
 	g_Path.Render();
-	UpdateTitle(strPath);
+	UpdateTitle(`Exploring - ${strPath}`);
 });
 
 document.addEventListener('explorer:sort', (ev) => {

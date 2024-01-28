@@ -1,0 +1,33 @@
+@import 'index.css';
+
+body {
+  padding: 3px;
+}
+
+#content {
+  gap: 0;
+  padding: 11px 10px;
+
+  flex-direction: column;
+}
+
+#content-info {
+  gap: 17px;
+
+  display: flex;
+  flex-grow: 1;
+}
+
+#alert-icon {
+  background-image: var(--icon);
+
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+#alert-buttons {
+  text-align: center;
+
+  margin-top: 17px;
+}

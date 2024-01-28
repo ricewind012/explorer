@@ -1,3 +1,19 @@
+function AlertDialog(strIcon, strTitle, strText) {
+	electron.Window.Create(
+		'alert',
+		{
+			resizable: false,
+			width:     380,
+			height:    164,
+		},
+		{
+			icon:  strIcon,
+			title: strTitle,
+			text:  strText,
+		}
+	);
+}
+
 function HandlePointerEvent(el, fnMoveCallback) {
 	el.addEventListener('pointerdown', () => {
 		function fnMove(ev) {
@@ -111,7 +127,6 @@ function HumanReadableSize(nBytes) {
 }
 
 function UpdateTitle(strName) {
-	strName = `Exploring - ${strName}`;
 	document.title = strName;
 	g_Elements.titlebar.name.innerText = strName;
 }
