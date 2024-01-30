@@ -1,7 +1,6 @@
 #titlebar {
 	background-color: var(--color-active-caption);
 	color: var(--color-active-caption-text);
-	font-weight: bold;
 
 	padding: 1px 2px;
 	gap: 4px;
@@ -26,28 +25,20 @@
 	font: var(--text-ui);
 	font-weight: bold;
 
-	margin: 0;
-
-	height: 100%;
 	flex-grow: 1;
-	display: flex;
-	align-items: center;
 
 	app-region: drag;
 }
 
 #titlebar-buttons {
-	margin-top: -3px;
-	margin-right: 3px;
+	display: flex;
 }
 
 .titlebar-button {
 	margin: 0;
-	/* TODO: not sure why there is a margin with the above line */
-	margin-right: -3px;
 
 	position: relative !important;
-	width: 16px !important;
+	min-width: 16px !important;
 	height: 14px !important;
 
 	&::before,

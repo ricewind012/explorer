@@ -26,8 +26,6 @@ body {
 
 	overflow: auto;
 
-	gap: 1px;
-
 	display: flex;
 	flex-grow: 1;
 }
@@ -53,6 +51,7 @@ body {
 
 #content-separator-container {
 	position: relative;
+	width: var(--window-gap);
 }
 
 #content-main {
