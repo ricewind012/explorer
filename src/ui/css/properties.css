@@ -1,23 +1,11 @@
-@import 'index.css';
-
 #tabs-container {
   margin: 5px;
 
   width: 100%;
 }
 
-#tabs {
-  width: min-content;
-}
-
-[role="tab"] {
-  box-shadow: 1px 0 var(--color-button-shadow-dark);
-}
-
 [role="tabpanel"] {
   line-height: 1.85;
-
-  padding: 14px;
 
   height: calc(100% - 14px);
 }

@@ -7,12 +7,13 @@
 		>
 
 		<meta name="color-scheme" content="light dark">
+		<link rel="stylesheet" href="../css/global.css">
 		<link rel="stylesheet" href="../css/properties.css">
 
 		<title>Properties</title>
 	</head>
 
-	<body>
+	<body class="window child">
 		<div id="body-container">
 			<header id="titlebar">
 				<h1 id="titlebar-name">Properties</h1>
@@ -32,8 +33,13 @@
 
 			<main id="content">
         <div id="tabs-container" >
-          <menu id="tabs">
-            <li role="tab">General</li>
+          <menu role="tablist">
+            <li
+							role="tab"
+							aria-selected="true"
+						>
+							General
+						</li>
           </menu>
 
           <div role="tabpanel">
