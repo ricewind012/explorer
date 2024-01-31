@@ -19,7 +19,10 @@
 					id="titlebar-icon"
 					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQMARcYyg/K3gAAANNJREFUOMutklFuwzAMQ5+H3iu8WaWb2SfjPuK4dpIO6zAChgAZokhJhY6IMCdEROE3iAjXWm2zxDvSM0pEWBLbJlqrl1hrfde0jO6fIgIDBviaxNBaIzPJTEopZObIz/Hi3/bwbNv0TkDPnWfzUjAILsWd9I7kjYVdnHusraFtO3Qug52xEJyLa2vjb97OLYEkMnMplkREAJDJrYLH3AH63iW0zwdJSB4mn08xn8ZjZz9Woz7YsSOkAG9QYD/M++v2zy+MbTge5nP8O8mfCBa7AHwDTh8VZEOWn1kAAAAASUVORK5CYII="
 				/>
-				<h1 id="titlebar-name"></h1>
+				<h1
+					id="titlebar-name"
+					class="text-overflow"
+				></h1>
 
 				<menu id="titlebar-buttons">
 					<button
@@ -166,22 +169,22 @@
 			<div class="tree-entry-content">
 				<span class="tree-entry-icon"></span>
 				<img class="tree-entry-image" />
-				<span class="tree-entry-name"></span>
+				<span class="text-overflow tree-entry-name"></span>
 			</div>
 		</li>
 	</template>
 
 	<template id="list-entry-template">
 		<li class="list-entry">
-			<img class="list-row list-image" />
-			<div class="list-row list-name"></div>
+			<img class="text-overflow list-row list-image" />
+			<div class="text-overflow list-row list-name"></div>
 			<input
 				class="list-rename-input"
 				hidden
 			/>
-			<div class="list-row list-size"></div>
-			<div class="list-row list-type"></div>
-			<div class="list-row list-mode"></div>
+			<div class="text-overflow list-row list-size"></div>
+			<div class="text-overflow list-row list-type"></div>
+			<div class="text-overflow list-row list-mode"></div>
 		</li>
 	</template>
 

@@ -51,9 +51,3 @@
 
 	flex-shrink: 0;
 }
-
-.tree-entry-name {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}

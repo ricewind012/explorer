@@ -1,7 +1,7 @@
 #tabs-container {
   margin: 6px;
 
-  width: 100%;
+  width: calc(100% - 12px);
 }
 
 [role="tabpanel"] {
@@ -30,6 +30,7 @@ hr {
 
 .column-header {
   width: var(--column-header-width);
+  flex-shrink: 0;
 }
 
 label {
