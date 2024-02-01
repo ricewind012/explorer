@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/app/main.js",
+  "type": "module",
   "scripts": {
     "start": "electron ."
   },
   "author": "",
   "license": "",
   "devDependencies": {
-    "electron": "^26.2.4"
+    "electron": "^28.2.1"
   }
 }

@@ -1,17 +1,14 @@
-class CEnum {
-	constructor(...vecMembers) {
-		for (let i = 0; i < vecMembers.length; i++) {
-			this.Append(vecMembers[i], i);
-		}
-	}
+import EFileType from '../../shared/EFileType.js';
 
-	Append(strMember, nIndex) {
-		this[nIndex] = strMember;
-		this[strMember] = nIndex;
-	}
-}
+import {
+	AlertDialog,
+	HumanReadableSize,
+	OnKeyPress,
+	PermissionsToString,
+	UpdateStatusbar,
+} from './functions.js';
 
-class CAppData {
+export class CAppData {
 	static Set(k, v) {
 		localStorage.setItem(k, JSON.stringify(v));
 	}
@@ -21,28 +18,7 @@ class CAppData {
 	}
 }
 
-class CFiles {
-	static GetContents(strPath) {
-		return electron.FS.List(strPath).map(e => {
-			let type = (() => {
-				switch (e.mode & S_IFMT) {
-					case S_IFREG:  return EFileType.Regular;
-					case S_IFDIR:  return EFileType.Directory;
-					case S_IFLNK:  return EFileType.Symlink;
-					case S_IFBLK:  return EFileType.Block;
-					case S_IFCHR:  return EFileType.Character;
-					case S_IFIFO:  return EFileType.FIFO;
-					case S_IFSOCK: return EFileType.Socket;
-					default:       return EFileType.Unknown;
-				}
-			})();
-
-			return Object.assign(e, { type })
-		});
-	}
-}
-
-class CPath {
+export class CPath {
 	constructor() {
 		this.m_strPath = null;
 		this.m_Selection = null;
@@ -118,7 +94,7 @@ class CPath {
 
 	Navigate(strPath) {
 		try {
-			g_vecFiles = CFiles.GetContents(strPath);
+			window.g_vecFiles = electron.FS.List(strPath);
 		} catch(e) {
 			AlertDialog('error', 'Navigate() error', e.message);
 			return;
@@ -232,17 +208,17 @@ class CPath {
 	}
 }
 
-class CTree {
+export class CTree {
 	constructor() {
-		this.m_elSelection = null;
+		this.m_elTreeSelection = null;
 	}
 
 	RenderPath(strPath) {
 		let files;
 		try {
-			files = CFiles.GetContents(strPath);
+			files = electron.FS.List(strPath);
 		} catch (e) {
-			AlertDialog('error', 'CFiles::GetContents() error', e.message);
+			AlertDialog('error', 'electron.FS.List() error', e.message);
 			return;
 		}
 
@@ -296,10 +272,10 @@ class CTree {
 
 					let path = strPath + '/' + strFolderName;
 
-					if (g_Path.m_strPath == path)
+					if (window.g_Path?.m_strPath == path)
 						return;
 
-					g_Path.Navigate(path);
+					window.g_Path.Navigate(path);
 				});
 
 				return elEntry;

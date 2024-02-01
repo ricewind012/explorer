@@ -1,3 +1,5 @@
+import { UpdateTitle } from './functions.js';
+
 window.addEventListener('message', (ev) => {
 	let data = ev.data;
 

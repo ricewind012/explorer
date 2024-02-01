@@ -1,9 +1,9 @@
-let {
+import {
 	app,
-	BrowserWindow: CBrowserWindow,
+	BrowserWindow as CBrowserWindow,
 	ipcMain,
-} = require('electron');
-let path = require('node:path');
+} from 'electron';
+import * as path from'node:path';
 
 function CreateWindow(strPageName, additionalOptions) {
 	let options = Object.assign({
@@ -17,7 +17,7 @@ function CreateWindow(strPageName, additionalOptions) {
 		autoHideMenuBar: true,
 		webPreferences:  {
 			nodeIntegration: true,
-			preload:         path.join(__dirname, 'preload.js'),
+			preload:         path.join(process.cwd(), 'src', 'app', 'preload.mjs'),
 		},
 	}, additionalOptions);
 	let wnd = new CBrowserWindow(options);

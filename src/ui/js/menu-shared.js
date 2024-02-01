@@ -1,4 +1,6 @@
-let g_vecMenuEntries = [
+import EFileType from '../../shared/EFileType.js';
+
+const vecMenuEntries = [
 	[
 		'Open', () => {
 			switch (g_Message.type) {
@@ -47,3 +49,5 @@ let g_vecMenuEntries = [
 		}
 	]
 ];
+
+export default vecMenuEntries;

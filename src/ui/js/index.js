@@ -1,5 +1,21 @@
-let g_Path         = new CPath();
-let g_Tree         = new CTree();
+import {
+	CAppData,
+	CPath,
+	CTree,
+} from './classes.js';
+
+import {
+	OnKeyPress,
+	HandlePointerEvent,
+	HumanReadableSize,
+	UpdateTitle,
+	UpdateStatusbar,
+} from './functions.js';
+
+import vecMenuEntries from './menu-shared.js';
+
+window.g_Path      = new CPath();
+window.g_Tree      = new CTree();
 
 let g_hChildWindow = null;
 let g_vecFiles     = [];
@@ -84,7 +100,7 @@ document.addEventListener('contextmenu', async (ev) => {
 	if (!selection?.el)
 		return;
 
-	let nMenuHeight = g_vecMenuEntries
+	let nMenuHeight = vecMenuEntries
 		.map(e => e.length ? 17 : 11)
 		.reduce((a, b) => a + b) + 1;
 

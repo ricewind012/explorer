@@ -1,3 +1,7 @@
+import EFileType from '../../shared/EFileType.js';
+
+import { HumanReadableSize } from './functions.js';
+
 window.addEventListener('message', (ev) => {
 	let data = ev.data;
 

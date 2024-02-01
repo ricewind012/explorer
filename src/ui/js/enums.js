@@ -1,3 +1,5 @@
+import CEnum from '../../shared/CEnum.js';
+
 const EFileSorting = new CEnum(
 	'none',
 	'ascending',
@@ -12,15 +14,7 @@ const EFileUnits = new CEnum(
 	'TB',
 );
 
-const EFileType = new CEnum(
-	'None',
-	'Regular',
-	'Directory',
-	'Symlink',
-	'Block',
-	'Character',
-	'FIFO',
-	'Socket',
-	'Unknown',
-);
-EFileType.Append('NotFound', -1);
+export {
+	EFileSorting,
+	EFileUnits,
+};

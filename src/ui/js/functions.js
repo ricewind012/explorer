@@ -1,4 +1,10 @@
-function AlertDialog(strIcon, strTitle, strText) {
+import EFileType from '../../shared/EFileType.js';
+import {
+	EFileSorting,
+	EFileUnits,
+} from './enums.js';
+
+export function AlertDialog(strIcon, strTitle, strText) {
 	electron.Window.Create(
 		'alert',
 		{
@@ -14,7 +20,7 @@ function AlertDialog(strIcon, strTitle, strText) {
 	);
 }
 
-function HandlePointerEvent(el, fnMoveCallback) {
+export function HandlePointerEvent(el, fnMoveCallback) {
 	el.addEventListener('pointerdown', () => {
 		function fnMove(ev) {
 			fnMoveCallback(ev);
@@ -30,7 +36,7 @@ function HandlePointerEvent(el, fnMoveCallback) {
 	});
 }
 
-function HandleMaximizeButton() {
+export function HandleMaximizeButton() {
 	let buttons = g_Elements.titlebar.buttons;
 	let bFullscreen = buttons.maximise.hidden;
 
@@ -39,7 +45,7 @@ function HandleMaximizeButton() {
 	electron.Window.ToggleFullscreen();
 }
 
-function OnKeyPress(ev) {
+export function OnKeyPress(ev) {
 	switch (ev.key) {
 		case 'Enter':
 			let selection = g_Path.m_Selection;
@@ -84,7 +90,7 @@ function OnKeyPress(ev) {
 	}
 }
 
-function GetPreviousSiblingsWidth(el) {
+export function GetPreviousSiblingsWidth(el) {
 	let nWidth = 0;
 
 	while (el.previousElementSibling) {
@@ -97,7 +103,7 @@ function GetPreviousSiblingsWidth(el) {
 	return nWidth;
 }
 
-function PermissionsToString(nPerms) {
+export function PermissionsToString(nPerms) {
 	let char = (c, p) => nPerms & p ? c : '-';
 	let strResult = '';
 
@@ -116,7 +122,7 @@ function PermissionsToString(nPerms) {
 	return strResult;
 }
 
-function HumanReadableSize(nBytes) {
+export function HumanReadableSize(nBytes) {
 	if (!nBytes)
 		return '0 B';
 
@@ -126,11 +132,11 @@ function HumanReadableSize(nBytes) {
 	return `${nSize} ${EFileUnits[eUnit]}`;
 }
 
-function UpdateTitle(strName) {
+export function UpdateTitle(strName) {
 	document.title = strName;
 	g_Elements.titlebar.name.innerText = strName;
 }
 
-function UpdateStatusbar(strSection, strText) {
+export function UpdateStatusbar(strSection, strText) {
 	g_Elements.statusbar[strSection].innerText = strText;
 }

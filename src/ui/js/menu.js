@@ -1,10 +1,12 @@
+import vecMenuEntries from './menu-shared.js';
+
 let g_elEntryTemplate = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   g_elEntryTemplate = id('menu-entry-template');
 
-	for (let i = 0; i < g_vecMenuEntries.length; i++) {
-		let vecEntry = g_vecMenuEntries[i];
+	for (let i = 0; i < vecMenuEntries.length; i++) {
+		let vecEntry = vecMenuEntries[i];
 		let elEntry;
 
 		if (!vecEntry.length) {
