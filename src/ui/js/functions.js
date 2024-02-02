@@ -32,7 +32,7 @@ export function HandleMaximizeButton() {
 export function OnKeyPress(ev) {
 	switch (ev.key) {
 		case 'Enter':
-			let selection = g_Path.m_Selection;
+			let selection = g_PathSelection.m_Selection;
 
 			switch (selection.file.type) {
 				case EFileType.NotFound:
@@ -44,7 +44,7 @@ export function OnKeyPress(ev) {
 					break;
 
 				default:
-					g_Path.ExecuteSelection();
+					g_PathSelection.Execute();
 					break;
 			}
 			break;
@@ -54,11 +54,11 @@ export function OnKeyPress(ev) {
 			break;
 
 		case 'F2':
-			g_Path.RenameSelection();
+			g_PathSelection.Rename();
 			break;
 
 		case 'Delete':
-			g_Path.DeleteSelection();
+			g_PathSelection.Delete();
 			break;
 	}
 }

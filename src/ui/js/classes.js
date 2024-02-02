@@ -17,10 +17,148 @@ export class CAppData {
 	}
 }
 
+export class CPathSelection {
+	constructor() {
+		this.m_Selection = null;
+	}
+
+	Change(el, file) {
+		this.m_Selection?.el.removeAttribute('selected');
+		this.m_Selection = {
+			el,
+			file
+		};
+		this.m_Selection.el.setAttribute('selected', '');
+
+		if (this.m_Selection.file.type == EFileType.Directory)
+			return;
+
+		UpdateStatusbar(
+			'usage',
+			HumanReadableSize(this.m_Selection.file.size)
+		);
+	}
+
+	Copy() {
+		window.g_strFileToCopy = this.m_Selection.file.path;
+		console.log('Trying to copy %o to %o', g_strFileToCopy, g_Path.m_strPath);
+	}
+
+	Delete() {
+		let selection = this.m_Selection;
+
+		try {
+			electron.File.Delete(selection.file.path, { recursive: true });
+		} catch (e) {
+			CWindow.Alert('error', 'Delete() error', e.message);
+			return;
+		}
+
+		console.log('%o deleted', selection.file.path);
+		selection.el.remove();
+	}
+
+	Execute() {
+		try {
+			electron.ExecuteCommand(`${k_strOpener} ${this.m_Selection.file.path}`);
+		} catch (e) {
+			CWindow.Alert('error', 'Execute() error', e.message);
+			return;
+		}
+	}
+
+	Rename() {
+		let selection = this.m_Selection;
+		let elListName = selection.el.querySelector(':scope > .list-name');
+		let elInput = selection.el.querySelector(':scope > .list-rename-input');
+
+		elListName.hidden = true;
+		elInput.value = elListName.innerText;
+		elInput.hidden = false;
+		elInput.focus();
+		elInput.select();
+
+		function GoBack() {
+			elListName.hidden = false;
+			elInput.hidden = true;
+
+			electron.Window.SetDestroyable(true);
+			document.addEventListener('keydown', OnKeyPress);
+			document.removeEventListener('keydown', OnAccept);
+			document.removeEventListener('keydown', OnCancel);
+		}
+
+		function OnAccept(ev) {
+			if (ev.key != 'Enter')
+				return;
+
+			let strOldName = elListName.innerText;
+			let strNewName = elInput.value;
+
+			if (strNewName == '' || strOldName == strNewName) {
+				GoBack();
+				return;
+			}
+
+			console.log('%o renamed to %o', strOldName, strNewName);
+			selection.file.path = strNewName;
+			elListName.innerText = strNewName;
+			try {
+				electron.File.Move(
+					g_Path.m_strPath + '/' + strOldName,
+					g_Path.m_strPath + '/' + strNewName
+				);
+			} catch (e) {
+				CWindow.Alert('error', 'electron.File.Move() error', e.message);
+			}
+
+			GoBack();
+		}
+
+		function OnCancel(ev) {
+			if (ev.key != 'Escape')
+				return;
+
+			GoBack();
+		}
+
+		electron.Window.SetDestroyable(false);
+		document.removeEventListener('keydown', OnKeyPress);
+		document.addEventListener('keydown', OnAccept);
+		document.addEventListener('keydown', OnCancel);
+	}
+
+	Paste() {
+		let strCopiedFileName = g_Path.m_strPath
+			+ '/'
+			+ CPath.Basename(g_strFileToCopy);
+		let strMessage = '';
+
+		if (g_strFileToCopy == '')
+			strMessage = 'Nothing to paste';
+		if (g_vecFiles.find(e => e.path == strCopiedFileName))
+			strMessage = 'The destination filename already exists.';
+		if (strCopiedFileName == g_strFileToCopy)
+			strMessage = 'The source and destination filenames are the same.';
+
+		if (strMessage != '') {
+			CWindow.Alert(
+				'error',
+				'Error Moving File',
+				`Cannot move ${strCopiedFileName}: ${strMessage}`
+			);
+			return;
+		}
+
+		console.log('%o copied to %o', g_strFileToCopy, strCopiedFileName);
+		electron.File.Copy(g_strFileToCopy, strCopiedFileName);
+		g_Path.CreateListItemFromNewFile(strCopiedFileName);
+	}
+}
+
 export class CPath {
 	constructor() {
 		this.m_strPath = null;
-		this.m_Selection = null;
 		this.m_Sorting  = {
 			data:   null,
 			button: null,
@@ -51,7 +189,7 @@ export class CPath {
 		] = [...elEntryContainer.children];
 
 		elEntryContainer.addEventListener('click', (ev) => {
-			this.ChangeSelection(ev.target.parentNode, file);
+			g_PathSelection.Change(ev.target.parentNode, file);
 		});
 
 		elListName.innerText = CPath.Basename(file.path);
@@ -67,14 +205,14 @@ export class CPath {
 
 			if (file.type == EFileType.Directory) {
 				elListName.addEventListener('dblclick', (ev) => {
-					g_Path.Navigate(file.path);
+					this.Navigate(file.path);
 				});
 			} else {
 				let strExtension = file.path.match(/\.[\w-]+$/);
 				elListIcon.setAttribute('ext', strExtension);
 
 				elListName.addEventListener('dblclick', (ev) => {
-					this.ExecuteSelection();
+					g_PathSelection.Execute();
 				});
 				elListSize.innerText = HumanReadableSize(file.size);
 			}
@@ -87,14 +225,14 @@ export class CPath {
 		let file = electron.File.Get(strPath);
 		let el = this.CreateListItem(file);
 
-		this.m_Selection.el.after(el);
-		this.ChangeSelection(el, file);
+		g_PathSelection.m_Selection.el.after(el);
+		g_PathSelection.Change(el, file);
 	}
 
 	Render() {
 		let elList = g_Elements.content.list;
 		let strLabel = `${g_vecFiles.length} files in ${this.m_strPath}`;
-		this.m_Selection = null;
+		g_PathSelection.m_Selection = null;
 		postMessage({ action: 'close' });
 		console.time(strLabel);
 
@@ -135,139 +273,6 @@ export class CPath {
 				.slice(0, -1)
 				.join('/')
 		);
-	}
-
-	ChangeSelection(el, file) {
-		this.m_Selection?.el.removeAttribute('selected');
-		this.m_Selection = {
-			el,
-			file
-		};
-		this.m_Selection.el.setAttribute('selected', '');
-
-		if (this.m_Selection.file.type == EFileType.Directory)
-			return;
-
-		UpdateStatusbar(
-			'usage',
-			HumanReadableSize(this.m_Selection.file.size)
-		);
-	}
-
-	CopySelection() {
-		window.g_strFileToCopy = this.m_Selection.file.path;
-		console.log('Trying to copy %o to %o', g_strFileToCopy, this.m_strPath);
-	}
-
-	DeleteSelection() {
-		let selection = this.m_Selection;
-
-		try {
-			electron.File.Delete(selection.file.path, { recursive: true });
-		} catch (e) {
-			CWindow.Alert('error', 'DeleteSelection() error', e.message);
-			return;
-		}
-
-		console.log('%o deleted', selection.file.path);
-		selection.el.remove();
-	}
-
-	ExecuteSelection() {
-		try {
-			electron.ExecuteCommand(`${k_strOpener} ${this.m_Selection.file.path}`);
-		} catch (e) {
-			CWindow.Alert('error', 'ExecuteSelection() error', e.message);
-			return;
-		}
-	}
-
-	RenameSelection() {
-		let elSelection = this.m_Selection.el;
-		let elListName = elSelection.querySelector(':scope > .list-name');
-		let elInput = elSelection.querySelector(':scope > .list-rename-input');
-
-		elListName.hidden = true;
-		elInput.value = elListName.innerText;
-		elInput.hidden = false;
-		elInput.focus();
-		elInput.select();
-
-		function GoBack() {
-			elListName.hidden = false;
-			elInput.hidden = true;
-
-			electron.Window.SetDestroyable(true);
-			document.addEventListener('keydown', OnKeyPress);
-			document.removeEventListener('keydown', OnAccept);
-			document.removeEventListener('keydown', OnCancel);
-		}
-
-		function OnAccept(ev) {
-			if (ev.key != 'Enter')
-				return;
-
-			let strOldName = elListName.innerText;
-			let strNewName = elInput.value;
-
-			if (strNewName == '' || strOldName == strNewName) {
-				GoBack();
-				return;
-			}
-
-			console.log('%o renamed to %o', strOldName, strNewName);
-			g_Path.m_Selection.file.path = strNewName;
-			elListName.innerText = strNewName;
-			try {
-				electron.File.Move(
-					g_Path.m_strPath + '/' + strOldName,
-					g_Path.m_strPath + '/' + strNewName
-				);
-			} catch (e) {
-				CWindow.Alert('error', 'electron.File.Move() error', e.message);
-			}
-
-			GoBack();
-		}
-
-		function OnCancel(ev) {
-			if (ev.key != 'Escape')
-				return;
-
-			GoBack();
-		}
-
-		electron.Window.SetDestroyable(false);
-		document.removeEventListener('keydown', OnKeyPress);
-		document.addEventListener('keydown', OnAccept);
-		document.addEventListener('keydown', OnCancel);
-	}
-
-	PasteSelection() {
-		let strCopiedFileName = this.m_strPath
-			+ '/'
-			+ CPath.Basename(g_strFileToCopy);
-		let strMessage = '';
-
-		if (g_strFileToCopy == '')
-			strMessage = 'Nothing to paste';
-		if (g_vecFiles.find(e => e.path == strCopiedFileName))
-			strMessage = 'The destination filename already exists.';
-		if (strCopiedFileName == g_strFileToCopy)
-			strMessage = 'The source and destination filenames are the same.';
-
-		if (strMessage != '') {
-			CWindow.Alert(
-				'error',
-				'Error Moving File',
-				`Cannot move ${strCopiedFileName}: ${strMessage}`
-			);
-			return;
-		}
-
-		console.log('%o copied to %o', g_strFileToCopy, strCopiedFileName);
-		electron.File.Copy(g_strFileToCopy, strCopiedFileName);
-		this.CreateListItemFromNewFile(strCopiedFileName);
 	}
 }
 

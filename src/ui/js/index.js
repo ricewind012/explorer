@@ -1,5 +1,6 @@
 import {
 	CAppData,
+	CPathSelection,
 	CPath,
 	CTree,
 	CWindow,
@@ -16,8 +17,9 @@ import {
 
 import vecMenuEntries from './menu-shared.js';
 
-window.g_Path      = new CPath();
-window.g_Tree      = new CTree();
+window.g_PathSelection = new CPathSelection();
+window.g_Path          = new CPath();
+window.g_Tree          = new CTree();
 window.g_strFileToCopy = '';
 
 let g_hChildWindow = null;
@@ -84,19 +86,19 @@ window.addEventListener('message', async (ev) => {
 
 		case 'file-cut':
 		case 'file-copy':
-			g_Path.CopySelection();
+			g_PathSelection.Copy();
 			break;
 
 		case 'file-paste':
-			g_Path.PasteSelection();
+			g_PathSelection.Paste();
 			break;
 
 		case 'file-delete':
-			g_Path.DeleteSelection();
+			g_PathSelection.Delete();
 			break;
 
 		case 'file-rename':
-			g_Path.RenameSelection();
+			g_PathSelection.Rename();
 			break;
 	}
 });
@@ -104,7 +106,7 @@ window.addEventListener('message', async (ev) => {
 document.addEventListener('keydown', OnKeyPress);
 
 document.addEventListener('contextmenu', async (ev) => {
-	let selection = g_Path.m_Selection;
+	let selection = g_PathSelection.m_Selection;
 
 	if (!selection?.el)
 		return;
@@ -207,13 +209,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	let toolbarButtonHandlers = {
 		go_up:       () => { g_Path.NavigateToParent(); },
-		cut:         () => { g_Path.CopySelection(); },
-		copy:        () => { g_Path.CopySelection(); },
-		paste:       () => { g_Path.PasteSelection(); },
+		cut:         () => { g_PathSelection.Copy(); },
+		copy:        () => { g_PathSelection.Copy(); },
+		paste:       () => { g_PathSelection.Paste(); },
 		undo_delete: fnStub,
-		delete:      () => { g_Path.DeleteSelection(); },
+		delete:      () => { g_PathSelection.Delete(); },
 		properties:  async () => {
-			window.g_hChildWindow = CWindow.Properties(g_Path.m_Selection.file);
+			window.g_hChildWindow = CWindow.Properties(
+				g_PathSelection.m_Selection.file
+			);
 		},
 		big_icons:   fnStub,
 		small_icons: fnStub,
