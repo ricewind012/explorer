@@ -2,6 +2,7 @@ import {
 	CAppData,
 	CPath,
 	CTree,
+	CWindow,
 } from './classes.js';
 
 import {
@@ -11,7 +12,6 @@ import {
 	HumanReadableSize,
 	UpdateTitle,
 	UpdateStatusbar,
-	AlertDialog,
 } from './functions.js';
 
 import vecMenuEntries from './menu-shared.js';
@@ -74,15 +74,7 @@ window.addEventListener('message', async (ev) => {
 			break;
 
 		case 'create-window':
-			g_hChildWindow = await electron.Window.Create(
-				'properties',
-				{
-					resizable: false,
-					width:     367,
-					height:    419,
-				},
-				data.file
-			);
+			g_hChildWindow = await CWindow.Properties(data.file);
 			break;
 
 		case 'create-shortcut':
@@ -117,25 +109,11 @@ document.addEventListener('contextmenu', async (ev) => {
 	if (!selection?.el)
 		return;
 
-	let nMenuHeight = vecMenuEntries
+	let unMenuHeight = vecMenuEntries
 		.map(e => e.length ? 17 : 10)
 		.reduce((a, b) => a + b) + 1;
 
-	g_hChildWindow = await electron.Window.Create(
-		'menu',
-		{
-			resizable:       false,
-			focusable:       false,
-			// Original is 122, but MS Sans Serif is just a fallback.
-			width:           123,
-			minWidth:        123,
-			height:          nMenuHeight,
-			minHeight:       nMenuHeight,
-			x:               ev.screenX,
-			y:               ev.screenY,
-		},
-		selection.file
-	);
+	g_hChildWindow = await CWindow.Menu(ev, selection.file, unMenuHeight);
 });
 
 document.addEventListener('explorer:navigate', (ev) => {
@@ -224,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Set up toolbar
 	let fnStub = () => {
-		AlertDialog('warning', 'Warning', 'Not implemented');
+		CWindow.Alert('warning', 'Warning', 'Not implemented');
 	};
 
 	let toolbarButtonHandlers = {
@@ -235,15 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		undo_delete: fnStub,
 		delete:      () => { g_Path.DeleteSelection(); },
 		properties:  async () => {
-			g_hChildWindow = await electron.Window.Create(
-				'properties',
-				{
-					resizable: false,
-					width:     367,
-					height:    419,
-				},
-				g_Path.m_Selection.file
-			);
+			window.g_hChildWindow = CWindow.Properties(g_Path.m_Selection.file);
 		},
 		big_icons:   fnStub,
 		small_icons: fnStub,

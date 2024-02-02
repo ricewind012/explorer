@@ -1,7 +1,6 @@
 import EFileType from '../../shared/EFileType.js';
 
 import {
-	AlertDialog,
 	HumanReadableSize,
 	OnKeyPress,
 	PermissionsToString,
@@ -113,7 +112,7 @@ export class CPath {
 		try {
 			window.g_vecFiles = electron.FS.List(strPath);
 		} catch(e) {
-			AlertDialog('error', 'Navigate() error', e.message);
+			CWindow.Alert('error', 'Navigate() error', e.message);
 			return;
 		}
 
@@ -166,7 +165,7 @@ export class CPath {
 		try {
 			electron.File.Delete(selection.file.path, { recursive: true });
 		} catch (e) {
-			AlertDialog('error', 'DeleteSelection() error', e.message);
+			CWindow.Alert('error', 'DeleteSelection() error', e.message);
 			return;
 		}
 
@@ -178,7 +177,7 @@ export class CPath {
 		try {
 			electron.ExecuteCommand(`${k_strOpener} ${this.m_Selection.file.path}`);
 		} catch (e) {
-			AlertDialog('error', 'ExecuteSelection() error', e.message);
+			CWindow.Alert('error', 'ExecuteSelection() error', e.message);
 			return;
 		}
 	}
@@ -225,7 +224,7 @@ export class CPath {
 					g_Path.m_strPath + '/' + strNewName
 				);
 			} catch (e) {
-				AlertDialog('error', 'electron.File.Move() error', e.message);
+				CWindow.Alert('error', 'electron.File.Move() error', e.message);
 			}
 
 			GoBack();
@@ -258,7 +257,7 @@ export class CPath {
 			strMessage = 'The source and destination filenames are the same.';
 
 		if (strMessage != '') {
-			AlertDialog(
+			CWindow.Alert(
 				'error',
 				'Error Moving File',
 				`Cannot move ${strCopiedFileName}: ${strMessage}`
@@ -282,7 +281,7 @@ export class CTree {
 		try {
 			files = electron.FS.List(strPath);
 		} catch (e) {
-			AlertDialog('error', 'electron.FS.List() error', e.message);
+			CWindow.Alert('error', 'electron.FS.List() error', e.message);
 			return;
 		}
 
@@ -351,5 +350,53 @@ export class CTree {
 		for (let i of this.RenderPath('/'))
 			elTree.appendChild(i)
 		console.timeEnd(strLabel);
+	}
+}
+
+export class CWindow {
+	static async Alert(strIcon, strTitle, strText) {
+		return await electron.Window.Create(
+			'alert',
+			{
+				resizable: false,
+				width:     380,
+				height:    164,
+			},
+			{
+				icon:  strIcon,
+				title: strTitle,
+				text:  strText,
+			}
+		);
+	}
+
+	static async Menu(ev, file, unMenuHeight) {
+		return await electron.Window.Create(
+			'menu',
+			{
+				resizable:       false,
+				focusable:       false,
+				// Original is 122, but MS Sans Serif is just a fallback.
+				width:           123,
+				minWidth:        123,
+				height:          unMenuHeight,
+				minHeight:       unMenuHeight,
+				x:               ev.screenX,
+				y:               ev.screenY,
+			},
+			file
+		);
+	}
+
+	static async Properties(file) {
+		return await electron.Window.Create(
+			'properties',
+			{
+				resizable: false,
+				width:     367,
+				height:    419,
+			},
+			file
+		);
 	}
 }

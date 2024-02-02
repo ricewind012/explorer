@@ -4,22 +4,6 @@ import {
 	EFileUnits,
 } from './enums.js';
 
-export function AlertDialog(strIcon, strTitle, strText) {
-	electron.Window.Create(
-		'alert',
-		{
-			resizable: false,
-			width:     380,
-			height:    164,
-		},
-		{
-			icon:  strIcon,
-			title: strTitle,
-			text:  strText,
-		}
-	);
-}
-
 export function HandlePointerEvent(el, fnMoveCallback) {
 	el.addEventListener('pointerdown', () => {
 		function fnMove(ev) {
