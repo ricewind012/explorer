@@ -25,6 +25,22 @@ const vecMenuEntries = [
 	], [
 		// Separator
 	], [
+		'Cut', () => {
+			electron.SendMesssageToParent({
+				action: 'file-cut',
+				file:   g_Message,
+			});
+		}
+	], [
+		'Copy', () => {
+			electron.SendMesssageToParent({
+				action: 'file-copy',
+				file:   g_Message,
+			});
+		}
+	], [
+		// Separator
+	], [
 		'Create Shortcut', () => {
 			electron.SendMesssageToParent({
 				action: 'create-shortcut',

@@ -11,12 +11,14 @@ import {
 	HumanReadableSize,
 	UpdateTitle,
 	UpdateStatusbar,
+	AlertDialog,
 } from './functions.js';
 
 import vecMenuEntries from './menu-shared.js';
 
 window.g_Path      = new CPath();
 window.g_Tree      = new CTree();
+window.g_strFileToCopy = '';
 
 let g_hChildWindow = null;
 let g_vecFiles     = [];
@@ -85,11 +87,40 @@ window.addEventListener('message', async (ev) => {
 
 		case 'create-shortcut':
 			CreateShortcut(data.file);
-			let file = electron.File.Get(`${data.file.path}.desktop`)
-			let el = g_Path.CreateListItem(file);
+			g_Path.CreateListItemFromNewFile(`${data.file.path}.desktop`)
+			break;
 
-			g_Path.m_Selection.el.after(el);
-			g_Path.ChangeSelection(el, file);
+		case 'file-cut':
+		case 'file-copy':
+			window.g_strFileToCopy = data.file.path;
+			console.log('Trying to copy %o to %o', g_strFileToCopy, g_Path.m_strPath);
+			break;
+
+		case 'file-paste':
+			let strCopiedFileName = g_Path.m_strPath
+				+ '/'
+				+ CPath.Basename(g_strFileToCopy);
+			let strMessage = '';
+
+			if (g_strFileToCopy == '')
+				strMessage = 'Nothing to paste';
+			if (g_vecFiles.find(e => e.path == strCopiedFileName))
+				strMessage = 'The destination filename already exists.';
+			if (strCopiedFileName == g_strFileToCopy)
+				strMessage = 'The source and destination filenames are the same.';
+
+			if (strMessage != '') {
+				AlertDialog(
+					'error',
+					'Error Moving File',
+					`Cannot move ${strCopiedFileName}: ${strMessage}`
+				);
+				return;
+			}
+
+			console.log('%o copied to %o', g_strFileToCopy, strCopiedFileName);
+			electron.File.Copy(g_strFileToCopy, strCopiedFileName);
+			g_Path.CreateListItemFromNewFile(strCopiedFileName);
 			break;
 
 		case 'file-delete':

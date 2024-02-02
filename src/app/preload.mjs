@@ -74,6 +74,7 @@ contextBridge.exposeInMainWorld('electron', {
 	},
 
 	File: {
+		Copy: fs.copyFileSync,
 		Delete: fs.rmSync,
 		Move: fs.renameSync,
 		Get: GetFileStats,

@@ -1,14 +1,11 @@
 import EFileType from '../../shared/EFileType.js';
-
+import { CPath } from './classes.js';
 import { HumanReadableSize } from './functions.js';
 
 window.addEventListener('message', (ev) => {
 	let data = ev.data;
 
-  g_Elements.file.name.innerText = data.path
-    .split('/')
-    .filter(e => e)
-    .splice(-1);
+  g_Elements.file.name.innerText = CPath.Basename(data.path);
 
   g_Elements.info.type.innerText = EFileType[data.type];
   g_Elements.info.path.innerText = data.path

@@ -29,6 +29,13 @@ export class CPath {
 		};
 	}
 
+	static Basename(strPath) {
+		return strPath
+			.split('/')
+			.filter(Boolean)
+			.splice(-1)[0];
+	}
+
 	CreateListItem(file) {
 		let bUnknownType = file.type == EFileType.Unknown;
 		console.assert(!bUnknownType, 'EFileType == 8 for %o', file.path);
@@ -48,10 +55,7 @@ export class CPath {
 			this.ChangeSelection(ev.target.parentNode, file);
 		});
 
-		elListName.innerText = file.path
-			.split('/')
-			.filter(e => e)
-			.splice(-1);
+		elListName.innerText = CPath.Basename(file.path);
 
 		if (!bUnknownType) {
 			for (let i of Object.keys(file))
@@ -78,6 +82,14 @@ export class CPath {
 		}
 
 		return elEntryContainer;
+	}
+
+	CreateListItemFromNewFile(strPath) {
+		let file = electron.File.Get(strPath);
+		let el = this.CreateListItem(file);
+
+		this.m_Selection.el.after(el);
+		this.ChangeSelection(el, file);
 	}
 
 	Render() {
@@ -238,10 +250,7 @@ export class CTree {
 					elListName,
 				] = [...elEntryContainer.querySelectorAll(':scope > div > *')];
 
-				let strFolderName = file.path
-					.split('/')
-					.filter(e => e)
-					.splice(-1)[0];
+				let strFolderName = CPath.Basename(file.path);
 				elListName.innerText = strFolderName;
 
 				const OnClick = (ev) => {
