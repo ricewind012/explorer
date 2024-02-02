@@ -12,6 +12,7 @@
 
 /* Content */
 @import 'parts/titlebar.css';
+@import 'parts/toolbar.css';
 @import 'parts/statusbar.css';
 
 @import 'content/tree.css';

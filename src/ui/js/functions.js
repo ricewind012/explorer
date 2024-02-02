@@ -66,18 +66,7 @@ export function OnKeyPress(ev) {
 			break;
 
 		case 'Backspace':
-			let strPath = g_Path.m_strPath;
-
-			if (!strPath || strPath == '/')
-				return;
-
-			g_Path.Navigate(
-				'/' + strPath
-					.split('/')
-					.filter(e => e)
-					.slice(0, -1)
-					.join('/')
-			);
+			g_Path.NavigateToParent();
 			break;
 
 		case 'F2':

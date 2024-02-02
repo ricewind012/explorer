@@ -123,6 +123,21 @@ export class CPath {
 		});
 	}
 
+	NavigateToParent() {
+		let strPath = this.m_strPath;
+
+		if (!strPath || strPath == '/')
+			return;
+
+		this.Navigate(
+			'/' + strPath
+				.split('/')
+				.filter(e => e)
+				.slice(0, -1)
+				.join('/')
+		);
+	}
+
 	ChangeSelection(el, file) {
 		this.m_Selection?.el.removeAttribute('selected');
 		this.m_Selection = {
@@ -138,6 +153,11 @@ export class CPath {
 			'usage',
 			HumanReadableSize(this.m_Selection.file.size)
 		);
+	}
+
+	CopySelection() {
+		window.g_strFileToCopy = this.m_Selection.file.path;
+		console.log('Trying to copy %o to %o', g_strFileToCopy, this.m_strPath);
 	}
 
 	DeleteSelection() {
@@ -222,6 +242,33 @@ export class CPath {
 		document.removeEventListener('keydown', OnKeyPress);
 		document.addEventListener('keydown', OnAccept);
 		document.addEventListener('keydown', OnCancel);
+	}
+
+	PasteSelection() {
+		let strCopiedFileName = this.m_strPath
+			+ '/'
+			+ CPath.Basename(g_strFileToCopy);
+		let strMessage = '';
+
+		if (g_strFileToCopy == '')
+			strMessage = 'Nothing to paste';
+		if (g_vecFiles.find(e => e.path == strCopiedFileName))
+			strMessage = 'The destination filename already exists.';
+		if (strCopiedFileName == g_strFileToCopy)
+			strMessage = 'The source and destination filenames are the same.';
+
+		if (strMessage != '') {
+			AlertDialog(
+				'error',
+				'Error Moving File',
+				`Cannot move ${strCopiedFileName}: ${strMessage}`
+			);
+			return;
+		}
+
+		console.log('%o copied to %o', g_strFileToCopy, strCopiedFileName);
+		electron.File.Copy(g_strFileToCopy, strCopiedFileName);
+		this.CreateListItemFromNewFile(strCopiedFileName);
 	}
 }
 

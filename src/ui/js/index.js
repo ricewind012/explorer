@@ -92,35 +92,11 @@ window.addEventListener('message', async (ev) => {
 
 		case 'file-cut':
 		case 'file-copy':
-			window.g_strFileToCopy = data.file.path;
-			console.log('Trying to copy %o to %o', g_strFileToCopy, g_Path.m_strPath);
+			g_Path.CopySelection();
 			break;
 
 		case 'file-paste':
-			let strCopiedFileName = g_Path.m_strPath
-				+ '/'
-				+ CPath.Basename(g_strFileToCopy);
-			let strMessage = '';
-
-			if (g_strFileToCopy == '')
-				strMessage = 'Nothing to paste';
-			if (g_vecFiles.find(e => e.path == strCopiedFileName))
-				strMessage = 'The destination filename already exists.';
-			if (strCopiedFileName == g_strFileToCopy)
-				strMessage = 'The source and destination filenames are the same.';
-
-			if (strMessage != '') {
-				AlertDialog(
-					'error',
-					'Error Moving File',
-					`Cannot move ${strCopiedFileName}: ${strMessage}`
-				);
-				return;
-			}
-
-			console.log('%o copied to %o', g_strFileToCopy, strCopiedFileName);
-			electron.File.Copy(g_strFileToCopy, strCopiedFileName);
-			g_Path.CreateListItemFromNewFile(strCopiedFileName);
+			g_Path.PasteSelection();
 			break;
 
 		case 'file-delete':
@@ -220,11 +196,64 @@ document.addEventListener('DOMContentLoaded', () => {
 		template:  id('tree-entry-template'),
 	};
 
+	g_Elements.toolbar = {
+		select:      id('toolbar-select'),
+
+		go_up:       id('toolbar-button-go-up'),
+
+		cut:         id('toolbar-button-cut'),
+		copy:        id('toolbar-button-copy'),
+		paste:       id('toolbar-button-paste'),
+
+		undo_delete: id('toolbar-button-undo-delete'),
+
+		delete:      id('toolbar-button-delete'),
+		properties:  id('toolbar-button-properties'),
+
+		big_icons:   id('toolbar-button-big-icons'),
+		small_icons: id('toolbar-button-small-icons'),
+		list:        id('toolbar-button-list'),
+		details:     id('toolbar-button-details'),
+	};
+
 	g_Elements.statusbar = {
 		count:  id('statusbar-count'),
 		usage:  id('statusbar-disk-usage'),
 		handle: id('window-resize-handle'),
 	};
+
+	// Set up toolbar
+	let fnStub = () => {
+		AlertDialog('warning', 'Warning', 'Not implemented');
+	};
+
+	let toolbarButtonHandlers = {
+		go_up:       () => { g_Path.NavigateToParent(); },
+		cut:         () => { g_Path.CopySelection(); },
+		copy:        () => { g_Path.CopySelection(); },
+		paste:       () => { g_Path.PasteSelection(); },
+		undo_delete: fnStub,
+		delete:      () => { g_Path.DeleteSelection(); },
+		properties:  async () => {
+			g_hChildWindow = await electron.Window.Create(
+				'properties',
+				{
+					resizable: false,
+					width:     367,
+					height:    419,
+				},
+				g_Path.m_Selection.file
+			);
+		},
+		big_icons:   fnStub,
+		small_icons: fnStub,
+		list:        fnStub,
+		details:     fnStub,
+	};
+
+	for (let k of Object.keys(g_Elements.toolbar)) {
+		g_Elements.toolbar[k].addEventListener('click', toolbarButtonHandlers[k]);
+	}
 
 	// Set up statusbar
 	HandlePointerEvent(g_Elements.statusbar.handle, (ev) => {
