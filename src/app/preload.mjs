@@ -28,6 +28,28 @@ ipcRenderer.on('window-message', (ev, args) => {
 	postMessage(args);
 });
 
+function GetFileStats(strPath) {
+	let stats = fs.statSync(strPath);
+
+	let type = (() => {
+		switch (stats.mode & S_IFMT) {
+			case S_IFREG:  return EFileType.Regular;
+			case S_IFDIR:  return EFileType.Directory;
+			case S_IFLNK:  return EFileType.Symlink;
+			case S_IFBLK:  return EFileType.Block;
+			case S_IFCHR:  return EFileType.Character;
+			case S_IFIFO:  return EFileType.FIFO;
+			case S_IFSOCK: return EFileType.Socket;
+			default:       return EFileType.Unknown;
+		}
+	})();
+
+	return Object.assign(stats, {
+		type,
+		path: strPath,
+	});
+}
+
 contextBridge.exposeInMainWorld('electron', {
 	FS: {
 		Constants: fs.constants,
@@ -37,25 +59,7 @@ contextBridge.exposeInMainWorld('electron', {
 				.map(e => path.join(strPath, e))
 				.map(e => {
 					try {
-						let stats = fs.statSync(e);
-
-						let type = (() => {
-							switch (stats.mode & S_IFMT) {
-								case S_IFREG:  return EFileType.Regular;
-								case S_IFDIR:  return EFileType.Directory;
-								case S_IFLNK:  return EFileType.Symlink;
-								case S_IFBLK:  return EFileType.Block;
-								case S_IFCHR:  return EFileType.Character;
-								case S_IFIFO:  return EFileType.FIFO;
-								case S_IFSOCK: return EFileType.Socket;
-								default:       return EFileType.Unknown;
-							}
-						})();
-
-						return Object.assign(stats, {
-							type,
-							path: e,
-						});
+						return GetFileStats(e);
 					} catch (e) {
 						console.error(e.message);
 						return;
@@ -72,6 +76,8 @@ contextBridge.exposeInMainWorld('electron', {
 	File: {
 		Delete: fs.rmSync,
 		Move: fs.renameSync,
+		Get: GetFileStats,
+		Write: fs.writeFileSync,
 	},
 
 	SendMesssageToParent(msg) {

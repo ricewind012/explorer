@@ -29,6 +29,57 @@ export class CPath {
 		};
 	}
 
+	CreateListItem(file) {
+		let bUnknownType = file.type == EFileType.Unknown;
+		console.assert(!bUnknownType, 'EFileType == 8 for %o', file.path);
+
+		let elEntry = g_Elements.content.entry.content.cloneNode(true);
+		let elEntryContainer = elEntry.children[0];
+		let [
+			elListIcon,
+			elListName,
+			_elListRenameInput,
+			elListSize,
+			elListType,
+			elListMode,
+		] = [...elEntryContainer.children];
+
+		elEntryContainer.addEventListener('click', (ev) => {
+			this.ChangeSelection(ev.target.parentNode, file);
+		});
+
+		elListName.innerText = file.path
+			.split('/')
+			.filter(e => e)
+			.splice(-1);
+
+		if (!bUnknownType) {
+			for (let i of Object.keys(file))
+				elEntryContainer.setAttribute(i, file[i]);
+
+			elListType.innerText = EFileType[file.type];
+			elListMode.innerText = PermissionsToString(
+				`0o${(file.mode).toString(8)}`
+			);
+
+			if (file.type == EFileType.Directory) {
+				elListName.addEventListener('dblclick', (ev) => {
+					g_Path.Navigate(file.path);
+				});
+			} else {
+				let strExtension = file.path.match(/\.[\w-]+$/);
+				elListIcon.setAttribute('ext', strExtension);
+
+				elListName.addEventListener('dblclick', (ev) => {
+					this.ExecuteSelection();
+				});
+				elListSize.innerText = HumanReadableSize(file.size);
+			}
+		}
+
+		return elEntryContainer;
+	}
+
 	Render() {
 		let elList = g_Elements.content.list;
 		let strLabel = `${g_vecFiles.length} files in ${this.m_strPath}`;
@@ -38,53 +89,7 @@ export class CPath {
 
 		elList.innerHTML = '';
 		for (let i = 0; i < g_vecFiles.length; i++) {
-			let file = g_vecFiles[i];
-			let bUnknownType = file.type == EFileType.Unknown;
-			console.assert(!bUnknownType, 'EFileType == 8 for %o', file.path);
-
-			let elEntry = g_Elements.content.entry.content.cloneNode(true);
-			let elEntryContainer = elEntry.children[0];
-			let [
-				elListIcon,
-				elListName,
-				_elListRenameInput,
-				elListSize,
-				elListType,
-				elListMode,
-			] = [...elEntryContainer.children];
-
-			elEntryContainer.addEventListener('click', (ev) => {
-				this.ChangeSelection(ev.target.parentNode, file);
-			});
-
-			elListName.innerText = file.path
-				.split('/')
-				.filter(e => e)
-				.splice(-1);
-
-			if (!bUnknownType) {
-				for (let i of Object.keys(file))
-					elEntryContainer.setAttribute(i, file[i]);
-
-				elListType.innerText = EFileType[file.type];
-				elListMode.innerText = PermissionsToString(
-					`0o${(file.mode).toString(8)}`
-				);
-
-				if (file.type == EFileType.Directory) {
-					elListName.addEventListener('dblclick', (ev) => {
-						g_Path.Navigate(file.path);
-					});
-				} else {
-					let strExtension = file.path.match(/\.[\w-]+$/);
-					elListIcon.setAttribute('ext', strExtension);
-
-					elListName.addEventListener('dblclick', (ev) => {
-						this.ExecuteSelection();
-					});
-					elListSize.innerText = HumanReadableSize(file.size);
-				}
-			}
+			let elEntry = this.CreateListItem(g_vecFiles[i]);
 
 			elList.appendChild(elEntry);
 		}

@@ -7,6 +7,7 @@ import {
 import {
 	OnKeyPress,
 	HandlePointerEvent,
+	CreateShortcut,
 	HumanReadableSize,
 	UpdateTitle,
 	UpdateStatusbar,
@@ -82,6 +83,15 @@ window.addEventListener('message', async (ev) => {
 			);
 			break;
 
+		case 'create-shortcut':
+			CreateShortcut(data.file);
+			let file = electron.File.Get(`${data.file.path}.desktop`)
+			let el = g_Path.CreateListItem(file);
+
+			g_Path.m_Selection.el.after(el);
+			g_Path.ChangeSelection(el, file);
+			break;
+
 		case 'file-delete':
 			g_Path.DeleteSelection();
 			break;
@@ -101,7 +111,7 @@ document.addEventListener('contextmenu', async (ev) => {
 		return;
 
 	let nMenuHeight = vecMenuEntries
-		.map(e => e.length ? 17 : 11)
+		.map(e => e.length ? 17 : 10)
 		.reduce((a, b) => a + b) + 1;
 
 	g_hChildWindow = await electron.Window.Create(
@@ -109,8 +119,9 @@ document.addEventListener('contextmenu', async (ev) => {
 		{
 			resizable:       false,
 			focusable:       false,
-			width:           112,
-			minWidth:        112,
+			// Original is 122, but MS Sans Serif is just a fallback.
+			width:           123,
+			minWidth:        123,
 			height:          nMenuHeight,
 			minHeight:       nMenuHeight,
 			x:               ev.screenX,

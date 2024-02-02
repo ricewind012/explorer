@@ -103,6 +103,14 @@ export function GetPreviousSiblingsWidth(el) {
 	return nWidth;
 }
 
+export function CreateShortcut(file) {
+	electron.File.Write(`${file.path}.desktop`, `[Desktop Entry]
+Name=${file.path.split('/').filter(e => e).slice(-1)[0]}
+Type=Link
+URL=file://${file.path}
+`);
+}
+
 export function PermissionsToString(nPerms) {
 	let char = (c, p) => nPerms & p ? c : '-';
 	let strResult = '';

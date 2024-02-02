@@ -25,6 +25,13 @@ const vecMenuEntries = [
 	], [
 		// Separator
 	], [
+		'Create Shortcut', () => {
+			electron.SendMesssageToParent({
+				action: 'create-shortcut',
+				file:   g_Message,
+			});
+		}
+	], [
 		'Delete', () => {
 			electron.SendMesssageToParent({
 				action: 'file-delete',
