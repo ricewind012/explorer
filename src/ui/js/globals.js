@@ -1,5 +1,9 @@
 const k_strOpener = 'xdg-open';
 
+const k_nChildWindowPadding = 3;
+// 1 (border) + 3 (top margin) + 4 (bottom margin)
+const k_nSeparatorHeight = 8;
+
 // TODO: window borders ?
 const k_nContentSeparatorOffset = 5;
 

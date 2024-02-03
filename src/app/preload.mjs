@@ -121,12 +121,6 @@ contextBridge.exposeInMainWorld('electron', {
 		},
 	},
 
-	// shell.openPath() is async, but blocking ?
-	ExecuteCommand(cmd) {
-		cp.exec(cmd, (err) => {
-			if (err) {
-				throw new Error(err.message);
-			}
-		});
-	},
+	// https://github.com/electron/electron/issues/26074
+	ExecuteCommand: cp.execSync,
 });

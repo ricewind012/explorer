@@ -60,7 +60,9 @@ export class CPathSelection {
 
 	Execute() {
 		try {
-			electron.ExecuteCommand(`${k_strOpener} ${this.m_Selection.file.path}`);
+			electron.ExecuteCommand(
+				`${k_strOpener} "${this.m_Selection.file.path.replace(/"/g, '\\"')}"`
+			);
 		} catch (e) {
 			CWindow.Alert('error', 'Execute() error', e.message);
 			return;
@@ -380,7 +382,7 @@ export class CWindow {
 			'menu',
 			{
 				resizable:       false,
-				focusable:       false,
+				//focusable:       false,
 				// Original is 122, but MS Sans Serif is just a fallback.
 				width:           123,
 				minWidth:        123,

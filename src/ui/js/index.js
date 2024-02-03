@@ -6,6 +6,8 @@ import {
 	CWindow,
 } from './classes.js';
 
+import { EFileSorting } from './enums.js';
+
 import {
 	OnKeyPress,
 	HandlePointerEvent,
@@ -57,18 +59,21 @@ let g_vecTableButtons = [
 	},
 ];
 
+let styles = getComputedStyle(document.body);
+let nMenuItemHeight = Number(styles.lineHeight.replace('px', '')) + 4;
+
 window.addEventListener('message', async (ev) => {
 	let data = ev.data;
 
 	switch (data.action) {
 		case 'close':
-			if (g_hChildWindow)
-				electron.Window.Close(g_hChildWindow);
-			g_hChildWindow = null;
+			if (window.g_hChildWindow)
+				electron.Window.Close(window.g_hChildWindow);
+			window.g_hChildWindow = null;
 			break;
 
 		case 'execute':
-			g_Path.ExecuteSelection();
+			g_PathSelection.Execute();
 			break;
 
 		case 'navigate':
@@ -76,7 +81,7 @@ window.addEventListener('message', async (ev) => {
 			break;
 
 		case 'create-window':
-			g_hChildWindow = await CWindow.Properties(data.file);
+			window.g_hChildWindow = await CWindow.Properties(data.file);
 			break;
 
 		case 'create-shortcut':
@@ -112,10 +117,14 @@ document.addEventListener('contextmenu', async (ev) => {
 		return;
 
 	let unMenuHeight = vecMenuEntries
-		.map(e => e.length ? 17 : 10)
-		.reduce((a, b) => a + b) + 1;
+		.map(e => e.length ? nMenuItemHeight : k_nSeparatorHeight)
+		.reduce((a, b) => a + b);
 
-	g_hChildWindow = await CWindow.Menu(ev, selection.file, unMenuHeight);
+	window.g_hChildWindow = await CWindow.Menu(
+		ev,
+		selection.file,
+		Math.round(unMenuHeight) + k_nChildWindowPadding * 2
+	);
 });
 
 document.addEventListener('explorer:navigate', (ev) => {
@@ -215,9 +224,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		undo_delete: fnStub,
 		delete:      () => { g_PathSelection.Delete(); },
 		properties:  async () => {
-			window.g_hChildWindow = CWindow.Properties(
-				g_PathSelection.m_Selection.file
-			);
+			let selection = g_PathSelection.m_Selection;
+
+			if (!selection) {
+				CWindow.Alert('error', 'Error', 'No selection');
+				return;
+			}
+
+			window.g_hChildWindow = await CWindow.Properties(selection);
 		},
 		big_icons:   fnStub,
 		small_icons: fnStub,
@@ -264,13 +278,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		buttons[strButtonName].addEventListener('click', (ev) => {
 			let eCurrentOrder = g_Path.m_Sorting.order;
-			let eOrder = ++eCurrentOrder == 2 ? 0 : eCurrentOrder;
+			let eOrder = ++eCurrentOrder == 3 ? 0 : eCurrentOrder;
 
 			g_Path.m_Sorting.button?.el?.removeAttribute('sort');
 			ev.target.setAttribute('sort', EFileSorting[eOrder]);
 
 			evt('explorer:sort', {
-				data:   g_vecFiles.sort(button.functions[eOrder]),
+				data:   window.g_vecFiles.sort(button.functions[eOrder]),
 				order:  eOrder,
 				button: {
 					el:   button[0],
@@ -303,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		return;
 
 	evt('explorer:sort', {
-		data:   g_vecFiles.sort(
+		data:   window.g_vecFiles.sort(
 			g_vecTableButtons
 				.find(e => e.name == strButton)
 				.functions[eOrder]

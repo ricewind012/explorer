@@ -15,6 +15,12 @@
 	display: flex;
 }
 
+@media (prefers-color-scheme: dark) {
+	.icon-button::before {
+		filter: invert();
+	}
+}
+
 #toolbar-button-go-up {
 	--button-img: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAMAAABBwMRzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAMUExURQAAAP//AP///wAAAKpIV4oAAAAEdFJOU////wBAKqn0AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAARElEQVQYV2WNSw4AMQhC6XD/OxdB62Ig8fOwKUiU2AJxPnmAw5X2Sp+F3AZoD23gXGVAD/lDdv57Xy2Taidx6Np3K+ACZEkA2XKF6BYAAAAASUVORK5CYII=');
 	--button-img-pos: 3px 4px;

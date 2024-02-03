@@ -1,8 +1,6 @@
+import { CPath } from './classes.js';
 import EFileType from '../../shared/EFileType.js';
-import {
-	EFileSorting,
-	EFileUnits,
-} from './enums.js';
+import { EFileUnits } from './enums.js';
 
 export function HandlePointerEvent(el, fnMoveCallback) {
 	el.addEventListener('pointerdown', () => {
@@ -78,7 +76,7 @@ export function GetPreviousSiblingsWidth(el) {
 
 export function CreateShortcut(file) {
 	electron.File.Write(`${file.path}.desktop`, `[Desktop Entry]
-Name=${file.path.split('/').filter(e => e).slice(-1)[0]}
+Name=${CPath.Basename(file.path)}
 Type=Link
 URL=file://${file.path}
 `);
