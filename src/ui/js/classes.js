@@ -24,8 +24,8 @@ export class CPathSelection {
 	Change(el, file) {
 		this.m_Selection?.el.removeAttribute('selected');
 		this.m_Selection = {
-			el,
-			file
+			el: el.classList.contains('list-item') ? el : el.parentNode,
+			file,
 		};
 		this.m_Selection.el.setAttribute('selected', '');
 
@@ -71,8 +71,8 @@ export class CPathSelection {
 
 	Rename() {
 		let selection = this.m_Selection;
-		let elListName = selection.el.querySelector(':scope > .list-name');
-		let elInput = selection.el.querySelector(':scope > .list-rename-input');
+		let elListName = selection.el.querySelector('.list-item-name');
+		let elInput = selection.el.querySelector('.list-rename-input');
 
 		elListName.hidden = true;
 		elInput.value = elListName.innerText;
@@ -182,9 +182,7 @@ export class CPath {
 		let elEntry = g_Elements.content.entry.content.cloneNode(true);
 		let elEntryContainer = elEntry.children[0];
 		let [
-			elListIcon,
 			elListName,
-			_elListRenameInput,
 			elListSize,
 			elListType,
 			elListMode,
@@ -194,7 +192,7 @@ export class CPath {
 			g_PathSelection.Change(ev.target.parentNode, file);
 		});
 
-		elListName.innerText = CPath.Basename(file.path);
+		elListName.children[1].textContent = CPath.Basename(file.path);
 
 		if (!bUnknownType) {
 			for (let i of Object.keys(file))
@@ -210,9 +208,6 @@ export class CPath {
 					this.Navigate(file.path);
 				});
 			} else {
-				let strExtension = file.path.match(/\.[\w-]+$/);
-				elListIcon.setAttribute('ext', strExtension);
-
 				elListName.addEventListener('dblclick', (ev) => {
 					g_PathSelection.Execute();
 				});
@@ -321,7 +316,7 @@ export class CTree {
 					elListIcon,
 					elListImage,
 					elListName,
-				] = [...elEntryContainer.querySelectorAll(':scope > div > *')];
+				] = [...elEntryContainer.querySelectorAll(':scope > div div')];
 
 				let strFolderName = CPath.Basename(file.path);
 				elListName.innerText = strFolderName;
@@ -330,7 +325,7 @@ export class CTree {
 					let elTarget = ev.target;
 
 					this.m_Selection?.removeAttribute('selected');
-					this.m_Selection = elEntryContainer;
+					this.m_Selection = elEntryContainer.children[0];
 					this.m_Selection.setAttribute('selected', '');
 
 					if (elEntryContainer.getAttribute('open') == '')

@@ -90,9 +90,9 @@ contextBridge.exposeInMainWorld('electron', {
 			ipcRenderer.send('close-window', hWindow);
 		},
 
-		Create(strPageName, options, msg) {
+		Create(page, options, msg) {
 			return ipcRenderer.invoke('create-window', {
-				page: strPageName,
+				page,
 				options,
 				msg,
 			});
@@ -106,11 +106,8 @@ contextBridge.exposeInMainWorld('electron', {
 			ipcRenderer.send('fullscreen');
 		},
 
-		Resize(nWidth, nHeight) {
-			ipcRenderer.send('resize', {
-				width:  nWidth,
-				height: nHeight,
-			});
+		Resize(width, height) {
+			ipcRenderer.send('resize', width, height);
 		},
 
 		SetDestroyable(bCanDestroy) {

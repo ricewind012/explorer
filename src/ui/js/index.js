@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		container: id('content'),
 		separator: id('content-separator'),
 		list:      id('table-list'),
-		entry:     id('list-entry-template'),
+		entry:     id('list-item-template'),
 
 		table: {
 			name: id('table-name-button'),
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	g_Elements.tree = {
 		container: id('tree'),
-		template:  id('tree-entry-template'),
+		template:  id('tree-item-template'),
 	};
 
 	g_Elements.toolbar = {

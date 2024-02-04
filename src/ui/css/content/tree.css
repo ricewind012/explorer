@@ -1,4 +1,4 @@
-.tree-entry {
+.tree-item {
 	min-width: 100%;
 
 	#tree > & {
@@ -16,7 +16,7 @@
 			top: -6px;
 		}
 
-		.tree-entry-icon::before {
+		.tree-item-icon::before {
 			visibility: hidden;
 		}
 	}
@@ -26,28 +26,15 @@
 	}
 }
 
-.tree-entry-content {
-	gap: 6px;
-
-  /* alternative -webkit-line-clamp */
-	height: calc(var(--text-size) * var(--text-line) + 3px);
-
-	display: flex;
-	align-items: center;
+.tree-item-content {
+	&,
+	& > .list-item-name-container {
+		gap: 6px;
+	}
 }
 
-.tree-entry-icon {
-	flex-shrink: 0;
-}
+.tree-item-image {
+	--list-icon: var(--icon-dir);
 
-.tree-entry-image {
-	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAMAAABBwMRzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAASUExURYeIj8DHyP//AP///wAAAAAAAJRqB2kAAAAGdFJOU///////ALO/pL8AAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA1SURBVBhXtYrRFQAQEMOCdv+VHcfDANKvtMVm4AWm1MguSI0ib9AuUHjuM9OPlh/7g7AupA6lNwF/p6NMjAAAAABJRU5ErkJggg==');
-	background-position: center;
-	background-repeat: no-repeat;
-
-	width: var(--icon-size);
-	height: var(--icon-size);
 	z-index: 1;
-
-	flex-shrink: 0;
 }

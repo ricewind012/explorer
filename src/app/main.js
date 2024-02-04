@@ -24,7 +24,7 @@ function CreateWindow(strPageName, additionalOptions) {
 
 	wnd.loadFile(`src/ui/html/${strPageName}.html`);
 	wnd.once('ready-to-show', () => {
-		wnd.show()
+		wnd.show();
 	});
 
 	return wnd;
@@ -34,8 +34,8 @@ app.commandLine.appendSwitch('disable-smooth-scrolling');
 app.whenReady().then(() => {
 	let wnd = CreateWindow('index');
 
-	ipcMain.on('resize', (_, e) => {
-		wnd.setSize(e.width, e.height);
+	ipcMain.on('resize', (_, width, height) => {
+		wnd.setSize(width, height);
 	});
 	ipcMain.on('minimize', () => {
 		wnd.minimize();
@@ -73,5 +73,5 @@ app.whenReady().then(() => {
 	});
 });
 app.on('window-all-closed', () => {
-	app.quit()
+	app.quit();
 });

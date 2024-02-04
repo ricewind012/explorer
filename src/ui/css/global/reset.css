@@ -1,13 +1,13 @@
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 ul,
 menu {
-  padding: 0;
-  margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 li {
-  list-style: none;
+	list-style: none;
 }

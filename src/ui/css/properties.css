@@ -1,44 +1,44 @@
 #tabs-container {
-  margin: 6px;
+	margin: 6px;
 
-  width: calc(100% - 12px);
+	width: calc(100% - 12px);
 }
 
 [role="tabpanel"] {
-  line-height: 1.85;
+	line-height: 1.85;
 
-  height: calc(100% - 14px);
+	height: calc(100% - 14px);
 }
 
 hr {
-  margin-top: 4px;
-  margin-bottom: 5px;
+	margin-top: 4px;
+	margin-bottom: 5px;
 }
 
 #section-file,
 #section-info {
-  --column-header-width: 60px;
+	--column-header-width: 60px;
 }
 
 #section-attribute {
-  --column-header-width: 90px;
+	--column-header-width: 90px;
 }
 
 .column {
-  display: flex;
+	display: flex;
 }
 
 .column-header {
-  width: var(--column-header-width);
-  flex-shrink: 0;
+	width: var(--column-header-width);
+	flex-shrink: 0;
 }
 
 label {
-  line-height: 1.8;
+	line-height: 1.8;
 }
 
 #button-group-container {
-  text-align: right;
+	text-align: right;
 
-  margin: 3px 3px 7px 6px;
+	margin: 3px 6px 7px 6px;
 }

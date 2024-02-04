@@ -3,7 +3,7 @@ import vecMenuEntries from './menu-shared.js';
 let g_elEntryTemplate = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  g_elEntryTemplate = id('menu-entry-template');
+	g_elEntryTemplate = id('menu-entry-template');
 
 	for (let i = 0; i < vecMenuEntries.length; i++) {
 		let vecEntry = vecMenuEntries[i];
@@ -21,6 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			});
 		}
 
-    document.body.appendChild(elEntry);
+		document.body.appendChild(elEntry);
 	}
 });

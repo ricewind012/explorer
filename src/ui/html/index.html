@@ -141,15 +141,6 @@
 						<menu id="table-header">
 							<li class="table-header-button-container">
 								<button
-									id="table-icon-button"
-									class="table-button"
-								>
-									Icon
-								</button>
-							</li>
-
-							<li class="table-header-button-container">
-								<button
 									id="table-name-button"
 									class="table-button"
 								>
@@ -230,24 +221,30 @@
 		></div>
 	</body>
 
-	<template id="tree-entry-template">
-		<li class="tree-entry">
-			<div class="tree-entry-content">
-				<span class="tree-entry-icon"></span>
-				<img class="tree-entry-image" />
-				<span class="text-overflow tree-entry-name"></span>
+	<template id="tree-item-template">
+		<li class="tree-item">
+			<div class="list-item tree-item-content">
+				<div class="tree-item-icon"></div>
+				<div class="list-item-name-container">
+					<img class="list-item-image tree-item-image" />
+					<div class="text-overflow list-item-name"></div>
+				</div>
 			</div>
 		</li>
 	</template>
 
-	<template id="list-entry-template">
-		<li class="list-entry">
-			<img class="text-overflow list-row list-image" />
-			<div class="text-overflow list-row list-name"></div>
-			<input
-				class="list-rename-input"
-				hidden
-			/>
+	<template id="list-item-template">
+		<li class="list-item table-list-item">
+			<div class="list-item-name-container">
+				<img class="list-item-image" />
+				<div class="text-overflow list-item-name"></div>
+				<input
+					class="list-rename-input"
+					spellcheck="false"
+					hidden
+				/>
+			</div>
+
 			<div class="text-overflow list-row list-size"></div>
 			<div class="text-overflow list-row list-type"></div>
 			<div class="text-overflow list-row list-mode"></div>
@@ -257,5 +254,8 @@
 	<script src="../js/globals.js"></script>
 	<script src="../js/helpers.js"></script>
 	<script src="../js/window.js"></script>
-	<script type="module" src="../js/index.js"></script>
+	<script
+		type="module"
+		src="../js/index.js"
+	></script>
 </html>

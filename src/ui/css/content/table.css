@@ -10,7 +10,7 @@
 
 .table-header-button-container {
 	position: relative;
-  display: flex;
+	display: flex;
 }
 
 .table-button {
@@ -18,29 +18,19 @@
 	min-width: 60px;
 }
 
-#table-icon-button {
-	color: transparent;
-
-	width: var(--table-icon-width);
-	min-width: var(--table-icon-width);
-}
-
-.list-entry {
-	--table-icon: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAQCAMAAAD6fQULAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURQAAAP///4eIj8DHyAAAAIf7VzIAAAAFdFJOU/////8A+7YOUwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAADZJREFUGFdjYGFhYIRCIBPIYYJCIBtIICCQBwfMWHgMDCBFOOVA0lSVgwEQjxkBGIDuhgMGFgBmBADr9EYr2gAAAABJRU5ErkJggg==');
-
-	width: max-content;
-  /* alternative -webkit-line-clamp */
-	height: calc(var(--text-size) * var(--text-line) + 3px);
-	display: flex;
-
-  &[selected] {
-    background-color: var(--color-highlight);
-    color: var(--color-highlight-text);
-  }
+.table-list-item {
+	--list-icon: var(--icon-file);
 
 	/* Directory */
 	&[type="2"] {
-		--table-icon: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAMAAABBwMRzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAASUExURYeIj8DHyP//AP///wAAAAAAAJRqB2kAAAAGdFJOU///////ALO/pL8AAAAJcEhZcwAADsMAAA7DAcdvqGQAAAA1SURBVBhXtYrRFQAQEMOCdv+VHcfDANKvtMVm4AWm1MguSI0ib9AuUHjuM9OPlh/7g7AupA6lNwF/p6NMjAAAAABJRU5ErkJggg==');
+		--list-icon: var(--icon-dir);
+	}
+
+	.list-item-name-container {
+		gap: 2px;
+
+		width: var(--table-row);
+		min-width: 60px;
 	}
 }
 
@@ -49,18 +39,11 @@
 
 	width: var(--table-row);
 	min-width: 60px;
-}
-
-.list-image {
-	background: var(--table-icon) center no-repeat;
-	padding: 0;
-
-	width: var(--table-icon-width);
-	min-width: var(--table-icon-width);
+	height: 100%;
 }
 
 #table-name-button,
-.list-name {
+.list-item-name-container {
 	--table-row: var(--table-separator-name-width);
 }
 
@@ -82,18 +65,9 @@
 .list-rename-input {
 	box-shadow: inset 0 0 0 1px var(--color-button-shadow-dark);
 
-	/*
-	 * the only way to get the desired 1:1 padding.
-	 * some entries may need to have it at "8px 0 9px 2px",
-	 * but it does not seem to have any specific pattern to apply it to.
-	 */
-	padding: 9px 0 8px 2px;
-	margin: 0;
+	padding: 2px 0 2px 2px;
+	margin-left: -3px;
 
 	width: var(--table-separator-name-width);
 	height: unset;
-
-	&:focus {
-		outline: none;
-	}
 }
