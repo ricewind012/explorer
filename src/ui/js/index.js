@@ -2,6 +2,7 @@ import {
 	CAppData,
 	CPathSelection,
 	CPath,
+	CStatusbar,
 	CTree,
 	CWindow,
 } from './classes.js';
@@ -14,13 +15,13 @@ import {
 	CreateShortcut,
 	HumanReadableSize,
 	UpdateTitle,
-	UpdateStatusbar,
 } from './functions.js';
 
 import vecMenuEntries from './menu-shared.js';
 
 window.g_PathSelection = new CPathSelection();
 window.g_Path          = new CPath();
+window.g_Statusbar     = new CStatusbar();
 window.g_Tree          = new CTree();
 window.g_strFileToCopy = '';
 
@@ -134,15 +135,16 @@ document.addEventListener('explorer:navigate', (ev) => {
 		path:  strPath,
 		count: nFiles,
 	} = ev.detail;
-	let {
-		bsize:  nBlockSize,
-		blocks: nBlocks,
-		bfree:  nBlocksFree,
-	} = electron.FS.Stat(strPath);
-	let nDiskUsage = nBlocks * nBlockSize - nBlocksFree * nBlockSize;
 
-	UpdateStatusbar('count', `${nFiles} object(s)`);
-	UpdateStatusbar('usage', HumanReadableSize(nDiskUsage));
+	let vecHiddenFiles = window.g_vecFiles
+		.filter(e => e.path.startsWith(strPath + '/.'));
+	let strCountText = `${nFiles} object(s)`;
+	if (vecHiddenFiles.length)
+		strCountText += ` (plus ${vecHiddenFiles.length} hidden)`;
+
+	g_Statusbar.UpdateDiskUsage(strPath);
+	g_Statusbar.UpdateItem('count', strCountText);
+	g_Statusbar.UpdateItem('usage', HumanReadableSize(g_Statusbar.m_unDiskUsage));
 
 	CAppData.Set('last_path', strPath);
 	g_Path.m_strPath = strPath;

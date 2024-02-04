@@ -115,7 +115,3 @@ export function UpdateTitle(strName) {
 	document.title = strName;
 	g_Elements.titlebar.name.innerText = strName;
 }
-
-export function UpdateStatusbar(strSection, strText) {
-	g_Elements.statusbar[strSection].innerText = strText;
-}

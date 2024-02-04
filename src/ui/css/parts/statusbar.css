@@ -1,5 +1,6 @@
 .statusbar-item {
-	width: 144px;
+	/* Original is always 144px, but MS Sans Serif is not being used. */
+	min-width: 144px;
 
 	&:last-child {
 		flex-grow: 1;

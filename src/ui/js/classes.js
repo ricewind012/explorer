@@ -4,7 +4,6 @@ import {
 	HumanReadableSize,
 	OnKeyPress,
 	PermissionsToString,
-	UpdateStatusbar,
 } from './functions.js';
 
 export class CAppData {
@@ -30,12 +29,13 @@ export class CPathSelection {
 		};
 		this.m_Selection.el.setAttribute('selected', '');
 
-		if (this.m_Selection.file.type == EFileType.Directory)
-			return;
+		let strFileSize = HumanReadableSize(this.m_Selection.file.size);
+		let strDiskSpace = HumanReadableSize(g_Statusbar.m_unDiskUsage);
 
-		UpdateStatusbar(
+		g_Statusbar.UpdateItem('count', '1 object(s) selected');
+		g_Statusbar.UpdateItem(
 			'usage',
-			HumanReadableSize(this.m_Selection.file.size)
+			`${strFileSize} (Disk free space: ${strDiskSpace})`
 		);
 	}
 
@@ -275,6 +275,26 @@ export class CPath {
 				.slice(0, -1)
 				.join('/')
 		);
+	}
+}
+
+export class CStatusbar {
+	constructor() {
+		this.m_unDiskUsage = 0;
+	}
+
+	UpdateDiskUsage(strPath) {
+		let {
+			bsize:  nBlockSize,
+			blocks: nBlocks,
+			bfree:  nBlocksFree,
+		} = electron.FS.Stat(strPath);
+
+		this.m_unDiskUsage = nBlocks * nBlockSize - nBlocksFree * nBlockSize;
+	}
+
+	UpdateItem(strItem, strText) {
+		g_Elements.statusbar[strItem].innerText = strText;
 	}
 }
 
