@@ -1,9 +1,8 @@
-import vecMenuEntries from './menu-shared.js';
+import entries from './menu-shared.js';
 
-let g_elEntryTemplate = null;
-
-document.addEventListener('DOMContentLoaded', () => {
-	g_elEntryTemplate = id('menu-entry-template');
+window.addEventListener('message', (ev) => {
+	let elEntryTemplate = id('menu-entry-template');
+	let vecMenuEntries = entries[ev.data.section];
 
 	for (let i = 0; i < vecMenuEntries.length; i++) {
 		let vecEntry = vecMenuEntries[i];
@@ -12,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (!vecEntry.length) {
 			elEntry = document.createElement('hr');
 		} else {
-			elEntry = g_elEntryTemplate.content.cloneNode(true).children[0];
+			elEntry = elEntryTemplate.content.cloneNode(true).children[0];
 
 			elEntry.innerText = vecEntry[0];
 			elEntry.addEventListener('click', () => {

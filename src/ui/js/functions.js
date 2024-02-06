@@ -31,9 +31,17 @@ export function OnKeyPress(ev) {
 	switch (ev.key) {
 		case 'Enter':
 			let selection = g_PathSelection.m_Selection;
+			OpenFile(
+				selection.file,
+				(strPath) => {
+					g_Path.Navigate(strPath);
+				},
+				(strPath) => {
+					g_PathSelection.Execute();
+				}
+			);
 
 			switch (selection.file.type) {
-				case EFileType.NotFound:
 				case EFileType.Unknown:
 					break;
 
@@ -59,6 +67,35 @@ export function OnKeyPress(ev) {
 			g_PathSelection.Delete();
 			break;
 	}
+}
+
+export function OpenFile(file, fnDirCallback, fnFileCallback) {
+	switch (file.type) {
+		case EFileType.NotFound:
+		case EFileType.Unknown:
+			break;
+
+		case EFileType.Directory:
+			fnDirCallback(file.path);
+			break;
+
+		default:
+			fnFileCallback(file.path);
+			break;
+	}
+}
+
+export function GetParentElementWithID(elChild) {
+	let el = elChild;
+
+	while (!el.id) {
+		if (!el.parentElement)
+			return null;
+
+		el = el.parentElement;
+	}
+
+	return el;
 }
 
 export function GetPreviousSiblingsWidth(el) {

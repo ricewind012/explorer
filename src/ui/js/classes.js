@@ -22,7 +22,16 @@ export class CPathSelection {
 	}
 
 	Change(el, file) {
-		this.m_Selection?.el.removeAttribute('selected');
+		let strDiskSpace = HumanReadableSize(g_Statusbar.m_unDiskUsage);
+
+		this.m_Selection?.el?.removeAttribute('selected');
+		if (!el && !file) {
+			this.m_Selection = null;
+
+			g_Statusbar.UpdateItem('count', `${window.g_vecFiles.length} object(s)`);
+			g_Statusbar.UpdateItem('usage', strDiskSpace);
+			return;
+		}
 		this.m_Selection = {
 			el: el.classList.contains('list-item') ? el : el.parentNode,
 			file,
@@ -30,7 +39,6 @@ export class CPathSelection {
 		this.m_Selection.el.setAttribute('selected', '');
 
 		let strFileSize = HumanReadableSize(this.m_Selection.file.size);
-		let strDiskSpace = HumanReadableSize(g_Statusbar.m_unDiskUsage);
 
 		g_Statusbar.UpdateItem('count', '1 object(s) selected');
 		g_Statusbar.UpdateItem(
@@ -295,7 +303,7 @@ export class CStatusbar {
 
 export class CTree {
 	constructor() {
-		this.m_elTreeSelection = null;
+		this.m_Selection = null;
 	}
 
 	RenderPath(strPath) {
@@ -324,9 +332,12 @@ export class CTree {
 				const OnClick = (ev) => {
 					let elTarget = ev.target;
 
-					this.m_Selection?.removeAttribute('selected');
-					this.m_Selection = elEntryContainer.children[0];
-					this.m_Selection.setAttribute('selected', '');
+					this.m_Selection?.el.removeAttribute('selected');
+					this.m_Selection = {
+						el: elEntryContainer.children[0],
+						file,
+					};
+					this.m_Selection.el.setAttribute('selected', '');
 
 					if (elEntryContainer.getAttribute('open') == '')
 						elEntryContainer.removeAttribute('open');

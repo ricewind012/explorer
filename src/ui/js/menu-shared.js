@@ -1,41 +1,38 @@
-import EFileType from '../../shared/EFileType.js';
+import { OpenFile } from './functions.js';
 
-const vecMenuEntries = [
-	[
-		'Open', () => {
-			switch (g_Message.type) {
-				case EFileType.NotFound:
-				case EFileType.Unknown:
-					break;
-
-				case EFileType.Directory:
-					electron.SendMesssageToParent({
-						action: 'navigate',
-						path:	 g_Message.path,
-					});
-					break;
-
-				default:
-					electron.SendMesssageToParent({
-						action: 'execute',
-					});
-					break;
-			}
+function OpenFileFromMenu(file) {
+	OpenFile(
+		file,
+		(strPath) => {
+			electron.SendMesssageToParent({
+				action: 'navigate',
+				path:   file.path,
+			});
+		},
+		(strPath) => {
+			electron.SendMesssageToParent({
+				action: 'execute',
+			});
 		}
-	], [
+	);
+}
+
+// TODO: these only use table, not tree
+const vecSharedFileEntries = [
+	[
 		// Separator
 	], [
 		'Cut', () => {
 			electron.SendMesssageToParent({
 				action: 'file-cut',
-				file:   g_Message,
+				file:   g_Message.file,
 			});
 		}
 	], [
 		'Copy', () => {
 			electron.SendMesssageToParent({
 				action: 'file-copy',
-				file:   g_Message,
+				file:   g_Message.file,
 			});
 		}
 	], [
@@ -44,21 +41,21 @@ const vecMenuEntries = [
 		'Create Shortcut', () => {
 			electron.SendMesssageToParent({
 				action: 'create-shortcut',
-				file:   g_Message,
+				file:   g_Message.file,
 			});
 		}
 	], [
 		'Delete', () => {
 			electron.SendMesssageToParent({
 				action: 'file-delete',
-				file:   g_Message,
+				file:   g_Message.file,
 			});
 		}
 	], [
 		'Rename', () => {
 			electron.SendMesssageToParent({
 				action: 'file-rename',
-				file:   g_Message,
+				file:   g_Message.file,
 			});
 		}
 	], [
@@ -67,10 +64,31 @@ const vecMenuEntries = [
 		'Properties', () => {
 			electron.SendMesssageToParent({
 				action: 'create-window',
-				file:   g_Message,
+				file:   g_Message.file,
 			});
 		}
 	]
 ];
 
-export default vecMenuEntries;
+const entries = {
+	table: [
+		[
+			'Open', () => {
+				OpenFileFromMenu(g_Message.file);
+			}
+		],
+		...vecSharedFileEntries,
+	],
+
+	tree: [
+		[
+			'Explore', () => {
+				OpenFileFromMenu(g_Message.file);
+			}
+		],
+		// TODO: open (index only with menu bar) & find
+		...vecSharedFileEntries,
+	],
+};
+
+export default entries;

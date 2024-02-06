@@ -11,13 +11,14 @@ import { EFileSorting } from './enums.js';
 
 import {
 	OnKeyPress,
+	GetParentElementWithID,
 	HandlePointerEvent,
 	CreateShortcut,
 	HumanReadableSize,
 	UpdateTitle,
 } from './functions.js';
 
-import vecMenuEntries from './menu-shared.js';
+import entries from './menu-shared.js';
 
 window.g_PathSelection = new CPathSelection();
 window.g_Path          = new CPath();
@@ -112,9 +113,24 @@ window.addEventListener('message', async (ev) => {
 document.addEventListener('keydown', OnKeyPress);
 
 document.addEventListener('contextmenu', async (ev) => {
-	let selection = g_PathSelection.m_Selection;
+	let elParent = GetParentElementWithID(ev.target);
 
-	if (!selection?.el)
+	if (!g_PathSelection.m_Selection && !g_Tree.m_Selection)
+		return;
+
+	let vecMenuEntries = entries[elParent.id];
+	let file = (() => {
+		switch (elParent.id) {
+			case 'table': return g_PathSelection.m_Selection.file;
+			case 'tree':  return g_Tree.m_Selection.file;
+
+			default:
+				console.log('event(contextmenu): nothing to open');
+				return;
+		}
+	})();
+
+	if (!file)
 		return;
 
 	let unMenuHeight = vecMenuEntries
@@ -123,7 +139,10 @@ document.addEventListener('contextmenu', async (ev) => {
 
 	window.g_hChildWindow = await CWindow.Menu(
 		ev,
-		selection.file,
+		{
+			file,
+			section: elParent.id,
+		},
 		Math.round(unMenuHeight) + k_nChildWindowPadding * 2
 	);
 });
@@ -171,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	g_Elements.content = {
 		container: id('content'),
 		separator: id('content-separator'),
-		list:      id('table-list'),
+		list:      id('table'),
 		entry:     id('list-item-template'),
 
 		table: {

@@ -3,23 +3,23 @@ import { CPath } from './classes.js';
 import { HumanReadableSize } from './functions.js';
 
 window.addEventListener('message', (ev) => {
-	let data = ev.data;
+	let file = ev.data.file;
 
-	g_Elements.file.name.innerText = CPath.Basename(data.path);
+	g_Elements.file.name.innerText = CPath.Basename(file.path);
 
-	g_Elements.info.type.innerText = EFileType[data.type];
-	g_Elements.info.path.innerText = data.path
+	g_Elements.info.type.innerText = EFileType[file.type];
+	g_Elements.info.path.innerText = file.path
 		.split('/')
 		.filter(e => e)
 		.slice(-2, -1)
 		[0] || '/';
-	g_Elements.info.size.innerText = HumanReadableSize(data.size);
-	if (data.size)
-		g_Elements.info.size.innerText += ` (${data.size?.toLocaleString()} bytes)`;
+	g_Elements.info.size.innerText = HumanReadableSize(file.size);
+	if (file.size)
+		g_Elements.info.size.innerText += ` (${file.size?.toLocaleString()} bytes)`;
 
-	g_Elements.attr.versteckt.checked = data.path[0] == '.';
-	g_Elements.attr.readonly.checked = !(data.mode & S_IWUSR);
-	g_Elements.attr.system.checked = !(data.mode & S_IWOTH);
+	g_Elements.attr.versteckt.checked = file.path[0] == '.';
+	g_Elements.attr.readonly.checked = !(file.mode & S_IWUSR);
+	g_Elements.attr.system.checked = !(file.mode & S_IWOTH);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
