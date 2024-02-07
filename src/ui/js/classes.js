@@ -47,6 +47,15 @@ export class CPathSelection {
 		);
 	}
 
+	ChangeFromEl(el) {
+		if (!el)
+			return;
+
+		let file = electron.File.Get(el.getAttribute('path'));
+
+		this.Change(el, file);
+	}
+
 	Copy() {
 		window.g_strFileToCopy = this.m_Selection.file.path;
 		console.log('Trying to copy %o to %o', g_strFileToCopy, g_Path.m_strPath);
@@ -306,6 +315,29 @@ export class CTree {
 		this.m_Selection = null;
 	}
 
+	ChangeSelection(el, file) {
+		this.m_Selection?.el.removeAttribute('selected');
+		if (!el && !file) {
+			this.m_Selection = null;
+			return;
+		}
+		this.m_Selection = {
+			el,
+			file,
+		};
+		this.m_Selection.el.setAttribute('selected', '');
+	}
+
+	ChangeFromEl(el) {
+		if (!el)
+			return;
+
+			console.log(el)
+		let file = electron.File.Get(el.getAttribute('path'));
+
+		this.ChangeSelection(el, file);
+	}
+
 	RenderPath(strPath) {
 		let files;
 		try {
@@ -326,19 +358,15 @@ export class CTree {
 					elListName,
 				] = [...elEntryContainer.querySelectorAll(':scope > div div')];
 
+				let elListItem = elEntryContainer.children[0];
 				let strFolderName = CPath.Basename(file.path);
 				elListName.innerText = strFolderName;
+				elListItem.setAttribute('path', file.path);
 
 				const OnClick = (ev) => {
 					let elTarget = ev.target;
 
-					this.m_Selection?.el.removeAttribute('selected');
-					this.m_Selection = {
-						el: elEntryContainer.children[0],
-						file,
-					};
-					this.m_Selection.el.setAttribute('selected', '');
-
+					this.ChangeSelection(elListItem, file);
 					if (elEntryContainer.getAttribute('open') == '')
 						elEntryContainer.removeAttribute('open');
 					else

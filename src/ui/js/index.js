@@ -24,6 +24,7 @@ window.g_PathSelection = new CPathSelection();
 window.g_Path          = new CPath();
 window.g_Statusbar     = new CStatusbar();
 window.g_Tree          = new CTree();
+window.g_LastClickedSection = null;
 window.g_strFileToCopy = '';
 
 let g_hChildWindow = null;
@@ -83,7 +84,7 @@ window.addEventListener('message', async (ev) => {
 			break;
 
 		case 'create-window':
-			window.g_hChildWindow = await CWindow.Properties(data.file);
+			window.g_hChildWindow = await CWindow.Properties({ file: data.file });
 			break;
 
 		case 'create-shortcut':
@@ -111,6 +112,27 @@ window.addEventListener('message', async (ev) => {
 });
 
 document.addEventListener('keydown', OnKeyPress);
+
+document.addEventListener('click', (ev) => {
+	let elParent = GetParentElementWithID(ev.target);
+
+	window.g_LastClickedSection = (() => {
+		switch (elParent.id) {
+			case 'table': return g_PathSelection;
+			case 'tree':  return g_Tree;
+		}
+	})();
+
+	switch (ev.target.id) {
+		case 'table':
+			g_PathSelection.Change(null, null);
+			break;
+
+		case 'tree':
+			g_Tree.ChangeSelection(null, null);
+			break;
+	}
+});
 
 document.addEventListener('contextmenu', async (ev) => {
 	let elParent = GetParentElementWithID(ev.target);

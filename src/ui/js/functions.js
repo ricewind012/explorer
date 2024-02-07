@@ -28,9 +28,35 @@ export function HandleMaximizeButton() {
 }
 
 export function OnKeyPress(ev) {
+	let section = g_LastClickedSection;
+
+	// TODO: maybe use events to not do ChangeFromEl
 	switch (ev.key) {
+		case 'ArrowUp': {
+			ev.preventDefault();
+
+			section.ChangeFromEl(
+				section.m_Selection.el
+					.parentElement.previousElementSibling
+					?.querySelector(':scope > .list-item')
+			);
+			break;
+		}
+
+		case 'ArrowDown': {
+			ev.preventDefault();
+
+			section.ChangeFromEl(
+				section.m_Selection.el
+					.parentElement.nextElementSibling
+					?.querySelector(':scope > .list-item')
+			);
+			break;
+		}
+
 		case 'Enter':
-			let selection = g_PathSelection.m_Selection;
+			let selection = g_LastClickedSection.m_Selection;
+
 			OpenFile(
 				selection.file,
 				(strPath) => {
@@ -40,19 +66,6 @@ export function OnKeyPress(ev) {
 					g_PathSelection.Execute();
 				}
 			);
-
-			switch (selection.file.type) {
-				case EFileType.Unknown:
-					break;
-
-				case EFileType.Directory:
-					g_Path.Navigate(selection.file.path);
-					break;
-
-				default:
-					g_PathSelection.Execute();
-					break;
-			}
 			break;
 
 		case 'Backspace':
