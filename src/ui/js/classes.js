@@ -1,5 +1,7 @@
 import EFileType from '../../shared/EFileType.js';
 
+import entries from './menu-shared.js';
+
 import {
 	HumanReadableSize,
 	OnKeyPress,
@@ -13,6 +15,39 @@ export class CAppData {
 
 	static Get(strItem) {
 		return JSON.parse(localStorage.getItem(strItem));
+	}
+}
+
+export class CMenubar {
+	constructor() {
+		this.m_elSelectedItem = null;
+		this.m_hContextMenuWindow = null;
+	}
+
+	ChangeSelection(el) {
+		this.m_elSelectedItem?.removeAttribute('selected');
+		this.m_elSelectedItem = el;
+
+		if (!el)
+			return;
+
+		this.m_elSelectedItem.setAttribute('selected', '');
+	}
+
+	async CloseContextMenu() {
+		if (this.m_elSelectedItem)
+			this.m_elSelectedItem.bClicked = false;
+		await electron.Window.Close(this.m_hContextMenuWindow);
+	}
+
+	async OpenContextMenu(item, opts) {
+		this.CloseContextMenu();
+		this.m_hContextMenuWindow = await CWindow.Menu(
+			// TODO xd
+			g_PathSelection.m_Selection?.file,
+			item,
+			opts
+		);
 	}
 }
 
@@ -288,6 +323,10 @@ export class CPath {
 				.join('/')
 		);
 	}
+
+	Refresh() {
+		this.Navigate(this.m_strPath);
+	}
 }
 
 export class CStatusbar {
@@ -431,21 +470,26 @@ export class CWindow {
 		);
 	}
 
-	static async Menu(ev, file, unMenuHeight) {
+	static async Menu(file, section, options) {
+		let unMenuHeight = entries[section]
+			.map(e => e.length ? nMenuItemHeight : k_nSeparatorHeight)
+			.reduce((a, b) => a + b);
+
 		return await electron.Window.Create(
 			'menu',
 			{
+				...options,
 				resizable:       false,
 				//focusable:       false,
 				// Original is 122, but MS Sans Serif is just a fallback.
 				width:           123,
 				minWidth:        123,
-				height:          unMenuHeight,
-				minHeight:       unMenuHeight,
-				x:               ev.screenX,
-				y:               ev.screenY,
+				height:          Math.round(unMenuHeight) + k_nChildWindowPadding * 2,
 			},
-			file
+			{
+				file,
+				section,
+			}
 		);
 	}
 

@@ -62,8 +62,18 @@ app.whenReady().then(() => {
 			});
 		});
 	});
-	ipcMain.on('close-window', (ev, args) => {
-		CBrowserWindow.fromId(args)?.close();
+	ipcMain.handle('close-window', (ev, args) => {
+		return new Promise((resolve, reject) => {
+			let wnd = CBrowserWindow.fromId(args);
+
+			if (!wnd)
+				reject(`No window with handle ${args}`);
+
+			wnd.close();
+			wnd.on('closed', () => {
+				resolve();
+			});
+		});
 	});
 	ipcMain.on('send-message-to-parent', (ev, args) => {
 		if (ev.sender == wnd.webContents)

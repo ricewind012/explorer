@@ -29,3 +29,6 @@ const {
 	S_IFIFO,
 	S_IFSOCK,
 } = electron.FS.Constants;
+
+let styles = getComputedStyle(document.body);
+let nMenuItemHeight = Number(styles.lineHeight.replace('px', '')) + 4;

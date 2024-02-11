@@ -87,7 +87,11 @@ contextBridge.exposeInMainWorld('electron', {
 
 	Window: {
 		Close(hWindow) {
-			ipcRenderer.send('close-window', hWindow);
+			if (!hWindow)
+				return;
+
+			return ipcRenderer.invoke('close-window', hWindow)
+				.catch((e) => console.log(e.message));
 		},
 
 		Create(page, options, msg) {

@@ -1,4 +1,9 @@
+import { CWindow } from './classes.js';
 import { OpenFile } from './functions.js';
+
+function fnStub() {
+	CWindow.Alert('warning', 'Warning', 'Not implemented');
+}
 
 function OpenFileFromMenu(file) {
 	OpenFile(
@@ -17,60 +22,156 @@ function OpenFileFromMenu(file) {
 	);
 }
 
+function SendMessageWithFile(strAction) {
+	electron.SendMesssageToParent({
+		action: strAction,
+		file:   g_Message.file,
+	});
+}
+
 // TODO: these only use table, not tree
 const vecSharedFileEntries = [
 	[
 		// Separator
 	], [
 		'Cut', () => {
-			electron.SendMesssageToParent({
-				action: 'file-cut',
-				file:   g_Message.file,
-			});
+			SendMessageWithFile('file-cut');
 		}
 	], [
 		'Copy', () => {
-			electron.SendMesssageToParent({
-				action: 'file-copy',
-				file:   g_Message.file,
-			});
+			SendMessageWithFile('file-copy');
 		}
 	], [
 		// Separator
 	], [
 		'Create Shortcut', () => {
-			electron.SendMesssageToParent({
-				action: 'create-shortcut',
-				file:   g_Message.file,
-			});
+			SendMessageWithFile('create-shortcut');
 		}
 	], [
 		'Delete', () => {
-			electron.SendMesssageToParent({
-				action: 'file-delete',
-				file:   g_Message.file,
-			});
+			SendMessageWithFile('file-delete');
 		}
 	], [
 		'Rename', () => {
-			electron.SendMesssageToParent({
-				action: 'file-rename',
-				file:   g_Message.file,
-			});
+			SendMessageWithFile('file-rename');
 		}
 	], [
 		// Separator
 	], [
 		'Properties', () => {
-			electron.SendMesssageToParent({
-				action: 'create-window',
-				file:   g_Message.file,
-			});
+			SendMessageWithFile('create-window');
 		}
 	]
 ];
 
 const entries = {
+	'menubar-file': [
+		[
+			'New', fnStub,
+		], [
+			// Separator
+		], [
+			'Create Shortcut', () => {
+				SendMessageWithFile('create-shortcut');
+			}
+		], [
+			'Delete', () => {
+				SendMessageWithFile('file-delete');
+			}
+		], [
+			'Rename', () => {
+				SendMessageWithFile('file-rename');
+			}
+		], [
+			'Properties', () => {
+				SendMessageWithFile('create-window');
+			}
+		], [
+			// Separator
+		], [
+			'Close', () => {
+				electron.Window.Close(1);
+			}
+		],
+	],
+
+	'menubar-edit': [
+		[
+			'Undo', fnStub,
+		], [
+			// Separator
+		], [
+			'Cut', () => {
+				SendMessageWithFile('file-cut');
+			},
+		], [
+			'Copy', () => {
+				SendMessageWithFile('file-copy');
+			},
+		], [
+			'Paste', () => {
+				SendMessageWithFile('file-paste');
+			},
+		], [
+			'Paste Shortcut', () => {
+				SendMessageWithFile('file-paste');
+			},
+		], [
+			// Separator
+		], [
+			'Select All', fnStub,
+		], [
+			'Invert Selection', fnStub,
+		],
+	],
+
+	'menubar-view': [
+		[
+			'Toolbar', fnStub,
+		], [
+			'Status Bar', fnStub,
+		], [
+			// Separator
+		], [
+			'Large Icons', fnStub,
+		], [
+			'Small Icons', fnStub,
+		], [
+			'List', fnStub,
+		], [
+			'Details', fnStub,
+		], [
+			// Separator
+		], [
+			'Arrange Icons', fnStub,
+		], [
+			'Line up Icons', fnStub,
+		], [
+			// Separator
+		], [
+			'Refresh', () => {
+				electron.SendMesssageToParent({
+					action: 'refresh',
+				});
+			},
+		], [
+			'Options', fnStub,
+		]
+	],
+
+	'menubar-tools': [
+		[
+			'Find', fnStub,
+		], [
+			// Separator
+		], [
+			'Go to...', fnStub,
+		],
+	],
+
+	'menubar-help': [
+	],
+
 	table: [
 		[
 			'Open', () => {

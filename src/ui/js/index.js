@@ -5,6 +5,7 @@ import {
 	CStatusbar,
 	CTree,
 	CWindow,
+	CMenubar,
 } from './classes.js';
 
 import { EFileSorting } from './enums.js';
@@ -20,6 +21,11 @@ import {
 
 import entries from './menu-shared.js';
 
+function fnStub() {
+	CWindow.Alert('warning', 'Warning', 'Not implemented');
+}
+
+window.g_Menubar       = new CMenubar();
 window.g_PathSelection = new CPathSelection();
 window.g_Path          = new CPath();
 window.g_Statusbar     = new CStatusbar();
@@ -62,17 +68,17 @@ let g_vecTableButtons = [
 	},
 ];
 
-let styles = getComputedStyle(document.body);
-let nMenuItemHeight = Number(styles.lineHeight.replace('px', '')) + 4;
-
 window.addEventListener('message', async (ev) => {
 	let data = ev.data;
 
 	switch (data.action) {
 		case 'close':
-			if (window.g_hChildWindow)
-				electron.Window.Close(window.g_hChildWindow);
+			await electron.Window.Close(window.g_hChildWindow);
 			window.g_hChildWindow = null;
+			break;
+
+		case 'menu-close':
+			g_Menubar.ChangeSelection(null);
 			break;
 
 		case 'execute':
@@ -81,6 +87,10 @@ window.addEventListener('message', async (ev) => {
 
 		case 'navigate':
 			g_Path.Navigate(data.path);
+			break;
+
+		case 'refresh':
+			g_Path.Refresh();
 			break;
 
 		case 'create-window':
@@ -155,17 +165,13 @@ document.addEventListener('contextmenu', async (ev) => {
 	if (!file)
 		return;
 
-	let unMenuHeight = vecMenuEntries
-		.map(e => e.length ? nMenuItemHeight : k_nSeparatorHeight)
-		.reduce((a, b) => a + b);
-
 	window.g_hChildWindow = await CWindow.Menu(
-		ev,
+		file,
+		elParent.id,
 		{
-			file,
-			section: elParent.id,
-		},
-		Math.round(unMenuHeight) + k_nChildWindowPadding * 2
+			x:      ev.screenX,
+			y:      ev.screenY,
+		}
 	);
 });
 
@@ -223,6 +229,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 	};
 
+	g_Elements.menubar = {
+		file:  id('menubar-file'),
+		edit:  id('menubar-edit'),
+		view:  id('menubar-view'),
+		tools: id('menubar-tools'),
+		help:  id('menubar-help'),
+	};
+
 	g_Elements.tree = {
 		container: id('tree'),
 		template:  id('tree-item-template'),
@@ -254,17 +268,40 @@ document.addEventListener('DOMContentLoaded', () => {
 		handle: id('window-resize-handle'),
 	};
 
-	// Set up toolbar
-	let fnStub = () => {
-		CWindow.Alert('warning', 'Warning', 'Not implemented');
-	};
+	// Set up menubar
+	// TODO: make on hover, but creating windows is too fucking slow
+	for (let el of Object.values(g_Elements.menubar)) {
+		let section = el.id;
+		let bounds = el.getBoundingClientRect();
 
+		el.bClicked = false;
+		el.addEventListener('click', (ev) => {
+			if (!el.bClicked) {
+				g_Menubar.CloseContextMenu();
+				g_Menubar.ChangeSelection(el);
+				g_Menubar.OpenContextMenu(section, {
+					x: Math.round(window.screenX + bounds.x),
+					y: Math.round(window.screenY + bounds.y + bounds.height),
+				});
+			} else {
+				g_Menubar.ChangeSelection(null);
+				g_Menubar.CloseContextMenu();
+			}
+
+			el.bClicked = !el.bClicked;
+		});
+	}
+
+	// Set up toolbar
 	let toolbarButtonHandlers = {
 		go_up:       () => { g_Path.NavigateToParent(); },
+
 		cut:         () => { g_PathSelection.Copy(); },
 		copy:        () => { g_PathSelection.Copy(); },
 		paste:       () => { g_PathSelection.Paste(); },
+
 		undo_delete: fnStub,
+
 		delete:      () => { g_PathSelection.Delete(); },
 		properties:  async () => {
 			let selection = g_PathSelection.m_Selection;
@@ -276,6 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			window.g_hChildWindow = await CWindow.Properties(selection);
 		},
+
 		big_icons:   fnStub,
 		small_icons: fnStub,
 		list:        fnStub,
