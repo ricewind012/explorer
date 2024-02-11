@@ -30,5 +30,27 @@ const {
 	S_IFSOCK,
 } = electron.FS.Constants;
 
+const k_Messages = {
+	file: {
+		cut:      'file-cut',
+		copy:     'file-copy',
+		shortcut: 'file-create-shortcut',
+		delete:   'file-delete',
+		rename:   'file-rename',
+	},
+
+	nav: {
+		execute:  'nav-execute',
+		navigate: 'nav-igate',
+		refresh:  'nav-refresh',
+	},
+
+	window: {
+		close:     'window-close',
+		create:    'window-create',
+		menu_done: 'window-menu-close',
+	}
+};
+
 let styles = getComputedStyle(document.body);
 let nMenuItemHeight = Number(styles.lineHeight.replace('px', '')) + 4;

@@ -1,4 +1,4 @@
-import { CPath } from './classes.js';
+import { CPath, CPathSelection } from './classes.js';
 import EFileType from '../../shared/EFileType.js';
 import { EFileUnits } from './enums.js';
 
@@ -38,7 +38,7 @@ export function OnKeyPress(ev) {
 			section.ChangeFromEl(
 				section.m_Selection.el
 					.parentElement.previousElementSibling
-					?.querySelector(':scope > .list-item')
+					?.querySelector(`:scope > .${CPathSelection.s_classes.item}`)
 			);
 			break;
 		}
@@ -49,7 +49,7 @@ export function OnKeyPress(ev) {
 			section.ChangeFromEl(
 				section.m_Selection.el
 					.parentElement.nextElementSibling
-					?.querySelector(':scope > .list-item')
+					?.querySelector(`:scope > .${CPathSelection.s_classes.item}`)
 			);
 			break;
 		}

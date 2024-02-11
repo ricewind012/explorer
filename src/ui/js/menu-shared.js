@@ -10,13 +10,13 @@ function OpenFileFromMenu(file) {
 		file,
 		(strPath) => {
 			electron.SendMesssageToParent({
-				action: 'navigate',
+				action: k_Messages.nav.navigate,
 				path:   file.path,
 			});
 		},
 		(strPath) => {
 			electron.SendMesssageToParent({
-				action: 'execute',
+				action: k_Messages.nav.execute,
 			});
 		}
 	);
@@ -35,31 +35,31 @@ const vecSharedFileEntries = [
 		// Separator
 	], [
 		'Cut', () => {
-			SendMessageWithFile('file-cut');
+			SendMessageWithFile(k_Messages.file.cut);
 		}
 	], [
 		'Copy', () => {
-			SendMessageWithFile('file-copy');
+			SendMessageWithFile(k_Messages.file.copy);
 		}
 	], [
 		// Separator
 	], [
 		'Create Shortcut', () => {
-			SendMessageWithFile('create-shortcut');
+			SendMessageWithFile(k_Messages.file.shortcut);
 		}
 	], [
 		'Delete', () => {
-			SendMessageWithFile('file-delete');
+			SendMessageWithFile(k_Messages.file.delete);
 		}
 	], [
 		'Rename', () => {
-			SendMessageWithFile('file-rename');
+			SendMessageWithFile(k_Messages.file.rename);
 		}
 	], [
 		// Separator
 	], [
 		'Properties', () => {
-			SendMessageWithFile('create-window');
+			SendMessageWithFile(k_Messages.window.create);
 		}
 	]
 ];
@@ -72,19 +72,19 @@ const entries = {
 			// Separator
 		], [
 			'Create Shortcut', () => {
-				SendMessageWithFile('create-shortcut');
+				SendMessageWithFile(k_Messages.file.shortcut);
 			}
 		], [
 			'Delete', () => {
-				SendMessageWithFile('file-delete');
+				SendMessageWithFile(k_Messages.file.delete);
 			}
 		], [
 			'Rename', () => {
-				SendMessageWithFile('file-rename');
+				SendMessageWithFile(k_Messages.file.rename);
 			}
 		], [
 			'Properties', () => {
-				SendMessageWithFile('create-window');
+				SendMessageWithFile(k_Messages.window.create);
 			}
 		], [
 			// Separator
@@ -102,19 +102,19 @@ const entries = {
 			// Separator
 		], [
 			'Cut', () => {
-				SendMessageWithFile('file-cut');
+				SendMessageWithFile(k_Messages.file.cut);
 			},
 		], [
 			'Copy', () => {
-				SendMessageWithFile('file-copy');
+				SendMessageWithFile(k_Messages.file.copy);
 			},
 		], [
 			'Paste', () => {
-				SendMessageWithFile('file-paste');
+				SendMessageWithFile(k_Messages.file.paste);
 			},
 		], [
 			'Paste Shortcut', () => {
-				SendMessageWithFile('file-paste');
+				SendMessageWithFile(k_Messages.file.paste);
 			},
 		], [
 			// Separator
@@ -151,7 +151,7 @@ const entries = {
 		], [
 			'Refresh', () => {
 				electron.SendMesssageToParent({
-					action: 'refresh',
+					action: k_Messages.nav.refresh,
 				});
 			},
 		], [

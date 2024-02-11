@@ -16,7 +16,7 @@ window.addEventListener('message', (ev) => {
 			elEntry.innerText = vecEntry[0];
 			elEntry.addEventListener('click', () => {
 				electron.SendMesssageToParent({
-					action: 'menu-close',
+					action: k_Messages.window.menu_done,
 				});
 				vecEntry[1]();
 				window.close();

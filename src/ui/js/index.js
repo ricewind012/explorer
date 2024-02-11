@@ -72,50 +72,50 @@ window.addEventListener('message', async (ev) => {
 	let data = ev.data;
 
 	switch (data.action) {
-		case 'close':
+		case k_Messages.window.close:
 			await electron.Window.Close(window.g_hChildWindow);
 			window.g_hChildWindow = null;
 			break;
 
-		case 'menu-close':
+		case k_Messages.window.menu_done:
 			g_Menubar.ChangeSelection(null);
 			break;
 
-		case 'execute':
+		case k_Messages.nav.execute:
 			g_PathSelection.Execute();
 			break;
 
-		case 'navigate':
+		case k_Messages.nav.navigate:
 			g_Path.Navigate(data.path);
 			break;
 
-		case 'refresh':
+		case k_Messages.nav.refresh:
 			g_Path.Refresh();
 			break;
 
-		case 'create-window':
+		case k_Messages.window.create:
 			window.g_hChildWindow = await CWindow.Properties({ file: data.file });
 			break;
 
-		case 'create-shortcut':
+		case k_Messages.file.shortcut:
 			CreateShortcut(data.file);
 			g_Path.CreateListItemFromNewFile(`${data.file.path}.desktop`)
 			break;
 
-		case 'file-cut':
-		case 'file-copy':
+		case k_Messages.file.cut:
+		case k_Messages.file.copy:
 			g_PathSelection.Copy();
 			break;
 
-		case 'file-paste':
+		case k_Messages.file.paste:
 			g_PathSelection.Paste();
 			break;
 
-		case 'file-delete':
+		case k_Messages.file.delete:
 			g_PathSelection.Delete();
 			break;
 
-		case 'file-rename':
+		case k_Messages.file.rename:
 			g_PathSelection.Rename();
 			break;
 	}
@@ -128,17 +128,17 @@ document.addEventListener('click', (ev) => {
 
 	window.g_LastClickedSection = (() => {
 		switch (elParent.id) {
-			case 'table': return g_PathSelection;
-			case 'tree':  return g_Tree;
+			case CPath.s_strListID: return g_PathSelection;
+			case CTree.s_strListID: return g_Tree;
 		}
 	})();
 
 	switch (ev.target.id) {
-		case 'table':
+		case CPath.s_strListID:
 			g_PathSelection.Change(null, null);
 			break;
 
-		case 'tree':
+		case CTree.s_strListID:
 			g_Tree.ChangeSelection(null, null);
 			break;
 	}
@@ -153,8 +153,8 @@ document.addEventListener('contextmenu', async (ev) => {
 	let vecMenuEntries = entries[elParent.id];
 	let file = (() => {
 		switch (elParent.id) {
-			case 'table': return g_PathSelection.m_Selection.file;
-			case 'tree':  return g_Tree.m_Selection.file;
+			case CPath.s_strListID: return g_PathSelection.m_Selection.file;
+			case CTree.s_strListID: return g_Tree.m_Selection.file;
 
 			default:
 				console.log('event(contextmenu): nothing to open');
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	g_Elements.content = {
 		container: id('content'),
 		separator: id('content-separator'),
-		list:      id('table'),
+		list:      id(CPath.s_strListID),
 		entry:     id('list-item-template'),
 
 		table: {
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	};
 
 	g_Elements.tree = {
-		container: id('tree'),
+		container: id(CTree.s_strListID),
 		template:  id('tree-item-template'),
 	};
 

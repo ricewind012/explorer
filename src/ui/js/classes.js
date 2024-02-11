@@ -52,6 +52,12 @@ export class CMenubar {
 }
 
 export class CPathSelection {
+	static s_classes = {
+		input: 'list-rename-input',
+		item:  'list-item',
+		name:  'list-item-name',
+	};
+
 	constructor() {
 		this.m_Selection = null;
 	}
@@ -68,7 +74,9 @@ export class CPathSelection {
 			return;
 		}
 		this.m_Selection = {
-			el: el.classList.contains('list-item') ? el : el.parentNode,
+			el: el.classList.contains(CPathSelection.s_classes.item)
+				? el
+				: el.parentNode,
 			file,
 		};
 		this.m_Selection.el.setAttribute('selected', '');
@@ -123,8 +131,12 @@ export class CPathSelection {
 
 	Rename() {
 		let selection = this.m_Selection;
-		let elListName = selection.el.querySelector('.list-item-name');
-		let elInput = selection.el.querySelector('.list-rename-input');
+		let elListName = selection.el.querySelector(
+			`.${CPathSelection.s_classes.name}`
+		);
+		let elInput = selection.el.querySelector(
+			`.${CPathSelection.s_classes.input}`
+		);
 
 		elListName.hidden = true;
 		elInput.value = elListName.innerText;
@@ -211,6 +223,8 @@ export class CPathSelection {
 }
 
 export class CPath {
+	static s_strListID = 'table';
+
 	constructor() {
 		this.m_strPath = null;
 		this.m_Sorting  = {
@@ -282,7 +296,7 @@ export class CPath {
 		let elList = g_Elements.content.list;
 		let strLabel = `${g_vecFiles.length} files in ${this.m_strPath}`;
 		g_PathSelection.m_Selection = null;
-		postMessage({ action: 'close' });
+		postMessage({ action: k_Messages.window.close });
 		console.time(strLabel);
 
 		elList.innerHTML = '';
@@ -350,6 +364,8 @@ export class CStatusbar {
 }
 
 export class CTree {
+	static s_strListID = 'tree';
+
 	constructor() {
 		this.m_Selection = null;
 	}
