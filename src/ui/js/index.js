@@ -19,8 +19,6 @@ import {
 	UpdateTitle,
 } from './functions.js';
 
-import entries from './menu-shared.js';
-
 function fnStub() {
 	CWindow.Alert('warning', 'Warning', 'Not implemented');
 }
@@ -32,9 +30,6 @@ window.g_Statusbar     = new CStatusbar();
 window.g_Tree          = new CTree();
 window.g_LastClickedSection = null;
 window.g_strFileToCopy = '';
-
-let g_hChildWindow = null;
-let g_vecFiles     = [];
 
 let g_vecTableButtons = [
 	{
@@ -150,7 +145,6 @@ document.addEventListener('contextmenu', async (ev) => {
 	if (!g_PathSelection.m_Selection && !g_Tree.m_Selection)
 		return;
 
-	let vecMenuEntries = entries[elParent.id];
 	let file = (() => {
 		switch (elParent.id) {
 			case CPath.s_strListID: return g_PathSelection.m_Selection.file;
