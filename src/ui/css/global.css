@@ -11,15 +11,18 @@
 @import 'shared/variables.css';
 @import 'shared/window.css';
 
-/* Content */
-@import 'parts/titlebar.css';
-@import 'parts/toolbar.css';
-@import 'parts/statusbar.css';
+/* win95-shared extensions */
+@import 'shared-ext/table.css';
+@import 'shared-ext/tree.css';
+@import 'shared-ext/window.css';
 
-@import 'content/tree.css';
-@import 'content/content.css';
-@import 'content/separator.css';
-@import 'content/table.css';
+/* Explorer */
+@import 'explorer/content.css';
+@import 'explorer/separator.css';
+@import 'explorer/table.css';
+@import 'explorer/titlebar.css';
+@import 'explorer/toolbar.css';
 
+/* Global rules */
 @import 'global/reset.css';
 @import 'global/shared.css';

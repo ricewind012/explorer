@@ -13,11 +13,6 @@
 	display: flex;
 }
 
-.table-button {
-	width: var(--table-row);
-	min-width: 60px;
-}
-
 .table-list-item {
 	--list-icon: var(--icon-file);
 

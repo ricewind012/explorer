@@ -1,0 +1,4 @@
+.table-button {
+	width: var(--table-row);
+	min-width: 60px;
+}

@@ -19,11 +19,6 @@ body {
 	}
 }
 
-.menubar {
-	/* what were they thinking ? */
-	margin-top: -1px;
-}
-
 #content {
 	--content-separator-width: 151px;
 

@@ -1,3 +1,8 @@
+.menubar {
+	/* What were they thinking ? */
+	margin-top: -1px;
+}
+
 .statusbar-item {
 	/* Original is always 144px, but MS Sans Serif is not being used. */
 	min-width: 144px;
