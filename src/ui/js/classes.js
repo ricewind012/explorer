@@ -488,7 +488,7 @@ export class CWindow {
 
 	static async Menu(file, section, options) {
 		let unMenuHeight = entries[section]
-			.map(e => e.length ? nMenuItemHeight : k_nSeparatorHeight)
+			.map(e => Object.keys(e).length ? nMenuItemHeight : k_nSeparatorHeight)
 			.reduce((a, b) => a + b);
 
 		return await electron.Window.Create(

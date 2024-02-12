@@ -31,162 +31,195 @@ function SendMessageWithFile(strAction) {
 
 // TODO: these only use table, not tree
 const vecSharedFileEntries = [
-	[
+	{
 		// Separator
-	], [
-		'Cut', () => {
+	}, {
+		name: 'Cut',
+		callback: () => {
 			SendMessageWithFile(k_Messages.file.cut);
-		}
-	], [
-		'Copy', () => {
+		},
+	}, {
+		name: 'Copy',
+		callback: () => {
 			SendMessageWithFile(k_Messages.file.copy);
-		}
-	], [
+		},
+	}, {
 		// Separator
-	], [
-		'Create Shortcut', () => {
+	}, {
+		name: 'Create Shortcut',
+		callback: () => {
 			SendMessageWithFile(k_Messages.file.shortcut);
-		}
-	], [
-		'Delete', () => {
+		},
+	}, {
+		name: 'Delete',
+		callback: () => {
 			SendMessageWithFile(k_Messages.file.delete);
-		}
-	], [
-		'Rename', () => {
+		},
+	}, {
+		name: 'Rename',
+		callback: () => {
 			SendMessageWithFile(k_Messages.file.rename);
-		}
-	], [
+		},
+	}, {
 		// Separator
-	], [
-		'Properties', () => {
+	}, {
+		name: 'Properties',
+		callback: () => {
 			SendMessageWithFile(k_Messages.window.create);
-		}
-	]
+		},
+	},
 ];
 
 const entries = {
 	'menubar-file': [
-		[
-			'New', fnStub,
-		], [
+		{
+			name: 'New',
+			callback: fnStub,
+		}, {
 			// Separator
-		], [
-			'Create Shortcut', () => {
+		}, {
+			name: 'Create Shortcut',
+			callback: () => {
 				SendMessageWithFile(k_Messages.file.shortcut);
-			}
-		], [
-			'Delete', () => {
+			},
+		}, {
+			name: 'Delete',
+			callback: () => {
 				SendMessageWithFile(k_Messages.file.delete);
-			}
-		], [
-			'Rename', () => {
+			},
+		}, {
+			name: 'Rename',
+			callback: () => {
 				SendMessageWithFile(k_Messages.file.rename);
-			}
-		], [
-			'Properties', () => {
+			},
+		}, {
+			name: 'Properties',
+			callback: () => {
 				SendMessageWithFile(k_Messages.window.create);
-			}
-		], [
+			},
+		}, {
 			// Separator
-		], [
-			'Close', () => {
+		}, {
+			name: 'Close',
+			callback: () => {
 				electron.Window.Close(1);
-			}
-		],
+			},
+		},
 	],
 
 	'menubar-edit': [
-		[
-			'Undo', fnStub,
-		], [
+		{
+			name: 'Undo',
+			callback: fnStub,
+		}, {
 			// Separator
-		], [
-			'Cut', () => {
+		}, {
+			name: 'Cut',
+			callback: () => {
 				SendMessageWithFile(k_Messages.file.cut);
 			},
-		], [
-			'Copy', () => {
+		}, {
+			name: 'Copy',
+			callback: () => {
 				SendMessageWithFile(k_Messages.file.copy);
 			},
-		], [
-			'Paste', () => {
+		}, {
+			name: 'Paste',
+			callback: () => {
 				SendMessageWithFile(k_Messages.file.paste);
 			},
-		], [
-			'Paste Shortcut', () => {
+		}, {
+			name: 'Paste Shortcut',
+			callback: () => {
 				SendMessageWithFile(k_Messages.file.paste);
 			},
-		], [
+		}, {
 			// Separator
-		], [
-			'Select All', fnStub,
-		], [
-			'Invert Selection', fnStub,
-		],
+		}, {
+			name: 'Select All',
+			callback: fnStub,
+		}, {
+			name: 'Invert Selection',
+			callback: fnStub,
+		},
 	],
 
 	'menubar-view': [
-		[
-			'Toolbar', fnStub,
-		], [
-			'Status Bar', fnStub,
-		], [
+		{
+			name: 'Toolbar',
+			callback: fnStub,
+		}, {
+			name: 'Status Bar',
+			callback: fnStub,
+		}, {
 			// Separator
-		], [
-			'Large Icons', fnStub,
-		], [
-			'Small Icons', fnStub,
-		], [
-			'List', fnStub,
-		], [
-			'Details', fnStub,
-		], [
+		}, {
+			name: 'Large Icons',
+			callback: fnStub,
+		}, {
+			name: 'Small Icons',
+			callback: fnStub,
+		}, {
+			name: 'List',
+			callback: fnStub,
+		}, {
+			name: 'Details',
+			callback: fnStub,
+		}, {
 			// Separator
-		], [
-			'Arrange Icons', fnStub,
-		], [
-			'Line up Icons', fnStub,
-		], [
+		}, {
+			name: 'Arrange Icons',
+			callback: fnStub,
+		}, {
+			name: 'Line up Icons',
+			callback: fnStub,
+		}, {
 			// Separator
-		], [
-			'Refresh', () => {
+		}, {
+			name: 'Refresh',
+			callback: () => {
 				electron.SendMesssageToParent({
 					action: k_Messages.nav.refresh,
 				});
 			},
-		], [
-			'Options', fnStub,
-		]
+		}, {
+			name: 'Options',
+			callback: fnStub,
+		},
 	],
 
 	'menubar-tools': [
-		[
-			'Find', fnStub,
-		], [
+		{
+			name: 'Find',
+			callback: fnStub,
+		}, {
 			// Separator
-		], [
-			'Go to...', fnStub,
-		],
+		}, {
+			name: 'Go to...',
+			callback: fnStub,
+		},
 	],
 
 	'menubar-help': [
 	],
 
 	table: [
-		[
-			'Open', () => {
+		{
+			name: 'Open',
+			callback: () => {
 				OpenFileFromMenu(g_Message.file);
-			}
-		],
+			},
+		},
 		...vecSharedFileEntries,
 	],
 
 	tree: [
-		[
-			'Explore', () => {
+		{
+			name: 'Explore',
+			callback: () => {
 				OpenFileFromMenu(g_Message.file);
-			}
-		],
+			},
+		},
 		// TODO: open (index only with menu bar) & find
 		...vecSharedFileEntries,
 	],

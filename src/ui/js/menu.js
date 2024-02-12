@@ -5,20 +5,21 @@ window.addEventListener('message', (ev) => {
 	let vecMenuEntries = entries[ev.data.section];
 
 	for (let i = 0; i < vecMenuEntries.length; i++) {
-		let vecEntry = vecMenuEntries[i];
+		let entry = vecMenuEntries[i];
 		let elEntry;
 
-		if (!vecEntry.length) {
+		if (!Object.keys(entry).length) {
 			elEntry = document.createElement('hr');
 		} else {
 			elEntry = elEntryTemplate.content.cloneNode(true).children[0];
 
-			elEntry.innerText = vecEntry[0];
+			elEntry.innerText = entry.name;
+
 			elEntry.addEventListener('click', () => {
 				electron.SendMesssageToParent({
 					action: k_Messages.window.menu_done,
 				});
-				vecEntry[1]();
+				entry.callback();
 				window.close();
 			});
 		}
