@@ -8,11 +8,7 @@ window.addEventListener('message', (ev) => {
 	g_Elements.file.name.innerText = CPath.Basename(file.path);
 
 	g_Elements.info.type.innerText = EFileType[file.type];
-	g_Elements.info.path.innerText = file.path
-		.split('/')
-		.filter(e => e)
-		.slice(-2, -1)
-		[0] || '/';
+	g_Elements.info.path.innerText = CPath.Dirname(file.path);
 	g_Elements.info.size.innerText = HumanReadableSize(file.size);
 	if (file.size)
 		g_Elements.info.size.innerText += ` (${file.size?.toLocaleString()} bytes)`;

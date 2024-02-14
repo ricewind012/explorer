@@ -1,4 +1,8 @@
-import { CWindow } from './classes.js';
+import {
+	CPath,
+	CWindow,
+} from './classes.js';
+import { EMenuItemType } from './enums.js';
 import { OpenFile } from './functions.js';
 
 function fnStub() {
@@ -38,10 +42,17 @@ const vecSharedFileEntries = [
 		callback: () => {
 			SendMessageWithFile(k_Messages.file.cut);
 		},
+		options: {
+			// TODO: this actually doesn't matter and I can Alert() that
+			disabled: !(g_Message.file?.mode & S_IRUSR),
+		},
 	}, {
 		name: 'Copy',
 		callback: () => {
 			SendMessageWithFile(k_Messages.file.copy);
+		},
+		options: {
+			disabled: !(g_Message.file?.mode & S_IRUSR),
 		},
 	}, {
 		// Separator
@@ -50,15 +61,24 @@ const vecSharedFileEntries = [
 		callback: () => {
 			SendMessageWithFile(k_Messages.file.shortcut);
 		},
+		options: {
+			disabled: !(g_Message.file?.mode & S_IWUSR),
+		},
 	}, {
 		name: 'Delete',
 		callback: () => {
 			SendMessageWithFile(k_Messages.file.delete);
 		},
+		options: {
+			disabled: !(g_Message.file?.mode & S_IWUSR),
+		},
 	}, {
 		name: 'Rename',
 		callback: () => {
 			SendMessageWithFile(k_Messages.file.rename);
+		},
+		options: {
+			disabled: !(g_Message.file?.mode & S_IRUSR),
 		},
 	}, {
 		// Separator
@@ -75,6 +95,9 @@ const entries = {
 		{
 			name: 'New',
 			callback: fnStub,
+			options: {
+				type: EMenuItemType.Parent,
+			},
 		}, {
 			// Separator
 		}, {
@@ -82,20 +105,32 @@ const entries = {
 			callback: () => {
 				SendMessageWithFile(k_Messages.file.shortcut);
 			},
+			options: {
+				disabled: !(g_Message.file?.mode & S_IWUSR),
+			},
 		}, {
 			name: 'Delete',
 			callback: () => {
 				SendMessageWithFile(k_Messages.file.delete);
+			},
+			options: {
+				disabled: !(g_Message.file?.mode & S_IWUSR),
 			},
 		}, {
 			name: 'Rename',
 			callback: () => {
 				SendMessageWithFile(k_Messages.file.rename);
 			},
+			options: {
+				disabled: !(g_Message.file?.mode & S_IRUSR),
+			},
 		}, {
 			name: 'Properties',
 			callback: () => {
-				SendMessageWithFile(k_Messages.window.create);
+				electron.SendMesssageToParent({
+					action: k_Messages.window.create,
+					file:   g_Message.dir,
+				});
 			},
 		}, {
 			// Separator
@@ -118,20 +153,32 @@ const entries = {
 			callback: () => {
 				SendMessageWithFile(k_Messages.file.cut);
 			},
+			options: {
+				disabled: !(g_Message.file?.mode & S_IRUSR),
+			},
 		}, {
 			name: 'Copy',
 			callback: () => {
 				SendMessageWithFile(k_Messages.file.copy);
+			},
+			options: {
+				disabled: !(g_Message.file?.mode & S_IRUSR),
 			},
 		}, {
 			name: 'Paste',
 			callback: () => {
 				SendMessageWithFile(k_Messages.file.paste);
 			},
+			options: {
+				disabled: !(g_Message.dir?.mode & S_IWUSR),
+			},
 		}, {
 			name: 'Paste Shortcut',
 			callback: () => {
 				SendMessageWithFile(k_Messages.file.paste);
+			},
+			options: {
+				disabled: !(g_Message.dir?.mode & S_IWUSR),
 			},
 		}, {
 			// Separator
@@ -148,31 +195,59 @@ const entries = {
 		{
 			name: 'Toolbar',
 			callback: fnStub,
+			options: {
+				type:    EMenuItemType.Checkbox,
+				checked: true,
+			}
 		}, {
 			name: 'Status Bar',
 			callback: fnStub,
+			options: {
+				type:    EMenuItemType.Checkbox,
+				checked: true,
+			},
 		}, {
 			// Separator
 		}, {
 			name: 'Large Icons',
 			callback: fnStub,
+			options: {
+				type: EMenuItemType.Radio,
+			},
 		}, {
 			name: 'Small Icons',
 			callback: fnStub,
+			options: {
+				type: EMenuItemType.Radio,
+			},
 		}, {
 			name: 'List',
 			callback: fnStub,
+			options: {
+				type: EMenuItemType.Radio,
+			},
 		}, {
 			name: 'Details',
 			callback: fnStub,
+			options: {
+				type:    EMenuItemType.Radio,
+				checked: true,
+			},
 		}, {
 			// Separator
 		}, {
 			name: 'Arrange Icons',
 			callback: fnStub,
+			options: {
+				disabled: true,
+				type:     EMenuItemType.Parent,
+			},
 		}, {
 			name: 'Line up Icons',
 			callback: fnStub,
+			options: {
+				disabled: true,
+			},
 		}, {
 			// Separator
 		}, {
@@ -192,6 +267,9 @@ const entries = {
 		{
 			name: 'Find',
 			callback: fnStub,
+			options: {
+				type: EMenuItemType.Parent,
+			},
 		}, {
 			// Separator
 		}, {
@@ -209,6 +287,9 @@ const entries = {
 			callback: () => {
 				OpenFileFromMenu(g_Message.file);
 			},
+			options: {
+				primary: true,
+			},
 		},
 		...vecSharedFileEntries,
 	],
@@ -218,6 +299,9 @@ const entries = {
 			name: 'Explore',
 			callback: () => {
 				OpenFileFromMenu(g_Message.file);
+			},
+			options: {
+				primary: true,
 			},
 		},
 		// TODO: open (index only with menu bar) & find

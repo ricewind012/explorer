@@ -1,7 +1,5 @@
 import EFileType from '../../shared/EFileType.js';
 
-import entries from './menu-shared.js';
-
 import {
 	HumanReadableSize,
 	OnKeyPress,
@@ -43,9 +41,12 @@ export class CMenubar {
 	async OpenContextMenu(item, opts) {
 		this.CloseContextMenu();
 		this.m_hContextMenuWindow = await CWindow.Menu(
-			// TODO xd
-			g_PathSelection.m_Selection?.file,
-			item,
+			{
+				dir: window.g_dir,
+				// TODO xd
+				file: g_PathSelection.m_Selection?.file,
+				section: item,
+			},
 			opts
 		);
 	}
@@ -241,6 +242,13 @@ export class CPath {
 			.splice(-1)[0];
 	}
 
+	static Dirname(strPath) {
+		return strPath
+			.split('/')
+			.filter(Boolean)
+			.slice(-2, -1)[0] || '/';
+	}
+
 	CreateListItem(file) {
 		let bUnknownType = file.type == EFileType.Unknown;
 		console.assert(!bUnknownType, 'EFileType == 8 for %o', file.path);
@@ -312,6 +320,7 @@ export class CPath {
 	Navigate(strPath) {
 		try {
 			window.g_vecFiles = electron.FS.List(strPath);
+			window.g_dir = electron.File.Get(strPath);
 		} catch(e) {
 			CWindow.Alert('error', 'Navigate() error', e.message);
 			return;
@@ -486,8 +495,11 @@ export class CWindow {
 		);
 	}
 
-	static async Menu(file, section, options) {
-		let unMenuHeight = entries[section]
+	static async Menu(msg, options) {
+		// Import here, since g_Message is, otherwise, undefined.
+		let entries = (await import('./menu-shared.js')).default;
+
+		let unMenuHeight = entries[msg.section]
 			.map(e => Object.keys(e).length ? nMenuItemHeight : k_nSeparatorHeight)
 			.reduce((a, b) => a + b);
 
@@ -502,10 +514,7 @@ export class CWindow {
 				minWidth:        123,
 				height:          Math.round(unMenuHeight) + k_nChildWindowPadding * 2,
 			},
-			{
-				file,
-				section,
-			}
+			msg
 		);
 	}
 

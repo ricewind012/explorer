@@ -30,6 +30,7 @@ window.g_Statusbar     = new CStatusbar();
 window.g_Tree          = new CTree();
 window.g_LastClickedSection = null;
 window.g_strFileToCopy = '';
+window.g_dir           = null;
 
 let g_vecTableButtons = [
 	{
@@ -141,12 +142,13 @@ document.addEventListener('click', (ev) => {
 
 document.addEventListener('contextmenu', async (ev) => {
 	let elParent = GetParentElementWithID(ev.target);
+	let section = elParent.id;
 
 	if (!g_PathSelection.m_Selection && !g_Tree.m_Selection)
 		return;
 
 	let file = (() => {
-		switch (elParent.id) {
+		switch (section) {
 			case CPath.s_strListID: return g_PathSelection.m_Selection.file;
 			case CTree.s_strListID: return g_Tree.m_Selection.file;
 
@@ -160,11 +162,14 @@ document.addEventListener('contextmenu', async (ev) => {
 		return;
 
 	window.g_hChildWindow = await CWindow.Menu(
-		file,
-		elParent.id,
 		{
-			x:      ev.screenX,
-			y:      ev.screenY,
+			dir: window.g_dir,
+			file,
+			section,
+		},
+		{
+			x: ev.screenX,
+			y: ev.screenY,
 		}
 	);
 });

@@ -14,7 +14,14 @@ const EFileUnits = new CEnum(
 	'TB',
 );
 
+const EMenuItemType = {
+	Checkbox: 'checkbox',
+	Radio: 'radio',
+	Parent: 'parent',
+};
+
 export {
 	EFileSorting,
 	EFileUnits,
+	EMenuItemType,
 };
