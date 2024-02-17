@@ -259,7 +259,9 @@ const entries = {
 			},
 		}, {
 			name: 'Options',
-			callback: fnStub,
+			callback: () => {
+				CWindow.Options();
+			},
 		},
 	],
 

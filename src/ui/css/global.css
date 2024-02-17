@@ -18,6 +18,7 @@
 
 /* Explorer */
 @import 'explorer/content.css';
+@import 'explorer/dialog.css';
 @import 'explorer/separator.css';
 @import 'explorer/table.css';
 @import 'explorer/titlebar.css';

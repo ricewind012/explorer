@@ -36,13 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			readonly:  id('attr-read-only'),
 			system:    id('attr-system'),
 		},
-
-		btns: {
-			ok: id('button-ok'),
-		},
 	};
 
-	g_Elements.btns.ok.addEventListener('click', () => {
+	g_Elements.dialog.ok.addEventListener('click', () => {
 		window.close();
 	});
 });

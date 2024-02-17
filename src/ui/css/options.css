@@ -1,0 +1,55 @@
+:root {
+	--label-line-height: 2.65;
+	--radio-top-offset: calc(1pt * var(--label-line-height) * 2);
+}
+
+legend {
+	margin-bottom: calc(-1pt * var(--label-line-height) + 2px);
+}
+
+label {
+	line-height: var(--label-line-height);
+
+	[role="tabpanel"] > & {
+		--label-line-height: 2.45;
+
+		margin-left: 1px;
+	}
+
+	fieldset > & {
+		margin-top: calc(var(--radio-top-offset) * -1);
+	}
+}
+
+input[type="radio"] {
+	margin-top: var(--radio-top-offset);
+
+	align-self: start;
+}
+
+#options-dialog-file-types-list {
+	margin-left: 18px;
+	margin-right: 4px;
+
+	height: 78px;
+}
+
+.list-file-type {
+	width: 43px;
+
+	&::before {
+		content: '.';
+	}
+}
+
+.list-file-type-description {
+	display: flex;
+
+	&::before {
+		content: '(';
+	}
+
+	&::after {
+		content: ')';
+	}
+}

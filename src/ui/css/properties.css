@@ -1,13 +1,5 @@
-#tabs-container {
-	margin: 6px;
-
-	width: calc(100% - 12px);
-}
-
 [role="tabpanel"] {
 	line-height: 1.85;
-
-	height: calc(100% - 14px);
 }
 
 hr {
@@ -35,10 +27,4 @@ hr {
 
 label {
 	line-height: 1.8;
-}
-
-#button-group-container {
-	text-align: right;
-
-	margin: 3px 6px 7px 6px;
 }

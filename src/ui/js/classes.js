@@ -8,11 +8,36 @@ import {
 
 export class CAppData {
 	static Set(k, v) {
+		console.log('CAppData: setting %o to %o', k, v);
 		localStorage.setItem(k, JSON.stringify(v));
 	}
 
 	static Get(strItem) {
 		return JSON.parse(localStorage.getItem(strItem));
+	}
+}
+
+export class CList {
+	constructor(elListContainer) {
+		this.m_elSelectedItem = null;
+
+		let vecItems = [...elListContainer.querySelectorAll('li')];
+
+		for (let i = 0; i < vecItems.length; i++) {
+			vecItems[i].addEventListener('click', () => {
+				this.ChangeSelection(vecItems[i]);
+			});
+		}
+	}
+
+	ChangeSelection(el) {
+		this.m_elSelectedItem?.removeAttribute('selected');
+		this.m_elSelectedItem = el;
+
+		if (!el)
+			return;
+
+		this.m_elSelectedItem.setAttribute('selected', '');
 	}
 }
 
@@ -479,6 +504,12 @@ export class CTree {
 }
 
 export class CWindow {
+	static s_DialogProps = {
+		resizable: false,
+		width:     367,
+		height:    439,
+	};
+
 	static async Alert(strIcon, strTitle, strText) {
 		return await electron.Window.Create(
 			'alert',
@@ -518,14 +549,17 @@ export class CWindow {
 		);
 	}
 
+	static async Options() {
+		return await electron.Window.Create(
+			'options',
+			CWindow.s_DialogProps
+		)
+	}
+
 	static async Properties(file) {
 		return await electron.Window.Create(
 			'properties',
-			{
-				resizable: false,
-				width:     367,
-				height:    419,
-			},
+			CWindow.s_DialogProps,
 			file
 		);
 	}
