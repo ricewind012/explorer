@@ -16,8 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		list: id('options-dialog-file-types-list'),
 	};
 
-	let list = new CList(g_Elements.options_dialog.list);
+	let list = new CList();
 	let data = CAppData.Get(k_strOptionsKey);
+	let vecItems = [...g_Elements.options_dialog.list.querySelectorAll('li')];
+
+	for (let i = 0; i < vecItems.length; i++) {
+		vecItems[i].addEventListener('click', () => {
+			list.ChangeSelection({
+				el: vecItems[i],
+			});
+		});
+	}
 
 	for (let k of Object.keys(g_Elements.options)) {
 		let el = g_Elements.options[k];

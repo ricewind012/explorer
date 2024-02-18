@@ -17,49 +17,37 @@ export class CAppData {
 	}
 }
 
+/**
+ * List base class
+ */
 export class CList {
-	constructor(elListContainer) {
-		this.m_elSelectedItem = null;
-
-		let vecItems = [...elListContainer.querySelectorAll('li')];
-
-		for (let i = 0; i < vecItems.length; i++) {
-			vecItems[i].addEventListener('click', () => {
-				this.ChangeSelection(vecItems[i]);
-			});
-		}
+	constructor() {
+		this.m_Selection = {};
 	}
 
-	ChangeSelection(el) {
-		this.m_elSelectedItem?.removeAttribute('selected');
-		this.m_elSelectedItem = el;
+	ChangeSelection(selection) {
+		this.m_Selection.el?.removeAttribute('selected');
+		this.m_Selection = selection;
 
-		if (!el)
+		if (!selection) {
+			this.m_Selection = {};
 			return;
+		}
 
-		this.m_elSelectedItem.setAttribute('selected', '');
+		this.m_Selection.el.setAttribute('selected', '');
 	}
 }
 
-export class CMenubar {
+export class CMenubar extends CList {
 	constructor() {
-		this.m_elSelectedItem = null;
+		super();
+
 		this.m_hContextMenuWindow = null;
 	}
 
-	ChangeSelection(el) {
-		this.m_elSelectedItem?.removeAttribute('selected');
-		this.m_elSelectedItem = el;
-
-		if (!el)
-			return;
-
-		this.m_elSelectedItem.setAttribute('selected', '');
-	}
-
 	async CloseContextMenu() {
-		if (this.m_elSelectedItem)
-			this.m_elSelectedItem.bClicked = false;
+		if (this.m_Selection.el)
+			this.m_Selection.el.bClicked = false;
 		await electron.Window.Close(this.m_hContextMenuWindow);
 	}
 
@@ -397,34 +385,23 @@ export class CStatusbar {
 	}
 }
 
-export class CTree {
+export class CTree extends CList {
 	static s_strListID = 'tree';
 
 	constructor() {
-		this.m_Selection = null;
+		super();
 	}
 
-	ChangeSelection(el, file) {
-		this.m_Selection?.el.removeAttribute('selected');
-		if (!el && !file) {
-			this.m_Selection = null;
-			return;
-		}
-		this.m_Selection = {
-			el,
-			file,
-		};
-		this.m_Selection.el.setAttribute('selected', '');
-	}
-
-	ChangeFromEl(el) {
-		if (!el)
+	ChangeFromEl(selection) {
+		if (!selection)
 			return;
 
-			console.log(el)
 		let file = electron.File.Get(el.getAttribute('path'));
 
-		this.ChangeSelection(el, file);
+		this.ChangeSelection({
+			el: selection.el,
+			file: selection.file,
+		});
 	}
 
 	RenderPath(strPath) {
@@ -453,9 +430,10 @@ export class CTree {
 				elListItem.setAttribute('path', file.path);
 
 				const OnClick = (ev) => {
-					let elTarget = ev.target;
-
-					this.ChangeSelection(elListItem, file);
+					this.ChangeSelection({
+						el: elListItem,
+						file,
+					});
 					if (elEntryContainer.getAttribute('open') == '')
 						elEntryContainer.removeAttribute('open');
 					else

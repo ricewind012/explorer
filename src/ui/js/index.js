@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		el.addEventListener('click', (ev) => {
 			if (!el.bClicked) {
 				g_Menubar.CloseContextMenu();
-				g_Menubar.ChangeSelection(el);
+				g_Menubar.ChangeSelection({ el });
 				g_Menubar.OpenContextMenu(section, {
 					x: Math.round(window.screenX + bounds.x),
 					y: Math.round(window.screenY + bounds.y + bounds.height),
