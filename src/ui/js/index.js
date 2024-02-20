@@ -244,21 +244,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	g_Elements.toolbar = {
 		select:      id('toolbar-select'),
 
-		go_up:       id('toolbar-button-go-up'),
+		go_up:       id('toolbar-go-up'),
 
-		cut:         id('toolbar-button-cut'),
-		copy:        id('toolbar-button-copy'),
-		paste:       id('toolbar-button-paste'),
+		cut:         id('toolbar-cut'),
+		copy:        id('toolbar-copy'),
+		paste:       id('toolbar-paste'),
 
-		undo_delete: id('toolbar-button-undo-delete'),
+		undo_delete: id('toolbar-undo-delete'),
 
-		delete:      id('toolbar-button-delete'),
-		properties:  id('toolbar-button-properties'),
+		delete:      id('toolbar-delete'),
+		properties:  id('toolbar-properties'),
 
-		big_icons:   id('toolbar-button-big-icons'),
-		small_icons: id('toolbar-button-small-icons'),
-		list:        id('toolbar-button-list'),
-		details:     id('toolbar-button-details'),
+		big_icons:   id('toolbar-big-icons'),
+		small_icons: id('toolbar-small-icons'),
+		list:        id('toolbar-list'),
+		details:     id('toolbar-details'),
 	};
 
 	g_Elements.statusbar = {
