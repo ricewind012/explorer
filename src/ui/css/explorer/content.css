@@ -33,15 +33,7 @@ body {
 	flex-grow: 1;
 }
 
-.content-section-container {
-	overflow: hidden;
-	background-color: var(--color-window);
-	box-shadow: var(--border-field);
-
-	padding: 2px;
-}
-
-.content-section {
+.content {
 	overflow: auto;
 
 	width: 100%;

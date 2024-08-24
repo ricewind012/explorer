@@ -1,4 +1,4 @@
-.menubar {
+[role="menubar"] {
 	/* What were they thinking ? */
 	margin-top: -1px;
 }
@@ -10,4 +10,12 @@
 	&:last-child {
 		flex-grow: 1;
 	}
+}
+
+[role="toolbar"] {
+	margin: 0;
+}
+
+.content-container {
+	overflow: hidden;
 }

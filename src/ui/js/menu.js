@@ -1,3 +1,5 @@
+import { EMenuItemType } from './enums.js';
+
 window.addEventListener('message', async (ev) => {
 	// Import here, since g_Message is, otherwise, undefined.
 	let entries = (await import('./menu-shared.js')).default;
@@ -26,12 +28,24 @@ window.addEventListener('message', async (ev) => {
 			if (entry.options) {
 				let opts = entry.options;
 
+				if (opts.checked)
+					elEntry.ariaChecked = opts.checked;
 				if (opts.disabled)
-					elEntry.setAttribute('disabled', '');
+					elEntry.ariaDisabled = opts.disabled;
 				if (opts.primary)
-					elEntry.setAttribute('primary', '');
-				if (opts.type)
-					elEntry.setAttribute('type', opts.type);
+					elEntry.classList.add('primary');
+				switch (opts.type) {
+					case EMenuItemType.Checkbox:
+						elEntry.role = 'menuitemcheckbox';
+						break;
+
+					case EMenuItemType.Radio:
+						elEntry.role = 'menuitemradio';
+						break;
+
+					case EMenuItemType.Parent:
+						elEntry.ariaHasPopup = true;
+				}
 			}
 		}
 

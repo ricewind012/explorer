@@ -26,7 +26,11 @@ export class CList {
 	}
 
 	ChangeSelection(selection) {
-		this.m_Selection.el?.removeAttribute('selected');
+		let el = this.m_Selection.el;
+		if (!el)
+			return;
+
+		el.ariaSelected = false;
 		this.m_Selection = selection;
 
 		if (!selection) {
@@ -34,7 +38,7 @@ export class CList {
 			return;
 		}
 
-		this.m_Selection.el.setAttribute('selected', '');
+		this.m_Selection.el.ariaSelected = true;
 	}
 }
 
@@ -77,9 +81,11 @@ export class CPathSelection {
 	}
 
 	Change(el, file) {
+		let elSelection = this.m_Selection?.el;
 		let strDiskSpace = HumanReadableSize(g_Statusbar.m_unDiskUsage);
 
-		this.m_Selection?.el?.removeAttribute('selected');
+		if (elSelection)
+			elSelection.ariaSelected = false;
 		if (!el && !file) {
 			this.m_Selection = null;
 
@@ -93,7 +99,7 @@ export class CPathSelection {
 				: el.parentNode,
 			file,
 		};
-		this.m_Selection.el.setAttribute('selected', '');
+		this.m_Selection.el.ariaSelected = true;
 
 		let strFileSize = HumanReadableSize(this.m_Selection.file.size);
 
@@ -434,10 +440,8 @@ export class CTree extends CList {
 						el: elListItem,
 						file,
 					});
-					if (elEntryContainer.getAttribute('open') == '')
-						elEntryContainer.removeAttribute('open');
-					else
-						elEntryContainer.setAttribute('open', '');
+					elEntryContainer.ariaExpanded = !elEntryContainer.ariaExpanded;
+					elListItem.ariaSelected = !elListItem.ariaSelected;
 
 					if (elEntryContainer.bRendered)
 						return;

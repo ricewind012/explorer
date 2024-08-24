@@ -5,10 +5,7 @@ window.addEventListener('message', (ev) => {
 
 	UpdateTitle(data.title);
 	g_Elements.alert.text.innerText = data.text;
-	g_Elements.alert.icon.style.setProperty(
-		'--icon',
-		`var(--icon-dialog-${data.icon}`
-	);
+	g_Elements.alert.icon.setAttribute('type', data.icon);
 });
 
 document.addEventListener('DOMContentLoaded', () => {

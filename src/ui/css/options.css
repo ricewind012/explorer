@@ -28,7 +28,7 @@ input[type="radio"] {
 }
 
 #options-dialog-file-types-list {
-	margin-left: 18px;
+	margin-left: calc(var(--sel-button-size) + var(--label-spacing));
 	margin-right: 4px;
 
 	height: 78px;

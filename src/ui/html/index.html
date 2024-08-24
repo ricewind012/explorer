@@ -14,14 +14,14 @@
 
 	<body class="window">
 		<div id="body-container">
-			<header id="titlebar">
+			<header class="titlebar">
 				<img
 					id="titlebar-icon"
 					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQMARcYyg/K3gAAANNJREFUOMutklFuwzAMQ5+H3iu8WaWb2SfjPuK4dpIO6zAChgAZokhJhY6IMCdEROE3iAjXWm2zxDvSM0pEWBLbJlqrl1hrfde0jO6fIgIDBviaxNBaIzPJTEopZObIz/Hi3/bwbNv0TkDPnWfzUjAILsWd9I7kjYVdnHusraFtO3Qug52xEJyLa2vjb97OLYEkMnMplkREAJDJrYLH3AH63iW0zwdJSB4mn08xn8ZjZz9Woz7YsSOkAG9QYD/M++v2zy+MbTge5nP8O8mfCBa7AHwDTh8VZEOWn1kAAAAASUVORK5CYII="
 				/>
 				<h1
 					id="titlebar-name"
-					class="text-overflow"
+					class="text-overflow titlebar-name"
 				></h1>
 
 				<menu id="titlebar-buttons">
@@ -48,34 +48,34 @@
 				</menu>
 			</header>
 
-			<ul class="menubar">
+			<ul role="menubar">
 				<li
 					id="menubar-file"
-					class="menubar-item"
+					role="menuitem"
 				>
 					File
 				</li>
 				<li
 					id="menubar-edit"
-					class="menubar-item"
+					role="menuitem"
 				>
 					Edit
 				</li>
 				<li
 					id="menubar-view"
-					class="menubar-item"
+					role="menuitem"
 				>
 					View
 				</li>
 				<li
 					id="menubar-tools"
-					class="menubar-item"
+					role="menuitem"
 				>
 					Tools
 				</li>
 				<li
 					id="menubar-help"
-					class="menubar-item"
+					role="menuitem"
 				>
 					Help
 				</li>
@@ -83,7 +83,7 @@
 
 			<hr />
 
-			<ul class="toolbar">
+			<ul role="toolbar">
 				<li class="toolbar-group">
 					<select id="toolbar-select"></select>
 				</li>
@@ -144,7 +144,7 @@
 					<button
 						id="toolbar-details"
 						class="icon-button"
-						selected
+						aria-selected="true"
 					></button>
 				</li>
 			</ul>
@@ -152,11 +152,12 @@
 			<main id="content">
 				<section
 					id="content-sidebar"
-					class="content-section-container"
+					class="content-container"
 				>
 					<ul
 						id="tree"
-						class="content-section"
+						role="tree"
+						class="content"
 					></ul>
 				</section>
 
@@ -170,9 +171,9 @@
 
 				<section
 					id="content-main"
-					class="content-section-container"
+					class="content-container"
 				>
-					<div class="content-section">
+					<div class="content">
 						<menu id="table-header">
 							<li class="table-header-button-container">
 								<button
@@ -255,7 +256,7 @@
 	</body>
 
 	<template id="tree-item-template">
-		<li class="tree-item">
+		<li role="treeitem">
 			<div class="list-item tree-item-content">
 				<div class="tree-item-icon"></div>
 				<div class="list-item-name-container">

@@ -8,14 +8,13 @@
 
 		<meta name="color-scheme" content="light dark">
 		<link rel="stylesheet" href="../css/global.css">
-		<link rel="stylesheet" href="../css/alert.css">
 
 		<title>Alert</title>
 	</head>
 
 	<body class="window child">
 		<div id="body-container">
-			<header id="titlebar">
+			<header class="titlebar">
 				<h1
 					id="titlebar-name"
 					class="text-overflow"
@@ -30,13 +29,23 @@
 				</menu>
 			</header>
 
-			<main id="content">
-				<div id="content-info">
-					<div id="alert-icon"></div>
-					<span id="alert-text"></span>
+			<main
+				id="content"
+				class="dialog-content"
+				type="messagebox"
+			>
+				<div class="dialog-body-container">
+					<div
+						id="alert-icon"
+						class="dialog-icon"
+					></div>
+					<span
+						id="alert-text"
+						class='dialog-body'
+					></span>
 				</div>
 
-				<footer id="alert-buttons">
+				<footer class="dialog-buttons">
 					<button id="alert-ok">OK</button>
 				</footer>
 			</main>

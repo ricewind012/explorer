@@ -1,7 +1,7 @@
-.tree-item {
+[role="treeitem"] {
 	min-width: 100%;
 
-	#tree > & {
+	[role="tree"] > & {
 		margin-left: 0;
 
 		&::before {
@@ -21,7 +21,7 @@
 		}
 	}
 
-	&:not([open]) > & {
+	&[aria-expanded="false"] > & {
 		display: none;
 	}
 }
@@ -29,7 +29,7 @@
 .tree-item-content {
 	&,
 	& > .list-item-name-container {
-		gap: 6px;
+		gap: var(--tree-spacing);
 	}
 }
 

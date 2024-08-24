@@ -15,7 +15,7 @@
 
 	<body class="window child">
 		<div id="body-container">
-			<header id="titlebar">
+			<header class="titlebar">
 				<h1
 					id="titlebar-name"
 					class="text-overflow"
@@ -34,8 +34,11 @@
 				</menu>
 			</header>
 
-			<main id="content">
-				<div id="tabs-container" >
+			<main
+				id="content"
+				class="dialog-content"
+			>
+				<div class="dialog-body">
 					<menu role="tablist">
 						<li
 							role="tab"
@@ -71,40 +74,40 @@
 
 							<div
 								id="options-dialog-file-types-list"
-								class="list-container"
+								class="content-container"
 							>
-								<ul class="list">
-									<li>Hidden Files</li>
+								<ul class="listbox">
+									<li class="listbox-item">Hidden Files</li>
 
-									<li>
+									<li class="listbox-item">
 										<div class="list-file-type">DLL</div>
 										<div class="list-file-type-description">
 											Application Extension
 										</div>
 									</li>
 
-									<li>
+									<li class="listbox-item">
 										<div class="list-file-type">SYS</div>
 										<div class="list-file-type-description">
 											System file
 										</div>
 									</li>
 
-									<li>
+									<li class="listbox-item">
 										<div class="list-file-type">VXD</div>
 										<div class="list-file-type-description">
 											Virtual device driver
 										</div>
 									</li>
 
-									<li>
+									<li class="listbox-item">
 										<div class="list-file-type">386</div>
 										<div class="list-file-type-description">
 											Virtual device driver
 										</div>
 									</li>
 
-									<li>
+									<li class="listbox-item">
 										<div class="list-file-type">DRV</div>
 										<div class="list-file-type-description">
 											Device driver
@@ -139,16 +142,16 @@
 						</label>
 					</div>
 				</div>
-			</main>
 
-			<footer id="button-group-container">
-				<button id="button-ok">OK</button>
-				<button id="button-cancel">Cancel</button>
-				<button
-					id="button-apply"
-					disabled
-				>Apply</button>
-			</footer>
+				<footer class="dialog-buttons">
+					<button id="button-ok">OK</button>
+					<button id="button-cancel">Cancel</button>
+					<button
+						id="button-apply"
+						disabled
+					>Apply</button>
+				</footer>
+			</main>
 		</div>
 	</body>
 

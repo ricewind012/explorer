@@ -1,0 +1,4 @@
+.dialog-body,
+[role="tabpanel"] {
+	flex-grow: 1;
+}

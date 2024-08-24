@@ -1,29 +1,12 @@
-#titlebar {
-	background-color: var(--color-active-caption);
-	color: var(--color-active-caption-text);
-
-	padding: 1px 2px;
-	gap: 4px;
-
-	height: var(--titlebar-height);
-	display: flex;
-	align-items: center;
-
-	:root:not([focused]) & {
-		--color-active-caption: var(--color-gray-text);
-	}
-}
-
 #titlebar-icon {
 	background-image: var(--titlebar-icon);
 
-	width: 16px;
-	height: 16px;
+	width: var(--icon-size);
+	height: var(--icon-size);
 }
 
 #titlebar-name {
-	font: var(--text-ui);
-	font-weight: bold;
+	font-size: var(--text-ui-size);
 
 	flex-grow: 1;
 
@@ -32,44 +15,6 @@
 
 #titlebar-buttons {
 	display: flex;
-}
-
-.titlebar-button {
-	margin: 0;
-
-	position: relative !important;
-	min-width: 16px !important;
-	height: 14px !important;
-
-	&::before,
-	&::after {
-		content: '' !important;
-
-		-webkit-mask: var(--button-img, none) no-repeat !important;
-		-webkit-mask-size: var(--button-img-size, auto auto) !important;
-		-webkit-mask-position: var(--button-img-pos, center) !important;
-
-		position: absolute !important;
-		top: 0 !important;
-		right: 0 !important;
-		bottom: 0 !important;
-		left: 0 !important;
-		height: 100% !important;
-		display: block !important;
-	}
-
-	&::before {
-		background-color: var(--color-button-text) !important;
-
-		z-index: 1 !important;
-	}
-
-	&:disabled::after {
-		background-color: var(--color-button-highlight) !important;
-
-		left: 1px !important;
-		top: 1px !important;
-	}
 }
 
 #titlebar-button-minimise {
