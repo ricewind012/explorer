@@ -18,15 +18,6 @@ export function HandlePointerEvent(el, fnMoveCallback) {
 	});
 }
 
-export function HandleMaximizeButton() {
-	let buttons = g_Elements.titlebar.buttons;
-	let bFullscreen = buttons.maximise.hidden;
-
-	buttons.restore.hidden  = bFullscreen;
-	buttons.maximise.hidden = !bFullscreen;
-	electron.Window.ToggleFullscreen();
-}
-
 export function OnKeyPress(ev) {
 	let section = g_LastClickedSection;
 
@@ -159,9 +150,4 @@ export function HumanReadableSize(nBytes) {
 	let nSize = Math.round(nBytes / Math.pow(1024, eUnit));
 
 	return `${nSize} ${EFileUnits[eUnit]}`;
-}
-
-export function UpdateTitle(strName) {
-	document.title = strName;
-	g_Elements.titlebar.name.innerText = strName;
 }

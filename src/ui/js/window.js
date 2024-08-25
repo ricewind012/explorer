@@ -1,11 +1,11 @@
 let g_Elements = {};
 
 window.addEventListener('focus', () => {
-	document.documentElement.setAttribute('focused', '');
+	document.documentElement.classList.add('focused');
 });
 
 window.addEventListener('blur', () => {
-	document.documentElement.removeAttribute('focused');
+	document.documentElement.classList.remove('focused');
 });
 
 window.addEventListener('message', (ev) => {
@@ -23,31 +23,5 @@ document.addEventListener('keydown', (ev) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-	g_Elements.titlebar = {
-		icon: id('titlebar-icon'),
-		name: id('titlebar-name'),
-
-		buttons: {
-			minimise: id('titlebar-button-minimise'),
-			maximise: id('titlebar-button-maximise'),
-			restore:	id('titlebar-button-restore'),
-			close:		id('titlebar-button-close'),
-		},
-	};
-
-	// Set up titlebar
-	let buttons = g_Elements.titlebar.buttons;
-
-	buttons.minimise?.addEventListener('click', () => {
-		electron.Window.Minimize();
-	});
-	buttons.maximise?.addEventListener('click', () => {
-		HandleMaximizeButton();
-	});
-	buttons.restore?.addEventListener('click', () => {
-		HandleMaximizeButton();
-	});
-	buttons.close?.addEventListener('click', () => {
-		window.close();
-	});
+	g_Elements.titlebar = id('titlebar');
 });

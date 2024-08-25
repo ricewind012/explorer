@@ -1,9 +1,9 @@
-import { UpdateTitle } from './functions.js';
+import { CTitlebar } from './elements/title-bar.js';
 
 window.addEventListener('message', (ev) => {
 	let data = ev.data;
 
-	UpdateTitle(data.title);
+	CTitlebar.UpdateTitle(data.title);
 	g_Elements.alert.text.innerText = data.text;
 	g_Elements.alert.icon.setAttribute('type', data.icon);
 });

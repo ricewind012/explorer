@@ -15,24 +15,10 @@
 
 	<body class="window child">
 		<div id="body-container">
-			<header class="titlebar">
-				<h1
-					id="titlebar-name"
-					class="text-overflow"
-				>Options</h1>
-
-				<menu id="titlebar-buttons">
-					<button
-						class="titlebar-button"
-						id="titlebar-button-help"
-					></button>
-
-					<button
-						class="titlebar-button"
-						id="titlebar-button-close"
-					></button>
-				</menu>
-			</header>
+			<title-bar
+				name="Options"
+				only-close
+			></title-bar>
 
 			<main
 				id="content"
@@ -154,6 +140,12 @@
 			</main>
 		</div>
 	</body>
+
+	<script
+		defer
+		type="module"
+		src="../js/elements/title-bar.js"
+	></script>
 
 	<script src="../js/globals.js"></script>
 	<script src="../js/helpers.js"></script>

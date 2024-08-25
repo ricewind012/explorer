@@ -8,6 +8,7 @@ import {
 	CMenubar,
 } from './classes.js';
 
+import { CTitlebar } from './elements/title-bar.js';
 import { EFileSorting } from './enums.js';
 
 import {
@@ -16,7 +17,6 @@ import {
 	HandlePointerEvent,
 	CreateShortcut,
 	HumanReadableSize,
-	UpdateTitle,
 } from './functions.js';
 
 function fnStub() {
@@ -195,7 +195,7 @@ document.addEventListener('explorer:navigate', (ev) => {
 	CAppData.Set('last_path', strPath);
 	g_Path.m_strPath = strPath;
 	g_Path.Render();
-	UpdateTitle(`Exploring - ${strPath}`);
+	CTitlebar.UpdateTitle(`Exploring - ${strPath}`);
 });
 
 document.addEventListener('explorer:sort', (ev) => {

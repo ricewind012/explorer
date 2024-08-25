@@ -14,39 +14,9 @@
 
 	<body class="window">
 		<div id="body-container">
-			<header class="titlebar">
-				<img
-					id="titlebar-icon"
-					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQMARcYyg/K3gAAANNJREFUOMutklFuwzAMQ5+H3iu8WaWb2SfjPuK4dpIO6zAChgAZokhJhY6IMCdEROE3iAjXWm2zxDvSM0pEWBLbJlqrl1hrfde0jO6fIgIDBviaxNBaIzPJTEopZObIz/Hi3/bwbNv0TkDPnWfzUjAILsWd9I7kjYVdnHusraFtO3Qug52xEJyLa2vjb97OLYEkMnMplkREAJDJrYLH3AH63iW0zwdJSB4mn08xn8ZjZz9Woz7YsSOkAG9QYD/M++v2zy+MbTge5nP8O8mfCBa7AHwDTh8VZEOWn1kAAAAASUVORK5CYII="
-				/>
-				<h1
-					id="titlebar-name"
-					class="text-overflow titlebar-name"
-				></h1>
-
-				<menu id="titlebar-buttons">
-					<button
-						class="titlebar-button"
-						id="titlebar-button-minimise"
-					></button>
-
-					<button
-						class="titlebar-button"
-						id="titlebar-button-maximise"
-					></button>
-
-					<button
-						class="titlebar-button"
-						id="titlebar-button-restore"
-						hidden
-					></button>
-
-					<button
-						class="titlebar-button"
-						id="titlebar-button-close"
-					></button>
-				</menu>
-			</header>
+			<title-bar
+				icon="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQMARcYyg/K3gAAANNJREFUOMutklFuwzAMQ5+H3iu8WaWb2SfjPuK4dpIO6zAChgAZokhJhY6IMCdEROE3iAjXWm2zxDvSM0pEWBLbJlqrl1hrfde0jO6fIgIDBviaxNBaIzPJTEopZObIz/Hi3/bwbNv0TkDPnWfzUjAILsWd9I7kjYVdnHusraFtO3Qug52xEJyLa2vjb97OLYEkMnMplkREAJDJrYLH3AH63iW0zwdJSB4mn08xn8ZjZz9Woz7YsSOkAG9QYD/M++v2zy+MbTge5nP8O8mfCBa7AHwDTh8VZEOWn1kAAAAASUVORK5CYII="
+			></title-bar>
 
 			<ul role="menubar">
 				<li
@@ -284,6 +254,12 @@
 			<div class="text-overflow list-row list-mode"></div>
 		</li>
 	</template>
+
+	<script
+		defer
+		type="module"
+		src="../js/elements/title-bar.js"
+	></script>
 
 	<script src="../js/globals.js"></script>
 	<script src="../js/helpers.js"></script>
